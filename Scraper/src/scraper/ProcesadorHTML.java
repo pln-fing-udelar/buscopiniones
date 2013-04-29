@@ -2,9 +2,17 @@ package scraper;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
-import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.DomSerializer;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
 import org.jsoup.Jsoup;
 
 /**
@@ -65,7 +73,7 @@ public class ProcesadorHTML {
 		return title;
 	}
 
-	public String procesar() throws BoilerpipeProcessingException {
+	public String procesar() throws BoilerpipeProcessingException, XPathExpressionException, ParserConfigurationException {
 		String xml = "<pagina>\r\n";
 
 		xml += "<url>" + url + "</url>\r\n";
@@ -89,60 +97,76 @@ public class ProcesadorHTML {
 		return xml;
 	}
 
-	public String parseFechaPublicacion() {
+	public String parseFechaPublicacion() throws XPathExpressionException, ParserConfigurationException {
+		// con xpath
+	//	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+	//	DocumentBuilder builder = factory.newDocumentBuilder();
+	//	Document doc = builder.parse(html);
+		TagNode tagNode = new HtmlCleaner().clean(html);
+		org.w3c.dom.Document doc = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression expr = xpath.compile("//span[@class='tiempo_transcurrido']");
+
 		Pattern p = Pattern.compile("(?i)((20)?[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
 		Pattern p1 = Pattern.compile("(?i)(20[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
-		Pattern p2 = Pattern.compile("(?i)([0-3]?[0-9]).de.(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(.de|,| ,).(20[0-1][0-9])");
+		Pattern p2 = Pattern.compile("(?i)([0-3]?[0-9]).de.(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(.de|,| ,).?(20[0-1][0-9])");
 		Pattern p3 = Pattern.compile("(?i)([0-3][0-9]).?([0-1]?[0-9]).?(20[0-1][0-9])");
 		Pattern p4 = Pattern.compile("(?i)([0-3][0-9]).?([0-1][0-9]).?([0-1][0-9])");
+
 
 		Matcher m = p.matcher(url);
 
 		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
+			System.out.println("hola1");
 			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
 		}
 
-		m = p2.matcher(html);
+		//m = p2.matcher(html);
+		String resultadoXPath = expr.evaluate(doc);
+		m = p2.matcher(resultadoXPath);
 
 		if (m.find()) { // trato de matchear la fecha en el contenido de la pagina con el patron p2
 			String aux2 = "";
 			String mes = "01";
-			if (m.group(2).equals("enero")) {
+			System.out.println(m.group(2));
+			if (m.group(2).toLowerCase().equals("enero")) {
 				mes = "01";
-			} else if (m.group(2).equals("febrero")) {
+			} else if (m.group(2).toLowerCase().equals("febrero")) {
 				mes = "02";
-			} else if (m.group(2).equals("marzo")) {
+			} else if (m.group(2).toLowerCase().equals("marzo")) {
 				mes = "03";
-			} else if (m.group(2).equals("abril")) {
+			} else if (m.group(2).toLowerCase().equals("abril")) {
 				mes = "04";
-			} else if (m.group(2).equals("mayo")) {
+			} else if (m.group(2).toLowerCase().equals("mayo")) {
 				mes = "05";
-			} else if (m.group(2).equals("junio")) {
+			} else if (m.group(2).toLowerCase().equals("junio")) {
 				mes = "06";
-			} else if (m.group(2).equals("julio")) {
+			} else if (m.group(2).toLowerCase().equals("julio")) {
 				mes = "07";
-			} else if (m.group(2).equals("agosto")) {
+			} else if (m.group(2).toLowerCase().equals("agosto")) {
 				mes = "08";
-			} else if (m.group(2).equals("septiembre")) {
+			} else if (m.group(2).toLowerCase().equals("septiembre")) {
 				mes = "09";
-			} else if (m.group(2).equals("octubre")) {
+			} else if (m.group(2).toLowerCase().equals("octubre")) {
 				mes = "10";
-			} else if (m.group(2).equals("noviembre")) {
+			} else if (m.group(2).toLowerCase().equals("noviembre")) {
 				mes = "11";
-			} else if (m.group(2).equals("diciembre")) {
+			} else if (m.group(2).toLowerCase().equals("diciembre")) {
 				mes = "12";
 			}
 
 			if ((Integer.parseInt(m.group(1)) < 10) && (m.group(1).length() == 1)) {
 				aux2 = "0";
 			}
-
+			System.out.println(m.group(1));
 			return m.group(4) + "-" + mes + "-" + aux2 + m.group(1) + "T00:00:00Z";
 		}
 
 		m = p1.matcher(html);
 
 		if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(3)) <= 31)) { // trato de matchear la fecha en el contenido de la pagina con el patron p
+			System.out.println("hola3");
 			return m.group(1) + "-" + m.group(2) + "-" + m.group(3) + "T00:00:00Z";
 		}
 
