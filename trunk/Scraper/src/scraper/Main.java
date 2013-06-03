@@ -22,6 +22,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
+//			TaggerOpiniones tagger = new TaggerOpiniones("C:\\Fing\\ProyGrado\\opiniones\\", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\");
+//			tagger.taggearFreelingDesdeArchivo("C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\prueba.txt", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\salida.txt");
+//			return;
 			File folder = new File("C:\\Fing\\ProyGrado\\paginas\\elpais");
 			File[] listOfFiles = folder.listFiles();
 			String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\elpais.xml";
@@ -38,9 +41,9 @@ public class Main {
 					FileChannel fc = stream.getChannel();
 					MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 					String html = Charset.forName("UTF-8").decode(bb).toString();
-					
+
 					ProcesadorHTML proc = new ProcesadorHTML(html, url);
-					if(proc.obtenerCharset().equals("iso-8859-1") || proc.obtenerCharset().equals("ISO-8859-1")){						
+					if (proc.obtenerCharset().equals("iso-8859-1") || proc.obtenerCharset().equals("ISO-8859-1")) {
 						stream = new FileInputStream(file);
 						fc = stream.getChannel();
 						bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
