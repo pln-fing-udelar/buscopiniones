@@ -73,7 +73,7 @@ public class ProcesadorHTML {
 		return title;
 	}
 
-	public String procesar() throws BoilerpipeProcessingException, XPathExpressionException, ParserConfigurationException {
+	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException, XPathExpressionException, ParserConfigurationException {
 		String xml = "<pagina>\r\n";
 
 		xml += "<url>" + url + "</url>\r\n";
@@ -93,6 +93,9 @@ public class ProcesadorHTML {
 		String fecha = this.parseFechaPublicacion();
 		xml += "<fecha>" + fecha + "</fecha>\r\n";
 
+		String categoria = this.parseCategorias(medioDePrensa);
+		xml += "<categorias>" + categoria + "</categorias>\r\n"; 
+				
 		xml += "</pagina>\r\n";
 		return xml;
 	}
@@ -212,7 +215,7 @@ public class ProcesadorHTML {
 		return null;
 	}
 	
-	String parseCategorias(){
+	String parseCategorias(String medioDePrensa){
 
 		return null;
 	}

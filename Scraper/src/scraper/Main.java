@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Date;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -58,7 +59,7 @@ public class Main {
 							}
 
 
-							String xml = proc.procesar();
+							String xml = proc.procesar(medioActual);
 							bw.append(xml);
 							bw.flush();
 						}
