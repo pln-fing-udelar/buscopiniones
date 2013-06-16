@@ -207,4 +207,13 @@ public class ProcesadorHTML {
 //		dia += day;
 //		return (d.getYear() + 1900) + "-" + mes + "-" + dia + "T00:00:00Z";
 	}
+
+	String parseAutor(){
+		return null;
+	}
+	
+	String parseCategorias(){
+
+		return null;
+	}
 }
