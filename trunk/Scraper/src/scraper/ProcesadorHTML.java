@@ -23,10 +23,13 @@ public class ProcesadorHTML {
 
 	private String html;
 	private String url;
+	private org.w3c.dom.Document doc;
 
-	public ProcesadorHTML(String html, String url) {
+	public ProcesadorHTML(String html, String url) throws ParserConfigurationException {
 		this.html = html;
 		this.url = url;
+		TagNode tagNode = new HtmlCleaner().clean(html);
+		doc = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
 	}
 
 	public static String html2text(String html) {
@@ -74,6 +77,8 @@ public class ProcesadorHTML {
 	}
 
 	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException, XPathExpressionException, ParserConfigurationException {
+	
+		
 		String xml = "<pagina>\r\n";
 
 		xml += "<url>" + url + "</url>\r\n";
@@ -105,8 +110,7 @@ public class ProcesadorHTML {
 	//	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 	//	DocumentBuilder builder = factory.newDocumentBuilder();
 	//	Document doc = builder.parse(html);
-		TagNode tagNode = new HtmlCleaner().clean(html);
-		org.w3c.dom.Document doc = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
+
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		XPath xpath = xPathfactory.newXPath();
 		XPathExpression expr = xpath.compile("//span[@class='tiempo_transcurrido']");
@@ -215,8 +219,22 @@ public class ProcesadorHTML {
 		return null;
 	}
 	
-	String parseCategorias(String medioDePrensa){
-
-		return null;
+	String parseCategorias(String medioDePrensa) throws XPathExpressionException{
+		if (medioDePrensa.equals("elobservador")){
+			XPathFactory xPathfactory = XPathFactory.newInstance();
+			XPath xpath = xPathfactory.newXPath();
+			System.out.println("jairo");
+			XPathExpression expr = xpath.compile("//div[@class='story collapsed']/h5");
+			String resultadoXPath = expr.evaluate(doc);
+			System.out.println(resultadoXPath);
+			resultadoXPath = resultadoXPath.replaceAll("\r\n", ",");
+			resultadoXPath = resultadoXPath.replaceAll("\n", ",");
+			resultadoXPath = resultadoXPath.replaceAll("<b>|<//b>", "");
+			System.out.println("jairo2");
+			System.out.println(resultadoXPath);
+			return resultadoXPath;
+		} else{
+			return null;
+		}
 	}
 }

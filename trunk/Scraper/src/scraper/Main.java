@@ -64,8 +64,8 @@ public class Main {
 							bw.flush();
 						}
 					}
-				bw.close();
 				}
+				bw.close();
 			}		
 		} catch (Exception e) {
 			System.out.println(e);
