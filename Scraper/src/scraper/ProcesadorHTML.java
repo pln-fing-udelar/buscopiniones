@@ -29,7 +29,8 @@ public class ProcesadorHTML {
 		this.html = html;
 		this.url = url;
 		TagNode tagNode = new HtmlCleaner().clean(html);
-		doc = new DomSerializer(new CleanerProperties()).createDOM(tagNode);
+		CleanerProperties properties = new CleanerProperties();
+		doc = new DomSerializer(properties).createDOM(tagNode);
 	}
 
 	public static String html2text(String html) {
