@@ -205,10 +205,15 @@ public class ProcesadorHTML {
 		if (medioDePrensa.equals("elobservador")){
 			String resultado = "";
 			Pattern p = Pattern.compile("(<div.class=\"story.collapsed\">)((.|\n|\r|\t)*?)(<h5>)((.|\n|\r|\t)*?)(</h5>)");
-//			(<h5>)(.*?)(</h5>)
 			Matcher m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(5);
+			}
+			String[] aux = resultado.split("<b>|</b>");
+			int n = aux.length;
+			resultado = "";
+			for(int i = 0; i < n; i++){
+				resultado = resultado + aux[i];
 			}
 			System.out.println(resultado);
 			return resultado;
