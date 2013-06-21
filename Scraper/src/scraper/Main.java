@@ -37,7 +37,7 @@ public class Main {
 					File[] listOfFiles = carpeta_fecha.listFiles();
 					for (File file : listOfFiles) {
 						if (file.isFile()) {
-
+							System.out.println(file.getName());
 							BASE64Decoder decoder = new BASE64Decoder();
 							byte[] decodedBytes = decoder.decodeBuffer(file.getName());
 							String url = new String(decodedBytes);
