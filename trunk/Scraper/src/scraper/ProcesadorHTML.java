@@ -2,17 +2,9 @@ package scraper;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
+import java.io.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.xpath.XPath;
-import javax.xml.xpath.XPathExpression;
-import javax.xml.xpath.XPathExpressionException;
-import javax.xml.xpath.XPathFactory;
-import org.htmlcleaner.CleanerProperties;
-import org.htmlcleaner.DomSerializer;
-import org.htmlcleaner.HtmlCleaner;
-import org.htmlcleaner.TagNode;
 import org.jsoup.Jsoup;
 
 /**
@@ -23,14 +15,10 @@ public class ProcesadorHTML {
 
 	private String html;
 	private String url;
-	private org.w3c.dom.Document doc;
 
-	public ProcesadorHTML(String html, String url) throws ParserConfigurationException {
+	public ProcesadorHTML(String html, String url) {
 		this.html = html;
 		this.url = url;
-		TagNode tagNode = new HtmlCleaner().clean(html);
-		CleanerProperties properties = new CleanerProperties();
-		doc = new DomSerializer(properties).createDOM(tagNode);
 	}
 
 	public static String html2text(String html) {
@@ -77,7 +65,7 @@ public class ProcesadorHTML {
 		return title;
 	}
 
-	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException, XPathExpressionException, ParserConfigurationException {
+	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException {
 	
 		
 		String xml = "<pagina>\r\n";
@@ -86,7 +74,7 @@ public class ProcesadorHTML {
 
 		String noticia = ArticleExtractor.INSTANCE.getText(html);
 		xml += "<articulo>" + noticia + "</articulo>\r\n";
-
+		
 		String title = this.obtenerTitle();
 		xml += "<title>" + title.trim() + "</title>\r\n";
 
@@ -106,15 +94,9 @@ public class ProcesadorHTML {
 		return xml;
 	}
 
-	public String parseFechaPublicacion() throws XPathExpressionException, ParserConfigurationException {
-		// con xpath
-	//	DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-	//	DocumentBuilder builder = factory.newDocumentBuilder();
-	//	Document doc = builder.parse(html);
+	public String parseFechaPublicacion() {
 
-		XPathFactory xPathfactory = XPathFactory.newInstance();
-		XPath xpath = xPathfactory.newXPath();
-		XPathExpression expr = xpath.compile("//span[@class='tiempo_transcurrido']");
+		//span[@class='tiempo_transcurrido']
 
 		Pattern p = Pattern.compile("(?i)((20)?[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
 		Pattern p1 = Pattern.compile("(?i)(20[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
@@ -131,8 +113,7 @@ public class ProcesadorHTML {
 		}
 
 		//m = p2.matcher(html);
-		String resultadoXPath = expr.evaluate(doc);
-		m = p2.matcher(resultadoXPath);
+		
 
 		if (m.find()) { // trato de matchear la fecha en el contenido de la pagina con el patron p2
 			String aux2 = "";
@@ -220,20 +201,17 @@ public class ProcesadorHTML {
 		return null;
 	}
 	
-	String parseCategorias(String medioDePrensa) throws XPathExpressionException{
+	String parseCategorias(String medioDePrensa) {
 		if (medioDePrensa.equals("elobservador")){
-			XPathFactory xPathfactory = XPathFactory.newInstance();
-			XPath xpath = xPathfactory.newXPath();
-			System.out.println("jairo");
-			XPathExpression expr = xpath.compile("//div[@class='story collapsed']/h5");
-			String resultadoXPath = expr.evaluate(doc);
-			System.out.println(resultadoXPath);
-			resultadoXPath = resultadoXPath.replaceAll("\r\n", ",");
-			resultadoXPath = resultadoXPath.replaceAll("\n", ",");
-			resultadoXPath = resultadoXPath.replaceAll("<b>|<//b>", "");
-			System.out.println("jairo2");
-			System.out.println(resultadoXPath);
-			return resultadoXPath;
+			String resultado = "";
+			Pattern p = Pattern.compile("(<div.class=\"story.collapsed\">)((.|\n|\r|\t)*?)(<h5>)((.|\n|\r|\t)*?)(</h5>)");
+//			(<h5>)(.*?)(</h5>)
+			Matcher m = p.matcher(html);
+			if (m.find()) {
+				resultado = m.group(5);
+			}
+			System.out.println(resultado);
+			return resultado;
 		} else{
 			return null;
 		}
