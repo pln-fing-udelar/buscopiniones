@@ -1,15 +1,17 @@
 package scraper;
 
+import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import java.util.Date;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -18,14 +20,34 @@ import sun.misc.BASE64Decoder;
  */
 public class Main {
 
+	static public String readFile(String file, String encoding) throws IOException {
+		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
+		String line = null;
+		StringBuilder stringBuilder = new StringBuilder();
+		String ls = System.getProperty("line.separator");
+
+		while ((line = reader.readLine()) != null) {
+			stringBuilder.append(line);
+			stringBuilder.append(ls);
+		}
+
+		return stringBuilder.toString();
+	}
+
 	/**
 	 * @param args the command line arguments
 	 */
 	public static void main(String[] args) {
 		try {
-//			TaggerOpiniones tagger = new TaggerOpiniones("C:\\Fing\\ProyGrado\\opiniones\\", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\");
-//			tagger.taggearFreelingDesdeArchivo("C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\prueba.txt", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\salida.txt");
-//			return;
+			TaggerOpiniones tagger = new TaggerOpiniones("C:\\Fing\\ProyGrado\\opiniones\\", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\");
+			tagger.taggearFreelingDesdeArchivo("C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\prueba.txt", "C:\\Fing\\ProyGrado\\opiniones\\entrada");
+			tagger.taggearOpiniones();
+
+			CopyFiles.copyWithChannels("C:\\Fing\\ProyGrado\\opiniones\\salida", "C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2\\entrada.xml", false);
+			TaggerCorreferencias tagger2 = new TaggerCorreferencias("C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2\\", "C:\\Python27\\");
+			tagger2.taggearCorreferencias();
+			return;
+
 			File folder = new File("C:\\Fing\\ProyGrado\\paginas");
 			File[] listOfMediosPrensa = folder.listFiles();
 			for (File medioPrensa : listOfMediosPrensa) {
@@ -54,7 +76,7 @@ public class Main {
 								fc = stream.getChannel();
 								bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
 								html = Charset.forName("ISO-8859-1").decode(bb).toString();
-		//						System.out.println(html + "ESTO ES EL FIN");
+								//						System.out.println(html + "ESTO ES EL FIN");
 								proc = new ProcesadorHTML(html, url);
 							}
 
@@ -66,7 +88,7 @@ public class Main {
 					}
 				}
 				bw.close();
-			}		
+			}
 		} catch (Exception e) {
 			System.out.println(e);
 		}

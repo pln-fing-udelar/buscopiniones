@@ -7,6 +7,7 @@ package scraper;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -81,7 +82,16 @@ public class TaggerOpiniones {
 		System.out.println(returnCode);
 	}
 
-	public void taggearOpiniones() {
+	public void taggearOpiniones() throws FileNotFoundException, IOException {
+		
+		// primero saco los numeritos que pone freeling al final de cada linea porque no se usan
+		String content = new Scanner(new File(archOpiniones + "entrada")).useDelimiter("\\Z").next();
+		content = content.replaceAll("(?m) [0-9\\.]*$", "");
+		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "Windows-1252"));
+		bw.write(content);
+		bw.close();
+
+		// ejecuto el reconocedor de opiniones (controlEs.pl) usando la libreria jpl para prolog
 		Query q1 =
 				new Query(
 				"consult",
@@ -91,9 +101,9 @@ public class TaggerOpiniones {
 		Query q2 =
 				new Query("inicio",
 				new Term[]{
-					new Atom(archOpiniones + "mujica"),
-					new Atom(archOpiniones + "mujicasalida"),
-					new Atom(archOpiniones + "roEs.txt")});
+					new Atom(archOpiniones + "entrada"), // archivo de entrada
+					new Atom(archOpiniones + "salida"), // archivo de salida
+					new Atom(archOpiniones + "roEs.txt")}); // esto no se para que es
 
 		System.out.println(
 				"inicio "
