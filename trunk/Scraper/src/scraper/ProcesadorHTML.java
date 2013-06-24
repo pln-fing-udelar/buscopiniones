@@ -67,7 +67,7 @@ public class ProcesadorHTML {
 	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException {
 	
 		if (medioDePrensa.equals("elpais")) {
-			if (url.endsWith(".asp")) {
+			if (url.endsWith("index.asp")) {
 				return "";
 			} else if (url.contains("/ediciones-anteriores/")) {
 				return "";
@@ -98,6 +98,9 @@ public class ProcesadorHTML {
 		String descripcion = this.parseMetaDescripcion(medioDePrensa);
 		xml += "<descripcion>" + descripcion + "</descripcion>\r\n";
 		
+		String autor = this.parseAutor();
+		xml += "<descripcion>" + autor + "</descripcion>\r\n";
+		
 		xml += "</pagina>\r\n";
 		return xml;
 	}
@@ -120,7 +123,7 @@ public class ProcesadorHTML {
 			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
 		}
 
-		//m = p2.matcher(html);
+		m = p2.matcher(html);
 		
 
 		if (m.find()) { // trato de matchear la fecha en el contenido de la pagina con el patron p2
@@ -206,12 +209,26 @@ public class ProcesadorHTML {
 	}
 
 	String parseAutor(){
-		return null;
+		String resultado = "";
+		Pattern p = Pattern.compile("(?s)(<div class=\"author\">)(.*?)(</div>)");
+		Matcher m = p.matcher(html);
+		if (m.find()) {
+			resultado = m.group(2);
+		}
+		return resultado;
 	}
 	
 	String parseMetaDescripcion(String medioDePrensa) {
+		String resultado = "";
 		if (medioDePrensa.equals("elobservador")){
-			String resultado = "";
+			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')(.*?)(\"|').*?>");
+			Matcher m = p.matcher(html);
+			if (m.find()) {
+				resultado = m.group(2);
+			}
+			return resultado;
+		} else if (medioDePrensa.equals("elpais")) {
+			
 			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')(.*?)(\"|').*?>");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
@@ -219,13 +236,13 @@ public class ProcesadorHTML {
 			}
 			return resultado;
 		} else {
-			return null;
+			return resultado;
 		}
 	}
 	
 	String parseCategorias(String medioDePrensa) {
-		if (medioDePrensa.equals("elobservador")){
-			String resultado = "";
+		String resultado = "";
+		if (medioDePrensa.equals("elobservador")){	
 			Pattern p = Pattern.compile("(<div.class=\"story.*?\">)((.|\n|\r|\t)*?)(<h5>)((.|\n|\r|\t)*?)(</h5>)");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
@@ -239,7 +256,6 @@ public class ProcesadorHTML {
 			}
 			return resultado;
 		} else if (medioDePrensa.equals("elpais")) {
-			String resultado = "";
 			Pattern p = Pattern.compile("(?s)(?i)<h2.*?>(.*?)</h2>");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
@@ -253,7 +269,7 @@ public class ProcesadorHTML {
 			}			
 			return resultado;
 		} else {
-			return null;
+			return resultado;
 		}
 	}
 }
