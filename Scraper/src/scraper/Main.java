@@ -57,12 +57,12 @@ public class Main {
 
 			Configuracion config = new Configuracion();
 
-			Query q1 =
-					new Query(
-					"consult",
-					new Term[]{new Atom(config.getDirOpiniones() + "controlEs.pl")});
-
-			System.out.println("consult " + (q1.query() ? "succeeded" : "failed"));
+//			Query q1 =
+//					new Query(
+//					"consult",
+//					new Term[]{new Atom(config.getDirOpiniones() + "controlEs.pl")});
+//
+//			System.out.println("consult " + (q1.query() ? "succeeded" : "failed"));
 			System.out.println("toy aca!!!!!!!");
 			File folder = new File("C:\\Fing\\ProyGrado\\paginas");
 			File[] listOfMediosPrensa = folder.listFiles();

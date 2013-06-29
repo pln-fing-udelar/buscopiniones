@@ -6,7 +6,8 @@
     Author     : Rodrigo
     Description:
         Aca tienen que ir las rutas a los directorios donde estan instaladas
-		las cosas.
+		las cosas, en las rutas hay que poner la "\" del final, por ejemplo,
+		C:\carpeta\.
 -->
 
 <Configuracion>
@@ -14,4 +15,5 @@
 	<dirFreeling>C:\Fing\ProyGrado\Freeling\freeling_win\freeling\bin\</dirFreeling>
 	<dirCorreferencias>C:\Fing\\ProyGrado\Correferencias\ModuloCorref\Proyecto_v6.2\</dirCorreferencias>
 	<dirPython>C:\Python27\</dirPython>
+	<dirProlog>C:\Program Files (x86)\swipl\bin\</dirProlog>
 </Configuracion>

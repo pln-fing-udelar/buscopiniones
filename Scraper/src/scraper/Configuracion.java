@@ -24,6 +24,7 @@ public class Configuracion {
 	private String dirFreeling;
 	private String dirCorreferencias;
 	private String dirPython;
+	private String dirProlog;
 
 	public Configuracion() throws ParserConfigurationException, SAXException, IOException {
 		System.out.println("toy aca 1");
@@ -38,6 +39,7 @@ public class Configuracion {
 		dirFreeling = doc.getDocumentElement().getElementsByTagName("dirFreeling").item(0).getTextContent();
 		dirCorreferencias = doc.getDocumentElement().getElementsByTagName("dirCorreferencias").item(0).getTextContent();
 		dirPython = doc.getDocumentElement().getElementsByTagName("dirPython").item(0).getTextContent();
+		dirProlog = doc.getDocumentElement().getElementsByTagName("dirProlog").item(0).getTextContent();
 	}
 
 	/**
@@ -66,5 +68,12 @@ public class Configuracion {
 	 */
 	public String getDirPython() {
 		return dirPython;
+	}
+
+	/**
+	 * @return the dirProlog
+	 */
+	public String getDirProlog() {
+		return dirProlog;
 	}
 }
