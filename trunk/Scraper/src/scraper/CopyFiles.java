@@ -12,13 +12,15 @@ import java.io.OutputStream;
 import java.nio.channels.FileChannel;
 
 /**
-Copy files, using two techniques, FileChannels and streams.
-Using FileChannels is usually faster than using streams.
+ * Copy files, using two techniques, FileChannels and streams. Using
+ * FileChannels is usually faster than using streams.
  */
 public class CopyFiles {
 
-	/** This may fail for VERY large files. */
-	static public void copyWithChannels(String source, String target, boolean aAppend) {
+	/**
+	 * This may fail for VERY large files.
+	 */
+	static public void copyWithChannels(String source, String target, boolean aAppend) throws FileNotFoundException, IOException {
 		File aSourceFile = new File(source);
 		File aTargetFile = new File(target);
 		log("Copying files with channels.");
@@ -27,37 +29,32 @@ public class CopyFiles {
 		FileChannel outChannel = null;
 		FileInputStream inStream = null;
 		FileOutputStream outStream = null;
-		try {
-			try {
-				inStream = new FileInputStream(aSourceFile);
-				inChannel = inStream.getChannel();
-				outStream = new FileOutputStream(aTargetFile, aAppend);
-				outChannel = outStream.getChannel();
-				long bytesTransferred = 0;
-				//defensive loop - there's usually only a single iteration :
-				while (bytesTransferred < inChannel.size()) {
-					bytesTransferred += inChannel.transferTo(0, inChannel.size(), outChannel);
-				}
-			} finally {
-				//being defensive about closing all channels and streams
-				if (inChannel != null) {
-					inChannel.close();
-				}
-				if (outChannel != null) {
-					outChannel.close();
-				}
-				if (inStream != null) {
-					inStream.close();
-				}
-				if (outStream != null) {
-					outStream.close();
-				}
-			}
-		} catch (FileNotFoundException ex) {
-			log("File not found: " + ex);
-		} catch (IOException ex) {
-			log(ex);
+
+		inStream = new FileInputStream(aSourceFile);
+		inChannel = inStream.getChannel();
+		outStream = new FileOutputStream(aTargetFile, aAppend);
+		outChannel = outStream.getChannel();
+		long bytesTransferred = 0;
+		//defensive loop - there's usually only a single iteration :
+		while (bytesTransferred < inChannel.size()) {
+			bytesTransferred += inChannel.transferTo(0, inChannel.size(), outChannel);
 		}
+
+		//being defensive about closing all channels and streams
+		if (inChannel != null) {
+			inChannel.close();
+		}
+		if (outChannel != null) {
+			outChannel.close();
+		}
+		if (inStream != null) {
+			inStream.close();
+		}
+		if (outStream != null) {
+			outStream.close();
+		}
+
+
 	}
 
 	static public void copyWithStreams(String source, String target, boolean aAppend) {

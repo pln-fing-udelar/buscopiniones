@@ -6,6 +6,7 @@ package scraper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -26,10 +27,12 @@ public class TaggerOpiniones {
 
 	private String archOpiniones;
 	private String archFreeling;
+	private String archProlog;
 
-	public TaggerOpiniones(String archOpiniones, String archFreeling) {
+	public TaggerOpiniones(String archOpiniones, String archFreeling, String archProlog) {
 		this.archOpiniones = archOpiniones;
 		this.archFreeling = archFreeling;
+		this.archProlog = archProlog;
 	}
 
 	public void taggearFreelingDesdeArchivo(String archInput, String archOutput) throws IOException {
@@ -89,18 +92,56 @@ public class TaggerOpiniones {
 		bw.write(content);
 		bw.close();
 
-		// ejecuto el reconocedor de opiniones (controlEs.pl) usando la libreria jpl para prolog
+		// ejecuto el reconocedor de opiniones (controlEs.pl) usando la libreria jpl para prolog	
+
+//		Query q2 =
+//				new Query("inicio",
+//				new Term[]{
+//					new Atom(archOpiniones + "entrada"), // archivo de entrada
+//					new Atom(archOpiniones + "salida"), // archivo de salida
+//					new Atom(archOpiniones + "roEs.txt")}); // esto no se para que es
+//
+//		System.out.println(
+//				"inicio "
+//				+ (q2.query() ? "succeeded" : "failed"));
 		
+		System.out.println(archProlog + "swipl.exe" + " controlEs.pl");
+		ProcessBuilder builder = new ProcessBuilder(archProlog + "swipl.exe", "controlEs.pl");
+		builder.directory(new File(archOpiniones));
+		builder.redirectErrorStream(true);
+		Process process = builder.start();
+		
+		
+		OutputStream stdin = process.getOutputStream();
+		final InputStream stdout = process.getInputStream();
 
-		Query q2 =
-				new Query("inicio",
-				new Term[]{
-					new Atom(archOpiniones + "entrada"), // archivo de entrada
-					new Atom(archOpiniones + "salida"), // archivo de salida
-					new Atom(archOpiniones + "roEs.txt")}); // esto no se para que es
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stdout));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(stdin)));
 
-		System.out.println(
-				"inicio "
-				+ (q2.query() ? "succeeded" : "failed"));
+		new Thread(new Runnable() {
+
+			public void run() {
+				try {
+					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+					String line;					
+					while ((line = br.readLine()) != null) {
+						System.out.println(line);						
+					}					
+				} catch (java.io.IOException e) {
+					System.out.println(e);
+				}
+			}
+		}).start();
+
+		writer.print("inicio('entrada', 'salida', 'roEs.txt').\n");
+		writer.close();
+		
+		
+		int returnCode = -1;
+		try {
+			returnCode = process.waitFor();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
 	}
 }
