@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+    Document   : config.xml
+    Created on : 22 de junio de 2013, 06:29 PM
+    Author     : Rodrigo
+    Description:
+        Aca tienen que ir las rutas a los directorios donde estan instaladas
+		las cosas.
+-->
+
+<Configuracion>
+	<dirOpiniones>C:\Fing\ProyGrado\opiniones\</dirOpiniones>
+	<dirFreeling>C:\Fing\ProyGrado\Freeling\freeling_win\freeling\bin\</dirFreeling>
+	<dirCorreferencias>C:\Fing\\ProyGrado\Correferencias\ModuloCorref\Proyecto_v6.2\</dirCorreferencias>
+	<dirPython>C:\Python27\</dirPython>
+</Configuracion>

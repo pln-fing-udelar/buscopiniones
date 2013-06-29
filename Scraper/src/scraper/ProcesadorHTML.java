@@ -24,7 +24,7 @@ public class ProcesadorHTML {
 		return Jsoup.parse(html).text();
 	}
 
-	public String obtenerCharset() {
+	static public String obtenerCharset(String html) {
 		String charset = "";
 		Pattern pattcharset = Pattern.compile("(?s)(?i)charset=\"?(.*?)(\"| )");
 		Matcher mcharset = pattcharset.matcher(html);
@@ -64,45 +64,55 @@ public class ProcesadorHTML {
 		return title;
 	}
 
-	public String procesar(String medioDePrensa) throws BoilerpipeProcessingException {
+	public Noticia procesar(String medioDePrensa) throws BoilerpipeProcessingException {
 	
-		if (medioDePrensa.equals("elpais")) {
-			if (url.endsWith("index.asp")) {
-				return "";
-			} else if (url.contains("/ediciones-anteriores/")) {
-				return "";
-			}
-		}
-		String xml = "<pagina>\r\n";
-
-		xml += "<url>" + url + "</url>\r\n";
-
-		String noticia = ArticleExtractor.INSTANCE.getText(html);
-		xml += "<articulo>" + noticia + "</articulo>\r\n";
+		return new Noticia(url,
+				ArticleExtractor.INSTANCE.getText(html),
+				this.obtenerTitle().trim(),
+				this.obtenerMetaTitle().trim(),
+				this.obtenerH1().trim(),
+				this.parseFechaPublicacion(),
+				this.parseCategorias(medioDePrensa),
+				this.parseMetaDescripcion(medioDePrensa),
+				this.parseAutor());
 		
-		String title = this.obtenerTitle();
-		xml += "<title>" + title.trim() + "</title>\r\n";
-
-		String metatitle = this.obtenerMetaTitle();
-		xml += "<metatitle>" + metatitle.trim() + "</metatitle>\r\n";
-		
-		String h1 = this.obtenerH1();
-		xml += "<h1>" + h1.trim() + "</h1>\r\n";
-
-		String fecha = this.parseFechaPublicacion();
-		xml += "<fecha>" + fecha + "</fecha>\r\n";
-
-		String categoria = this.parseCategorias(medioDePrensa);
-		xml += "<categorias>" + categoria + "</categorias>\r\n"; 
-
-		String descripcion = this.parseMetaDescripcion(medioDePrensa);
-		xml += "<descripcion>" + descripcion + "</descripcion>\r\n";
-		
-		String autor = this.parseAutor();
-		xml += "<descripcion>" + autor + "</descripcion>\r\n";
-		
-		xml += "</pagina>\r\n";
-		return xml;
+//		if (medioDePrensa.equals("elpais")) {
+//			if (url.endsWith("index.asp")) {
+//				return "";
+//			} else if (url.contains("/ediciones-anteriores/")) {
+//				return "";
+//			}
+//		}
+//		String xml = "<pagina>\r\n";
+//
+//		xml += "<url>" + url + "</url>\r\n";
+//
+//		String noticia = ArticleExtractor.INSTANCE.getText(html);
+//		xml += "<articulo>" + noticia + "</articulo>\r\n";
+//		
+//		String title = this.obtenerTitle();
+//		xml += "<title>" + title.trim() + "</title>\r\n";
+//
+//		String metatitle = this.obtenerMetaTitle();
+//		xml += "<metatitle>" + metatitle.trim() + "</metatitle>\r\n";
+//		
+//		String h1 = this.obtenerH1();
+//		xml += "<h1>" + h1.trim() + "</h1>\r\n";
+//
+//		String fecha = this.parseFechaPublicacion();
+//		xml += "<fecha>" + fecha + "</fecha>\r\n";
+//
+//		String categoria = this.parseCategorias(medioDePrensa);
+//		xml += "<categorias>" + categoria + "</categorias>\r\n"; 
+//
+//		String descripcion = this.parseMetaDescripcion(medioDePrensa);
+//		xml += "<descripcion>" + descripcion + "</descripcion>\r\n";
+//		
+//		String autor = this.parseAutor();
+//		xml += "<descripcion>" + autor + "</descripcion>\r\n";
+//		
+//		xml += "</pagina>\r\n";
+//		return xml;
 	}
 
 	public String parseFechaPublicacion() {
