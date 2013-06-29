@@ -6,7 +6,6 @@ package scraper;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -16,8 +15,8 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
 import java.io.Writer;
-import java.util.Scanner;
 import jpl.*;
+import jpl.fli.Prolog;
 
 /**
  *
@@ -34,7 +33,8 @@ public class TaggerOpiniones {
 	}
 
 	public void taggearFreelingDesdeArchivo(String archInput, String archOutput) throws IOException {
-		String content = new Scanner(new File(archInput)).useDelimiter("\\Z").next();
+		//String content = new Scanner(new File(archInput)).useDelimiter("\\Z").next();
+		String content = Main.readFile(archInput, "utf8");
 		taggearFreeling(content, archOutput);
 	}
 
@@ -47,8 +47,6 @@ public class TaggerOpiniones {
 
 		BufferedReader reader = new BufferedReader(new InputStreamReader(stdout));
 		PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(stdin)));
-		System.out.println(articulo);
-
 
 		new Thread(new Runnable() {
 
@@ -59,7 +57,7 @@ public class TaggerOpiniones {
 					String line;
 					String articuloTaggeado = "";
 					while ((line = br.readLine()) != null) {
-						System.out.println(line);
+//						System.out.println(line);
 						articuloTaggeado += line + "\n";
 					}
 					bw.write(articuloTaggeado);
@@ -79,24 +77,20 @@ public class TaggerOpiniones {
 		} catch (InterruptedException ex) {
 			System.out.println(ex);
 		}
-		System.out.println(returnCode);
+//		System.out.println(returnCode);
 	}
 
 	public void taggearOpiniones() throws FileNotFoundException, IOException {
-		
+
 		// primero saco los numeritos que pone freeling al final de cada linea porque no se usan
-		String content = new Scanner(new File(archOpiniones + "entrada")).useDelimiter("\\Z").next();
+		String content = Main.readFile(archOpiniones + "entrada", "Windows-1252");
 		content = content.replaceAll("(?m) [0-9\\.]*$", "");
 		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "Windows-1252"));
 		bw.write(content);
 		bw.close();
 
 		// ejecuto el reconocedor de opiniones (controlEs.pl) usando la libreria jpl para prolog
-		Query q1 =
-				new Query(
-				"consult",
-				new Term[]{new Atom(archOpiniones + "controlEs.pl")});
-		System.out.println("consult " + (q1.query() ? "succeeded" : "failed"));
+		
 
 		Query q2 =
 				new Query("inicio",
@@ -108,6 +102,5 @@ public class TaggerOpiniones {
 		System.out.println(
 				"inicio "
 				+ (q2.query() ? "succeeded" : "failed"));
-
 	}
 }

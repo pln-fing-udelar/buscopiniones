@@ -29,9 +29,16 @@ public class TaggerCorreferencias {
 	}
 
 	public void taggearCorreferencias() throws IOException {
+		System.out.println(archPython + "python.exe" + " correferencias.py");
 		ProcessBuilder builder = new ProcessBuilder(archPython + "python.exe", "correferencias.py");
 		builder.directory(new File(archCorreferencias));
 		builder.redirectErrorStream(true);
 		Process process = builder.start();
+		int returnCode = -1;
+		try {
+			returnCode = process.waitFor();
+		} catch (InterruptedException ex) {
+			System.out.println(ex);
+		}
 	}
 }
