@@ -5,31 +5,44 @@ package scraper;
  * @author Rodrigo
  */
 public class Opinion {
+
 	private Noticia noticia;
-	private String fuente;
+	private Fuente fuente;
 	private String opinion;
 
-	public Opinion(Noticia noti, String fuente, String opinion){
+	public Opinion(Noticia noti, Fuente fuente, String opinion) {
 		this.noticia = noti;
 		this.fuente = fuente;
 		this.opinion = opinion;
 	}
 
+	public String toXML() {
+		String xml = "<elem>\r\n";
+		xml += noticia.toXML();
+		xml += "<fuente>" + fuente.getFuente() + "</fuente>\r\n";
+		xml += "<opinion>" + opinion + "</opinion>\r\n";
+		xml += "</elem>\r\n";
+		return xml;
+	}
+
 	/**
 	 * @return the noticia
-	 */ public Noticia getNoticia() {
+	 */
+	public Noticia getNoticia() {
 		return noticia;
 	}
 
 	/**
 	 * @return the fuente
-	 */ public String getFuente() {
+	 */
+	public Fuente getFuente() {
 		return fuente;
 	}
 
 	/**
 	 * @return the opinion
-	 */ public String getOpinion() {
+	 */
+	public String getOpinion() {
 		return opinion;
 	}
 }
