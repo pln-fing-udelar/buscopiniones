@@ -64,54 +64,31 @@ public class ProcesadorPaginas {
 		String salidaFreeling = Main.readFile(config.getDirFreeling() + "salidaFreeling.txt", "utf8");
 		System.out.println(salidaFreeling);
 		String[] arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
-		System.out.println("toy aca freeling!");
-//		System.out.println(Arrays.toString(arrFreeling));
-		System.out.println(salidaFreeling);
-//		System.exit(1);
+
 		int i = 0;
 		for (Noticia noti : coleccionNoticias) {
 			//i = salidaFreeling.indexOf("--------------------------------------------------------------", i+1);
 			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirOpiniones() + "entrada"), "Windows-1252"));
-//			System.out.println(i +" freeling_aca");
-//			System.out.println(noti.getArticulo());
-//			System.out.println(i +" freeling_aca2");
-//			System.out.println(arrFreeling[i]);
+
 			bw.write(arrFreeling[i++]);
 			bw.flush();
 			bw.close();
 			tagger.taggearOpiniones();
 
 			CopyFiles.copyWithChannels(config.getDirOpiniones() + "salida", config.getDirCorreferencias() + "entrada.xml", false);
+
+			TaggerCorreferencias taggerCorref = new TaggerCorreferencias(config);
+			taggerCorref.taggearCorreferencias();
 			//---<borrar>
 //			java.util.Date date = new java.util.Date();
 //			long unixTime = System.currentTimeMillis() / 1000L;
-//			CopyFiles.copyWithChannels(config.getDirOpiniones() + "salida", "C:\\Fing\\ProyGrado\\basura\\entrada" + unixTime + ".xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "entrada.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "entrada.xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaFinal.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaFinal.xml", false);
 			//---</borrar>
-			TaggerCorreferencias tagger2 = new TaggerCorreferencias(config.getDirCorreferencias(), config.getDirPython());
-			tagger2.taggearCorreferencias();
 
-//		String salidaCorref = Main.readFile(config.getDirCorreferencias() + "salidaFinal.xml", "utf8");
-
-			File fXmlFile = new File(config.getDirCorreferencias() + "salidaFinal.xml");
-			DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
-			DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
-			Document doc = dBuilder.parse(fXmlFile);
-			doc.getDocumentElement().normalize();
-
-			NodeList nList = doc.getElementsByTagName("opinion");
-
-			for (int temp = 0; temp < nList.getLength(); temp++) {
-				xml += "<elem>\r\n";
-				xml += noti.toXML();
-				Node nNode = nList.item(temp);
-				if (nNode.getNodeType() == Node.ELEMENT_NODE) {
-					Element eElement = (Element) nNode;
-					String opinion = eElement.getTextContent();
-					xml += "<opinion>" + opinion + "</opinion>\r\n";
-					String fuente = eElement.getElementsByTagName("fuente").item(0).getTextContent();
-					xml += "<fuente>" + fuente + "</fuente>\r\n";
-				}
-				xml += "</elem>\r\n";
+			Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
+			for (Opinion op : opiniones) {
+				xml += op.toXML();
 			}
 		}
 		coleccionNoticias = new ArrayList<Noticia>();
