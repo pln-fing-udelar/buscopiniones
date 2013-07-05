@@ -12,9 +12,6 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
-import jpl.Atom;
-import jpl.Query;
-import jpl.Term;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -25,7 +22,7 @@ public class Main {
 
 	static public String readFile(String file, String encoding) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
-		while(!reader.ready());
+		while (!reader.ready());
 		String line = null;
 		StringBuilder stringBuilder = new StringBuilder();
 		String ls = System.getProperty("line.separator");
@@ -44,26 +41,10 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
-//			TaggerOpiniones tagger = new TaggerOpiniones("C:\\Fing\\ProyGrado\\opiniones\\", "C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\");
-//			tagger.taggearFreelingDesdeArchivo("C:\\Fing\\ProyGrado\\Freeling\\freeling_win\\freeling\\bin\\prueba.txt", "C:\\Fing\\ProyGrado\\opiniones\\entrada");
-//			tagger.taggearOpiniones();
-
-//
-//			CopyFiles.copyWithChannels("C:\\Fing\\ProyGrado\\opiniones\\salida", "C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2\\entrada.xml", false);
-//			TaggerCorreferencias tagger2 = new TaggerCorreferencias("C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2\\", "C:\\Python27\\");
-//			tagger2.taggearCorreferencias();
-
-
-
+			
 			Configuracion config = new Configuracion();
 			final int maxIterFreeling = 10;
 
-//			Query q1 =
-//					new Query(
-//					"consult",
-//					new Term[]{new Atom(config.getDirOpiniones() + "controlEs.pl")});
-//
-//			System.out.println("consult " + (q1.query() ? "succeeded" : "failed"));
 			System.out.println("toy aca!!!!!!!");
 			File folder = new File("C:\\Fing\\ProyGrado\\paginas");
 			File[] listOfMediosPrensa = folder.listFiles();

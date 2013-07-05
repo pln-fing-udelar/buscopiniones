@@ -9,18 +9,21 @@ public class Opinion {
 	private Noticia noticia;
 	private Fuente fuente;
 	private String opinion;
+	private String id;
 
-	public Opinion(Noticia noti, Fuente fuente, String opinion) {
+	public Opinion(Noticia noti, Fuente fuente, String opinion, String id) {
 		this.noticia = noti;
 		this.fuente = fuente;
 		this.opinion = opinion;
+		this.id = id;
 	}
 
 	public String toXML() {
 		String xml = "<doc>\r\n";
 		xml += noticia.toXML();
-		xml += "<field name=\"fuente\">" + fuente.getFuente() + "</field>\r\n";
-		xml += "<field name=\"opinion\">" + opinion + "</field>\r\n";
+		xml += "<field name=\"fuente\">" + ProcesadorHTML.html2text(fuente.getFuente()) + "</field>\r\n";
+		xml += "<field name=\"opinion\">" + ProcesadorHTML.html2text(opinion) + "</field>\r\n";
+		xml += "<field name=\"id\">" + noticia.getUrl() + "/" + id + "</field>\r\n";
 		xml += "</doc>\r\n";
 		return xml;
 	}

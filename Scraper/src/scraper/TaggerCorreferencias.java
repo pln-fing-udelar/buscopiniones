@@ -104,7 +104,7 @@ public class TaggerCorreferencias {
 		Collection<Opinion> opiniones = new ArrayList<Opinion>();
 		Collection<Fuente> fuentesRec = new ArrayList<Fuente>();
 		obtenerFuentesRec(docElem, fuentesRec);
-		obtenerOpinionesRecursivo(docElem, noti, opiniones, fuentesRec);
+		obtenerOpinionesRecursivo(docElem, noti, opiniones, fuentesRec, 0);
 
 		for (Opinion op : opiniones) {
 			if (!op.getFuente().getIdRec().equals("0") && !op.getFuente().getIdRec().equals("")) {
@@ -144,7 +144,7 @@ public class TaggerCorreferencias {
 		return opiniones;
 	}
 
-	private void obtenerOpinionesRecursivo(Node nodo, Noticia noti, Collection<Opinion> opiniones, Collection<Fuente> fuentesRec) {
+	private void obtenerOpinionesRecursivo(Node nodo, Noticia noti, Collection<Opinion> opiniones, Collection<Fuente> fuentesRec, int idOp) {
 		if (nodo.getNodeType() == Node.ELEMENT_NODE) {
 			Element elemento = (Element) nodo;
 			NodeList listaOpiniones = elemento.getElementsByTagName("opinion");
@@ -165,9 +165,10 @@ public class TaggerCorreferencias {
 						fuente = new Fuente("", "", "");
 					}
 
-					Opinion op = new Opinion(noti, fuente, opinion);
+					Opinion op = new Opinion(noti, fuente, opinion, idOp + "");
+					idOp++;
 					opiniones.add(op);
-					obtenerOpinionesRecursivo(eElement, noti, opiniones, fuentesRec);
+					obtenerOpinionesRecursivo(eElement, noti, opiniones, fuentesRec, idOp);
 				}
 			}
 		}
