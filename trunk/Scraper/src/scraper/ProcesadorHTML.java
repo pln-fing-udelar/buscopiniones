@@ -4,6 +4,9 @@ import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import de.l3s.boilerpipe.extractors.ArticleExtractor;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.TagNode;
 import org.jsoup.Jsoup;
 
 /**
@@ -21,7 +24,17 @@ public class ProcesadorHTML {
 	}
 
 	public static String html2text(String html) {
-		return Jsoup.parse(html).text();
+		if (html.equals("")){
+			return "";
+		}
+		
+		String textoOk = Jsoup.parse(html).text();
+		
+		HtmlCleaner cleaner = new HtmlCleaner();
+		CleanerProperties props = cleaner.getProperties();
+		TagNode node = cleaner.clean(textoOk);
+		TagNode[] nodos = node.getElementsByName("body", true);
+		return cleaner.getInnerHtml(nodos[0]);
 	}
 
 	static public String obtenerCharset(String html) {
