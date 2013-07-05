@@ -62,7 +62,7 @@ public class ProcesadorPaginas {
 		//config.getDirOpiniones() + "entrada"
 		tagger.taggearFreelingDesdeArchivo(config.getDirFreeling() + "entradaFreeling.txt", config.getDirFreeling() + "salidaFreeling.txt");
 		String salidaFreeling = Main.readFile(config.getDirFreeling() + "salidaFreeling.txt", "utf8");
-		System.out.println(salidaFreeling);
+//		System.out.println(salidaFreeling);
 		String[] arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
 
 		int i = 0;
@@ -84,6 +84,7 @@ public class ProcesadorPaginas {
 //			long unixTime = System.currentTimeMillis() / 1000L;
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "entrada.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "entrada.xml", false);
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaFinal.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaFinal.xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaRec.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaRec.xml", false);
 			//---</borrar>
 
 			Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);

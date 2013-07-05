@@ -4,13 +4,21 @@
  */
 package scraper;
 
+import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import org.htmlcleaner.CleanerProperties;
+import org.htmlcleaner.HtmlCleaner;
+import org.htmlcleaner.PrettyXmlSerializer;
+import org.htmlcleaner.TagNode;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -40,12 +48,32 @@ public class TaggerCorreferencias {
 		//		PyObject someFunc = interpreter.get("funcName");
 		//		PyObject result = someFunc.__call__(new PyString("Test!"));
 		//		String realResult = (String) result.__tojava__(String.class);
-
+		
+		this.arreglarXML();
 		System.out.println(config.getDirPython() + "python.exe" + " correferencias.py");
 		ProcessBuilder builder = new ProcessBuilder(config.getDirPython() + "python.exe", "correferencias.py");
 		builder.directory(new File(config.getDirCorreferencias()));
 		builder.redirectErrorStream(true);
 		Process process = builder.start();
+
+		OutputStream stdin = process.getOutputStream();
+		final InputStream stdout = process.getInputStream();
+
+		new Thread(new Runnable() {
+			public void run() {
+				try {
+					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+					String line;
+					System.out.println("Esto es CORREFERENCIAS:");
+					while ((line = br.readLine()) != null) {						
+						System.out.println(line);
+					}
+				} catch (java.io.IOException e) {
+					System.out.println(e);
+				}
+			}
+		}).start();
+
 		int returnCode = -1;
 		try {
 			returnCode = process.waitFor();
@@ -54,6 +82,14 @@ public class TaggerCorreferencias {
 		}
 	}
 
+	private void arreglarXML() throws IOException{
+		String opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "Windows-1252");
+		HtmlCleaner cleaner = new HtmlCleaner();
+		CleanerProperties props = cleaner.getProperties();
+		TagNode node = cleaner.clean(opinionesXML);
+		new PrettyXmlSerializer(props).writeToFile(node, config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
+	}
+	
 	// A partir del archivo salidaFinal.xml, genera una lista de las opiniones encontradas en el mismo
 	public Collection<Opinion> obtenerOpiniones(Noticia noti) throws ParserConfigurationException, SAXException, IOException {
 

@@ -13,7 +13,7 @@
 <Configuracion>
 	<dirOpiniones>C:\Fing\ProyGrado\opiniones\</dirOpiniones>
 	<dirFreeling>C:\Fing\ProyGrado\Freeling\freeling_win\freeling\bin\</dirFreeling>
-	<dirCorreferencias>C:\Fing\\ProyGrado\Correferencias\ModuloCorref\Proyecto_v6.2\</dirCorreferencias>
+	<dirCorreferencias>C:\Fing\ProyGrado\Correferencias\ModuloCorref\Proyecto_v6.2\</dirCorreferencias>
 	<dirPython>C:\Python27\</dirPython>
 	<dirProlog>C:\Program Files (x86)\swipl\bin\</dirProlog>
 </Configuracion>
