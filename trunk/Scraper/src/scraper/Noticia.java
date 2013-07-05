@@ -30,15 +30,15 @@ public class Noticia {
 
 	public String toXML() {
 		String xml = "";
-		xml += "<field name=\"url\">" + url + "</url>\r\n";
-		xml += "<field name=\"articulo\">" + articulo + "</articulo>\r\n";
-		xml += "<field name=\"title\">" + title + "</title>\r\n";
-		xml += "<field name=\"metatitle\">" + metatitle + "</metatitle>\r\n";
-		xml += "<field name=\"h1\">" + h1 + "</h1>\r\n";
-		xml += "<field name=\"fecha\">" + fecha + "</fecha>\r\n";
-		xml += "<field name=\"categorias\">" + categorias + "</categorias>\r\n";
-		xml += "<field name=\"descripcion\">" + getDescripcion() + "</descripcion>\r\n";
-		xml += "<field name=\"autor\">" + getAutor() + "</autor>\r\n";
+		xml += "<field name=\"url\">" + url + "</field>\r\n";
+		xml += "<field name=\"articulo\">" + articulo + "</field>\r\n";
+		xml += "<field name=\"title\">" + title + "</field>\r\n";
+		xml += "<field name=\"metatitle\">" + metatitle + "</field>\r\n";
+		xml += "<field name=\"h1\">" + h1 + "</field>\r\n";
+		xml += "<field name=\"fecha\">" + fecha + "</field>\r\n";
+		xml += "<field name=\"categorias\">" + categorias + "</field>\r\n";
+		xml += "<field name=\"descripcion\">" + getDescripcion() + "</field>\r\n";
+		xml += "<field name=\"autor\">" + getAutor() + "</field>\r\n";
 		return xml;
 	}
 
