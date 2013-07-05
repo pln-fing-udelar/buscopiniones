@@ -56,6 +56,7 @@ public class Main {
 
 
 			Configuracion config = new Configuracion();
+			final int maxIterFreeling = 10;
 
 //			Query q1 =
 //					new Query(
@@ -102,7 +103,7 @@ public class Main {
 							proc.procesar(html, url);
 							i++;
 						}
-						if (i >= 10) {
+						if (i >= maxIterFreeling) {
 							String xml = proc.taggear();
 							bw.append(xml);
 							bw.flush();
@@ -110,7 +111,7 @@ public class Main {
 						}
 					}
 
-					if (i >= 10) {
+					if (i >= maxIterFreeling) {
 						String xml = proc.taggear();
 						bw.append(xml);
 						bw.flush();
