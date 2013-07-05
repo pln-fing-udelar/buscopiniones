@@ -29,9 +29,9 @@ public class Main {
 		String line = null;
 		StringBuilder stringBuilder = new StringBuilder();
 		String ls = System.getProperty("line.separator");
-		System.out.println("toy por entrar al archivo");
+//		System.out.println("toy por entrar al archivo");
 		while ((line = reader.readLine()) != null) {
-			System.out.println(line);
+//			System.out.println(line);
 			stringBuilder.append(line);
 			stringBuilder.append(ls);
 		}
