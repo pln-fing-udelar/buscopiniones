@@ -17,11 +17,11 @@ public class Opinion {
 	}
 
 	public String toXML() {
-		String xml = "<elem>\r\n";
+		String xml = "<doc>\r\n";
 		xml += noticia.toXML();
-		xml += "<fuente>" + fuente.getFuente() + "</fuente>\r\n";
-		xml += "<opinion>" + opinion + "</opinion>\r\n";
-		xml += "</elem>\r\n";
+		xml += "<field name=\"fuente\">" + fuente.getFuente() + "</field>\r\n";
+		xml += "<field name=\"opinion\">" + opinion + "</field>\r\n";
+		xml += "</doc>\r\n";
 		return xml;
 	}
 
