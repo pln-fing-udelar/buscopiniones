@@ -71,7 +71,7 @@ public class Main {
 				String medioActual = medioPrensa.getName();
 				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + ".xml";
 				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo)));
-
+				bw.append("<add>");
 				ProcesadorPaginas proc = new ProcesadorPaginas(config, medioActual);
 				int i = 0;
 				for (File carpeta_fecha : listOfFolders) {
@@ -123,6 +123,8 @@ public class Main {
 					bw.append(xml);
 					bw.flush();
 				}
+				bw.append("</add>");
+				bw.flush();
 				bw.close();
 			}
 		} catch (Exception e) {
