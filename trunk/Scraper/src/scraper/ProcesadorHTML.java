@@ -67,7 +67,7 @@ public class ProcesadorHTML {
 	public Noticia procesar(String medioDePrensa) throws BoilerpipeProcessingException {
 	
 		return new Noticia(url,
-				ArticleExtractor.INSTANCE.getText(html),
+				ProcesadorHTML.html2text(ArticleExtractor.INSTANCE.getText(html)),
 				this.obtenerTitle().trim(),
 				this.obtenerMetaTitle().trim(),
 				this.obtenerH1().trim(),
@@ -200,7 +200,7 @@ public class ProcesadorHTML {
 			return "20" + m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
 		}
 
-		return "";
+		return "1990-08-14T00:00:00Z";
 		// En caso de que no haya encontrado ninguna fecha, le pongo la fecha de hoy (el dia que se indexó)
 //		Date d = new Date();
 //		String mes = "";
@@ -225,7 +225,7 @@ public class ProcesadorHTML {
 		if (m.find()) {
 			resultado = m.group(2);
 		}
-		return resultado;
+		return ProcesadorHTML.html2text(resultado);
 	}
 	
 	String parseMetaDescripcion(String medioDePrensa) {
@@ -236,7 +236,6 @@ public class ProcesadorHTML {
 			if (m.find()) {
 				resultado = m.group(2);
 			}
-			return resultado;
 		} else if (medioDePrensa.equals("elpais")) {
 			
 			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')(.*?)(\"|').*?>");
@@ -244,10 +243,8 @@ public class ProcesadorHTML {
 			if (m.find()) {
 				resultado = m.group(2);
 			}
-			return resultado;
-		} else {
-			return resultado;
 		}
+		return ProcesadorHTML.html2text(resultado);
 	}
 	
 	String parseCategorias(String medioDePrensa) {
@@ -263,8 +260,7 @@ public class ProcesadorHTML {
 			resultado = "";
 			for(int i = 0; i < n; i++){
 				resultado = resultado + aux[i];
-			}
-			return resultado;
+			}			
 		} else if (medioDePrensa.equals("elpais")) {
 			Pattern p = Pattern.compile("(?s)(?i)<h2.*?>(.*?)</h2>");
 			Matcher m = p.matcher(html);
@@ -277,9 +273,8 @@ public class ProcesadorHTML {
 			for(int i = 0; i < n; i++){
 				resultado = resultado + aux[i];
 			}			
-			return resultado;
-		} else {
-			return resultado;
+			
 		}
+		return ProcesadorHTML.html2text(resultado);
 	}
 }
