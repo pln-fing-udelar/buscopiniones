@@ -41,9 +41,9 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
-			
+
 			Configuracion config = new Configuracion();
-			final int maxIterFreeling = 10;
+			final int maxIterFreeling = 25;
 
 			System.out.println("toy aca!!!!!!!");
 			File folder = new File("C:\\Fing\\ProyGrado\\paginas");
