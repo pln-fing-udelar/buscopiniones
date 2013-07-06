@@ -59,37 +59,42 @@ public class ProcesadorPaginas {
 		bw.close();
 
 		TaggerOpiniones tagger = new TaggerOpiniones(config.getDirOpiniones(), config.getDirFreeling(), config.getDirProlog());
-		//config.getDirOpiniones() + "entrada"
 		tagger.taggearFreelingDesdeArchivo(config.getDirFreeling() + "entradaFreeling.txt", config.getDirFreeling() + "salidaFreeling.txt");
-		String salidaFreeling = Main.readFile(config.getDirFreeling() + "salidaFreeling.txt", "utf8");
-//		System.out.println(salidaFreeling);
-		String[] arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
 
-		int i = 0;
-		for (Noticia noti : coleccionNoticias) {
-			//i = salidaFreeling.indexOf("--------------------------------------------------------------", i+1);
-			bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirOpiniones() + "entrada"), "Windows-1252"));
+		String[] arrFreeling = null;
+		int contador = 0;
+		while (arrFreeling == null || ((arrFreeling.length - 1) != coleccionNoticias.size() && contador < 10)) {
+			String salidaFreeling = Main.readFile(config.getDirFreeling() + "salidaFreeling.txt", "utf8");
+			arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
+			contador++;
+		}
+		if (contador < 10) {
+			int i = 0;
+			for (Noticia noti : coleccionNoticias) {
+				//i = salidaFreeling.indexOf("--------------------------------------------------------------", i+1);
+				bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirOpiniones() + "entrada"), "Windows-1252"));
 
-			bw.write(arrFreeling[i++]);
-			bw.flush();
-			bw.close();
-			tagger.taggearOpiniones();
+				bw.write(arrFreeling[i++]);
+				bw.flush();
+				bw.close();
+				tagger.taggearOpiniones();
 
-			CopyFiles.copyWithChannels(config.getDirOpiniones() + "salida", config.getDirCorreferencias() + "entrada.xml", false);
+				CopyFiles.copyWithChannels(config.getDirOpiniones() + "salida", config.getDirCorreferencias() + "entrada.xml", false);
 
-			TaggerCorreferencias taggerCorref = new TaggerCorreferencias(config);
-			taggerCorref.taggearCorreferencias();
-			//---<borrar>
+				TaggerCorreferencias taggerCorref = new TaggerCorreferencias(config);
+				taggerCorref.taggearCorreferencias();
+				//---<borrar>
 //			java.util.Date date = new java.util.Date();
 //			long unixTime = System.currentTimeMillis() / 1000L;
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "entrada.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "entrada.xml", false);
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaFinal.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaFinal.xml", false);
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaRec.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaRec.xml", false);
-			//---</borrar>
+				//---</borrar>
 
-			Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
-			for (Opinion op : opiniones) {
-				xml += op.toXML();
+				Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
+				for (Opinion op : opiniones) {
+					xml += op.toXML();
+				}
 			}
 		}
 		coleccionNoticias = new ArrayList<Noticia>();
