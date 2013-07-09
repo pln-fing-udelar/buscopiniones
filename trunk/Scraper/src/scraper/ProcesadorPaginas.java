@@ -6,22 +6,13 @@ package scraper;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
 import java.io.BufferedWriter;
-import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Date;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
 
 /**
@@ -41,14 +32,15 @@ public class ProcesadorPaginas {
 	}
 
 	public void procesar(String html, String url) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
-		ProcesadorHTML proc = new ProcesadorHTML(html, url);
+		System.out.println("Empiezo a procesar HTML");
+		ProcesadorHTML proc = new ProcesadorHTML(html, url);		
 		Noticia noti = proc.procesar(medioDePrensa);
 		coleccionNoticias.add(noti);
 	}
 
 	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
 		String xml = "";
-
+		System.out.println("Empiezo a procesar taggeo");
 		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirFreeling() + "entradaFreeling.txt"), "utf8"));
 		for (Noticia noti : coleccionNoticias) {
 			bw.write(noti.getArticulo());
@@ -57,8 +49,9 @@ public class ProcesadorPaginas {
 			bw.write("\r\n");
 		}
 		bw.close();
-
+		
 		TaggerOpiniones tagger = new TaggerOpiniones(config.getDirOpiniones(), config.getDirFreeling(), config.getDirProlog());
+		System.out.println("Empiezo a taggear con freeling");
 		tagger.taggearFreelingDesdeArchivo(config.getDirFreeling() + "entradaFreeling.txt", config.getDirFreeling() + "salidaFreeling.txt");
 
 		String[] arrFreeling = null;
@@ -68,6 +61,7 @@ public class ProcesadorPaginas {
 			arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
 			contador++;
 		}
+		System.out.println("Termine con freeling");
 		if (contador < 10) {
 			int i = 0;
 			for (Noticia noti : coleccionNoticias) {
@@ -77,11 +71,13 @@ public class ProcesadorPaginas {
 				bw.write(arrFreeling[i++]);
 				bw.flush();
 				bw.close();
+				System.out.println("Empiezo a taggear opiniones");
 				tagger.taggearOpiniones();
 
 				CopyFiles.copyWithChannels(config.getDirOpiniones() + "salida", config.getDirCorreferencias() + "entrada.xml", false);
 
 				TaggerCorreferencias taggerCorref = new TaggerCorreferencias(config);
+				System.out.println("Empiezo a taggear correferencias");
 				taggerCorref.taggearCorreferencias();
 				//---<borrar>
 //			java.util.Date date = new java.util.Date();
@@ -91,11 +87,13 @@ public class ProcesadorPaginas {
 //			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaRec.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaRec.xml", false);
 				//---</borrar>
 
+				System.out.println("Empiezo a scrapear opiniones");
 				Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
 				for (Opinion op : opiniones) {
 					xml += op.toXML();
 				}
 			}
+			System.out.println("Termine con el taggeo!");
 		}
 		coleccionNoticias = new ArrayList<Noticia>();
 		return xml;
