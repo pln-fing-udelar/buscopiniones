@@ -19,22 +19,31 @@ public class ProcesadorHTML {
 	private String url;
 
 	public ProcesadorHTML(String html, String url) {
+		if (html == null) {
+			html = "";
+		}
+		if (url == null) {
+			url = "";
+		}
 		this.html = html;
 		this.url = url;
 	}
 
 	public static String html2text(String html) {
-		if (html.equals("")){
+		if (html == null || html.equals("")) {
 			return "";
 		}
-		
+
 		String textoOk = Jsoup.parse(html).text();
-		
 		HtmlCleaner cleaner = new HtmlCleaner();
 		CleanerProperties props = cleaner.getProperties();
 		TagNode node = cleaner.clean(textoOk);
 		TagNode[] nodos = node.getElementsByName("body", true);
-		return cleaner.getInnerHtml(nodos[0]);
+		String ret = cleaner.getInnerHtml(nodos[0]);
+		if (ret == null) {
+			ret = "";
+		}
+		return ret;
 	}
 
 	static public String obtenerCharset(String html) {
@@ -78,7 +87,7 @@ public class ProcesadorHTML {
 	}
 
 	public Noticia procesar(String medioDePrensa) throws BoilerpipeProcessingException {
-	
+
 		return new Noticia(url,
 				ProcesadorHTML.html2text(ArticleExtractor.INSTANCE.getText(html)),
 				this.obtenerTitle().trim(),
@@ -88,44 +97,6 @@ public class ProcesadorHTML {
 				this.parseCategorias(medioDePrensa),
 				this.parseMetaDescripcion(medioDePrensa),
 				this.parseAutor());
-		
-//		if (medioDePrensa.equals("elpais")) {
-//			if (url.endsWith("index.asp")) {
-//				return "";
-//			} else if (url.contains("/ediciones-anteriores/")) {
-//				return "";
-//			}
-//		}
-//		String xml = "<pagina>\r\n";
-//
-//		xml += "<url>" + url + "</url>\r\n";
-//
-//		String noticia = ArticleExtractor.INSTANCE.getText(html);
-//		xml += "<articulo>" + noticia + "</articulo>\r\n";
-//		
-//		String title = this.obtenerTitle();
-//		xml += "<title>" + title.trim() + "</title>\r\n";
-//
-//		String metatitle = this.obtenerMetaTitle();
-//		xml += "<metatitle>" + metatitle.trim() + "</metatitle>\r\n";
-//		
-//		String h1 = this.obtenerH1();
-//		xml += "<h1>" + h1.trim() + "</h1>\r\n";
-//
-//		String fecha = this.parseFechaPublicacion();
-//		xml += "<fecha>" + fecha + "</fecha>\r\n";
-//
-//		String categoria = this.parseCategorias(medioDePrensa);
-//		xml += "<categorias>" + categoria + "</categorias>\r\n"; 
-//
-//		String descripcion = this.parseMetaDescripcion(medioDePrensa);
-//		xml += "<descripcion>" + descripcion + "</descripcion>\r\n";
-//		
-//		String autor = this.parseAutor();
-//		xml += "<descripcion>" + autor + "</descripcion>\r\n";
-//		
-//		xml += "</pagina>\r\n";
-//		return xml;
 	}
 
 	public String parseFechaPublicacion() {
@@ -147,7 +118,7 @@ public class ProcesadorHTML {
 		}
 
 		m = p2.matcher(html);
-		
+
 
 		if (m.find()) { // trato de matchear la fecha en el contenido de la pagina con el patron p2
 			String aux2 = "";
@@ -231,7 +202,7 @@ public class ProcesadorHTML {
 //		return (d.getYear() + 1900) + "-" + mes + "-" + dia + "T00:00:00Z";
 	}
 
-	String parseAutor(){
+	String parseAutor() {
 		String resultado = "";
 		Pattern p = Pattern.compile("(?s)(<div class=\"author\">)(.*?)(</div>)");
 		Matcher m = p.matcher(html);
@@ -240,17 +211,17 @@ public class ProcesadorHTML {
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
-	
+
 	String parseMetaDescripcion(String medioDePrensa) {
 		String resultado = "";
-		if (medioDePrensa.equals("elobservador")){
+		if (medioDePrensa.equals("elobservador")) {
 			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')(.*?)(\"|').*?>");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(2);
 			}
 		} else if (medioDePrensa.equals("elpais")) {
-			
+
 			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')(.*?)(\"|').*?>");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
@@ -259,34 +230,33 @@ public class ProcesadorHTML {
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
-	
+
 	String parseCategorias(String medioDePrensa) {
 		String resultado = "";
-		if (medioDePrensa.equals("elobservador")){	
+		if (medioDePrensa.equals("elobservador")) {
 			Pattern p = Pattern.compile("(<div.class=\"story.*?\">)((.|\n|\r|\t)*?)(<h5>)((.|\n|\r|\t)*?)(</h5>)");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(5);
+				String[] aux = resultado.split("<b>|</b>");
+				int n = aux.length;
+				resultado = "";
+				for (int i = 0; i < n; i++) {
+					resultado = resultado + aux[i];
+				}
 			}
-			String[] aux = resultado.split("<b>|</b>");
-			int n = aux.length;
-			resultado = "";
-			for(int i = 0; i < n; i++){
-				resultado = resultado + aux[i];
-			}			
 		} else if (medioDePrensa.equals("elpais")) {
 			Pattern p = Pattern.compile("(?s)(?i)<h2.*?>(.*?)</h2>");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(1);
+				String[] aux = resultado.split("<b>|</b>");
+				int n = aux.length;
+				resultado = "";
+				for (int i = 0; i < n; i++) {
+					resultado = resultado + aux[i];
+				}
 			}
-			String[] aux = resultado.split("<b>|</b>");
-			int n = aux.length;
-			resultado = "";
-			for(int i = 0; i < n; i++){
-				resultado = resultado + aux[i];
-			}			
-			
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
