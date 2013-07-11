@@ -31,14 +31,22 @@ public class ProcesadorPaginas {
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
 
-	public void procesar(String html, String url) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+	public boolean procesar(String html, String url) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
 		System.out.println("Empiezo a procesar HTML");
-		ProcesadorHTML proc = new ProcesadorHTML(html, url);		
-		Noticia noti = proc.procesar(medioDePrensa);
-		coleccionNoticias.add(noti);
+		ProcesadorHTML proc = new ProcesadorHTML(html, url);
+		if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
+			Noticia noti = proc.procesar(medioDePrensa);
+			coleccionNoticias.add(noti);
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+		if (coleccionNoticias.isEmpty()){
+			return "";
+		}
 		String xml = "";
 		System.out.println("Empiezo a procesar taggeo");
 		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirFreeling() + "entradaFreeling.txt"), "utf8"));
