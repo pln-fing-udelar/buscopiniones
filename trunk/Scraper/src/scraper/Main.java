@@ -72,6 +72,7 @@ public class Main {
 					File[] listOfFiles = carpeta_fecha.listFiles();
 					for (File file : listOfFiles) {
 						if (file.isFile()) {
+							boolean pasaFiltro = true;
 							System.out.println(file.getName());
 							BASE64Decoder decoder = new BASE64Decoder();
 							byte[] decodedBytes = decoder.decodeBuffer(file.getName());
@@ -96,7 +97,7 @@ public class Main {
 							}
 
 
-							proc.procesar(html, url);
+							pasaFiltro = proc.procesar(html, url);
 							i++;
 						}
 						if (i >= maxIterFreeling) {

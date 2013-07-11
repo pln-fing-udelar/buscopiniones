@@ -267,4 +267,12 @@ public class ProcesadorHTML {
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
+
+	String getUrl() {
+		return url;
+	}
+
+	String getHtml() {
+		return html;
+	}
 }
