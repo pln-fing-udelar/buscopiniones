@@ -109,12 +109,19 @@ public class ProcesadorHTML {
 		Pattern p3 = Pattern.compile("(?i)([0-3][0-9]).?([0-1]?[0-9]).?(20[0-1][0-9])");
 		Pattern p4 = Pattern.compile("(?i)([0-3][0-9]).?([0-1][0-9]).?([0-1][0-9])");
 		Pattern p5 = Pattern.compile("(?i)([0-3][0-9])\\.([0-1][0-9])\\.(20[0-1][0-9])");
+		Pattern p6 = Pattern.compile("(?i)(Publicado el )([0-3][0-9])/([0-1][0-9])/(20[0-1][0-9])");
 		if (medioDePrensa.equals("elobservador")) {
 			Matcher m = p5.matcher(html);
 
 			if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(1)) <= 31)) { // trato de matchear la fecha en el contenido de la pagina con el patron p4
 				return m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
 			}			
+		} else if (medioDePrensa.equals("larepublica")){
+			Matcher m = p6.matcher(html);
+			
+			if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(1)) <= 31)) { // trato de matchear la fecha en el contenido de la pagina con el patron p4
+				return m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
+			}	
 		}
 
 		Matcher m = p.matcher(url);
