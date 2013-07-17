@@ -31,15 +31,12 @@ public class ProcesadorPaginas {
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
 
-	public boolean procesar(String html, String url) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+	public void procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+		// saque para afuera el procesador html, para poder utilizarlo en otros casos
 		System.out.println("Empiezo a procesar HTML");
-		ProcesadorHTML proc = new ProcesadorHTML(html, url);
 		if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
 			Noticia noti = proc.procesar(medioDePrensa);
 			coleccionNoticias.add(noti);
-			return true;
-		} else {
-			return false;
 		}
 	}
 
