@@ -58,6 +58,7 @@ public class Main {
 			Configuracion config = new Configuracion();
 			final int maxIterFreeling = 25;
 
+			// Creo una lista de ejemplos vacia, para entrenar
 			LinkedList<Ejemplo> ejemplos = new LinkedList();
 			System.out.println("toy aca!!!!!!!");
 			
@@ -104,13 +105,15 @@ public class Main {
 
 							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
 							
-							// para crear los ejemplos de entrenamiento a manopla
+							// para crear los ejemplos de entrenamiento a mano
 							BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+							System.out.println(url);
+							System.out.println("Es articulo? s/n");
 							String esArticuloStr = in.readLine();
 							boolean esArticulo = esArticuloStr.equals("s");
 							Ejemplo ej = new Ejemplo(procHTML, esArticulo);
 							ejemplos.add(ej);
-							
+							Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs", ejemplos);
 							proc.procesar(procHTML);
 							
 							i++;
