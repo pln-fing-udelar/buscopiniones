@@ -284,30 +284,66 @@ public class ProcesadorHTML {
 	}
 
 	int calcularLargoUrl() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		return url.length();
 	}
 
 	int calcularH1() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<h1>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 
 	int calcularH2() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<h2>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 
 	int calcularH3() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<h3>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 
 	int calcularH4() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<h4>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 
 	int calcularH5() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<h5>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 
 	int calcularDiv() {
-		throw new UnsupportedOperationException("Not yet implemented");
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<div>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
 	}
 }
