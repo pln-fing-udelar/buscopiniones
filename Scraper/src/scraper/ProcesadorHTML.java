@@ -282,4 +282,32 @@ public class ProcesadorHTML {
 	String getHtml() {
 		return html;
 	}
+
+	int calcularLargoUrl() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularH1() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularH2() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularH3() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularH4() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularH5() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
+
+	int calcularDiv() {
+		throw new UnsupportedOperationException("Not yet implemented");
+	}
 }
