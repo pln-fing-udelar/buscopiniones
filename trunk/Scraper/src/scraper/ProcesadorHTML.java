@@ -283,10 +283,24 @@ public class ProcesadorHTML {
 		return html;
 	}
 
+	int calcularTamanioHTML(){
+		return html.length();
+	}
+	
 	int calcularLargoUrl() {
 		return url.length();
 	}
 
+	int cantidadTagsHTML(){
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<.*?>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;	
+	}
+	
 	int calcularH1() {
 		int cantidad = 0;
 		Pattern p = Pattern.compile("(?i)(<h1>)");
