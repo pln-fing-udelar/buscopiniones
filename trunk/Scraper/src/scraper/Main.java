@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.LinkedList;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -57,8 +58,14 @@ public class Main {
 			Configuracion config = new Configuracion();
 			final int maxIterFreeling = 25;
 
+			LinkedList<Ejemplo> ejemplos = new LinkedList();
 			System.out.println("toy aca!!!!!!!");
-			File folder = new File("C:\\Fing\\ProyGrado\\paginas");
+			
+			/*****************************************
+			 * Cambie la carpeta para una de pruebas *
+			 *****************************************/
+			File folder = new File("C:\\Fing\\ProyGrado\\pruebas");
+			
 			File[] listOfMediosPrensa = folder.listFiles();
 			for (File medioPrensa : listOfMediosPrensa) {
 				File[] listOfFolders = medioPrensa.listFiles();
@@ -72,7 +79,6 @@ public class Main {
 					File[] listOfFiles = carpeta_fecha.listFiles();
 					for (File file : listOfFiles) {
 						if (file.isFile()) {
-							boolean pasaFiltro = true;
 							System.out.println(file.getName());
 							BASE64Decoder decoder = new BASE64Decoder();
 							byte[] decodedBytes = decoder.decodeBuffer(file.getName());
@@ -96,8 +102,17 @@ public class Main {
 								html = readFile(file, "Windows-1252");
 							}
 
-
-							pasaFiltro = proc.procesar(html, url);
+							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
+							
+							// para crear los ejemplos de entrenamiento a manopla
+							BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+							String esArticuloStr = in.readLine();
+							boolean esArticulo = esArticuloStr.equals("s");
+							Ejemplo ej = new Ejemplo(procHTML, esArticulo);
+							ejemplos.add(ej);
+							
+							proc.procesar(procHTML);
+							
 							i++;
 						}
 						if (i >= maxIterFreeling) {
