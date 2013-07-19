@@ -12,6 +12,7 @@ import java.io.Writer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 import java.nio.charset.Charset;
+import java.util.Hashtable;
 import java.util.LinkedList;
 import sun.misc.BASE64Decoder;
 
@@ -20,6 +21,36 @@ import sun.misc.BASE64Decoder;
  * @author Rodrigo
  */
 public class Main {
+
+	static public void generarCVSEntrenamiento() throws IOException {
+		Hashtable<String,Boolean> tablaUrls = new Hashtable();
+		LinkedList<Ejemplo> ejemplos = new LinkedList();
+		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\ejemplos");
+		File[] listOfFiles = folder.listFiles();
+		for (File file : listOfFiles) {
+			if (file.isFile()) {
+				System.out.println(file.getName());
+				BASE64Decoder decoder = new BASE64Decoder();
+				byte[] decodedBytes = decoder.decodeBuffer(file.getName());
+				String url = new String(decodedBytes);
+				System.out.println(url);
+
+				String html = readFile(file, "UTF-8");
+
+				if (ProcesadorHTML.obtenerCharset(html).equals("iso-8859-1") || ProcesadorHTML.obtenerCharset(html).equals("ISO-8859-1")) {
+
+					html = readFile(file, "ISO-8859-1");
+
+				} else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")) {
+					html = readFile(file, "Windows-1252");
+				}
+				ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
+				Ejemplo ej = new Ejemplo(procHTML, true);
+				ejemplos.add(ej);
+			}
+		}
+		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs", ejemplos);
+	}
 
 	static public String readFile(String file, String encoding) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
@@ -34,7 +65,7 @@ public class Main {
 		reader.close();
 		return stringBuilder.toString();
 	}
-	
+
 	static public String readFile(File file, String encoding) throws IOException {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), encoding));
 		while (!reader.ready());
@@ -59,14 +90,24 @@ public class Main {
 			final int maxIterFreeling = 25;
 
 			// Creo una lista de ejemplos vacia, para entrenar
-			LinkedList<Ejemplo> ejemplos = new LinkedList();
+			
 			System.out.println("toy aca!!!!!!!");
-			
-			/*****************************************
-			 * Cambie la carpeta para una de pruebas *
-			 *****************************************/
+			System.out.println("Entrenar clasificador?s/n");
+			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
+			String entrenarClasificador = in.readLine();			
+			if (entrenarClasificador.equals("s")) {
+					Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
+					clasif.crearModelo();
+					return;
+			}
+			/**
+			 * *******************************************************************
+			 * Cambie la carpeta para una de pruebas con archivos bajados a mano
+			 * *
+			 * *******************************************************************
+			 */
 			File folder = new File("C:\\Fing\\ProyGrado\\pruebas");
-			
+
 			File[] listOfMediosPrensa = folder.listFiles();
 			for (File medioPrensa : listOfMediosPrensa) {
 				File[] listOfFolders = medioPrensa.listFiles();
@@ -99,24 +140,17 @@ public class Main {
 //								html = Charset.forName("ISO-8859-1").decode(bb).toString();
 								html = readFile(file, "ISO-8859-1");
 
-							}else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")){
+							} else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")) {
 								html = readFile(file, "Windows-1252");
 							}
 
 							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
-							
-							// para crear los ejemplos de entrenamiento a mano
-							BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-							System.out.println(url);
-							System.out.println("Es articulo? s/n");
-							String esArticuloStr = in.readLine();
-							boolean esArticulo = esArticuloStr.equals("s");
-							Ejemplo ej = new Ejemplo(procHTML, esArticulo);
-							ejemplos.add(ej);
-							Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs", ejemplos);
 							proc.procesar(procHTML);
-							
+
+
 							i++;
+
+
 						}
 						if (i >= maxIterFreeling) {
 							String xml = proc.taggear();
