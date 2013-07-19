@@ -1,17 +1,6 @@
 package scraper;
 
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
-import java.nio.charset.Charset;
+import java.io.*;
 import java.util.Hashtable;
 import java.util.LinkedList;
 import sun.misc.BASE64Decoder;
@@ -25,7 +14,7 @@ public class Main {
 	static public void generarCVSEntrenamiento() throws IOException {
 		Hashtable<String,Boolean> tablaUrls = new Hashtable();
 		LinkedList<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\ejemplos");
+		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -85,7 +74,8 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
-
+			LectorCVS lectorCVS = new LectorCVS();
+			lectorCVS.run();
 			Configuracion config = new Configuracion();
 			final int maxIterFreeling = 25;
 
