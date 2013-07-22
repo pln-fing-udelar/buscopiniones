@@ -21,6 +21,7 @@ import org.xml.sax.SAXException;
  */
 public class ProcesadorPaginas {
 
+	private Clasificador clasificador;
 	private Configuracion config;
 	private String medioDePrensa;
 	private Collection<Noticia> coleccionNoticias;
@@ -28,13 +29,21 @@ public class ProcesadorPaginas {
 	public ProcesadorPaginas(Configuracion config, String medioDePrensa) {
 		this.config = config;
 		this.medioDePrensa = medioDePrensa;
+		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
+		clasificador.crearModelo();
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
 
-	public void procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+	public void procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, Exception {
 		// saque para afuera el procesador html, para poder utilizarlo en otros casos
 		System.out.println("Empiezo a procesar HTML");
-		if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
+		if (medioDePrensa.equals("elpais")){
+			Ejemplo ej = new Ejemplo(proc, false);
+			if (clasificador.clasificar(ej)) {
+				Noticia noti = proc.procesar(medioDePrensa);
+				coleccionNoticias.add(noti);
+			}
+		} else if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
 			Noticia noti = proc.procesar(medioDePrensa);
 			coleccionNoticias.add(noti);
 		}

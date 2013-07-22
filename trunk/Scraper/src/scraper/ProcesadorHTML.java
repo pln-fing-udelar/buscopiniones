@@ -293,7 +293,8 @@ public class ProcesadorHTML {
 
 	int cantidadTagsHTML(){
 		int cantidad = 0;
-		Pattern p = Pattern.compile("(?i)(<.*?>)");
+		Pattern p = Pattern.compile("(?i)<(([a-zA-Z0-9].+?)|([ac-oq-zA-Z0-9].*?))>");
+//		Pattern p = Pattern.compile("(?i)(<.*?>)");
 		Matcher m = p.matcher(html);
 		while (m.find()) {
 			cantidad++;
@@ -360,4 +361,27 @@ public class ProcesadorHTML {
 		}
 		return cantidad;
 	}
+
+	Integer calcularTable() {
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)(<table.*?>)");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
+	}
+	
+	// calcula los <p>
+	Integer calcularParrafos() {
+		int cantidad = 0;
+		Pattern p = Pattern.compile("(?i)<p>");
+		Matcher m = p.matcher(html);
+		while (m.find()) {
+			cantidad++;
+		}
+		return cantidad;
+	}		
+	
+	
 }

@@ -24,6 +24,8 @@ public class Ejemplo {
 	private Integer cantH3;
 	private Integer cantH4;
 	private Integer cantH5;
+	private Integer cantP;
+	private Integer cantTable;
 	private Integer cantDiv;
 	private Integer cantTags;
 	private Boolean esArticulo;
@@ -36,6 +38,8 @@ public class Ejemplo {
 		cantH3 = pagina.calcularH3();
 		cantH4 = pagina.calcularH4();
 		cantH5 = pagina.calcularH5();
+		cantP = pagina.calcularParrafos();
+		cantTable = pagina.calcularTable();
 		cantDiv = pagina.calcularDiv();
 		cantTags = pagina.cantidadTagsHTML();
 		this.esArticulo = esArticulo;
@@ -48,8 +52,8 @@ public class Ejemplo {
 		String coma = ",";
 		return getTamanioTotalHTML().toString() + coma + getLargoUrl().toString() + coma + getCantH1().toString() + coma
 				+ getCantH2().toString() + coma + getCantH3().toString() + coma + getCantH4().toString()
-				+ coma + getCantH5().toString() + coma + getCantDiv().toString() + coma + getCantTags().toString()
-				+ coma + getEsArticulo().toString();
+				+ coma + getCantH5().toString() + coma + getCantP().toString() + coma + getCantTable().toString() + coma + getCantDiv().toString() 
+				+ coma + getCantTags().toString() + coma + getEsArticulo().toString();
 	}
 	
 	static void guardarCSV(String archivo, List<Ejemplo> ejemplos) {
@@ -57,7 +61,7 @@ public class Ejemplo {
 			Writer out = new OutputStreamWriter(new FileOutputStream(archivo, false), Charset.forName("ISO-8859-15"));
 
 			out.write("Tamanio, LargoUrl, CantH1, CantH2, CantH3, CantH4,"
-					+ " CantH5, CantDiv, CantTags, EsArticulo");
+					+ " CantH5, CantP, CantTable, CantDiv, CantTags, EsArticulo");
 			out.write(System.getProperty("line.separator"));
 
 			Iterator it = ejemplos.iterator();
@@ -120,9 +124,17 @@ public class Ejemplo {
 		return cantH5;
 	}
 
+	public Integer getCantP() {
+		return cantP;
+	}
+	
 	/**
 	 * @return the cantDiv
 	 */
+	public Integer getCantTable() {
+		return cantTable;
+	}
+	
 	public Integer getCantDiv() {
 		return cantDiv;
 	}

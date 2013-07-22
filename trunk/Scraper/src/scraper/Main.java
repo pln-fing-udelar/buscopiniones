@@ -133,7 +133,7 @@ public class Main {
 							} else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")) {
 								html = readFile(file, "Windows-1252");
 							}
-
+							
 							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
 							proc.procesar(procHTML);
 

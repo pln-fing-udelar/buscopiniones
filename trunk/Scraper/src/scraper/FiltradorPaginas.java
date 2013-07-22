@@ -22,15 +22,6 @@ public class FiltradorPaginas {
 	int largoUrl(){
 		return url.length();
 	}
-	int contarh3(){
-		return 0;
-	}
-	int contarh2(){
-		return 0;
-	}
-	int contarh1(){
-		return 0;
-	}
 
 	boolean pasaFiltro() {
 		if (medioDePrensa.equals("elobservador")) {

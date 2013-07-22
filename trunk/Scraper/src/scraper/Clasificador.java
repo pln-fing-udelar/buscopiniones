@@ -112,8 +112,10 @@ public class Clasificador {
 		values[4] = ej.getCantH3();
 		values[5] = ej.getCantH4();
 		values[6] = ej.getCantH5();
-		values[7] = ej.getCantDiv();
-		values[8] = ej.getCantTags();
+		values[7] = ej.getCantP();
+		values[8] = ej.getCantTable();
+		values[9] = ej.getCantDiv();
+		values[10] = ej.getCantTags();
 		System.out.println("estoy en clasificar1");
 		Instance ins = new Instance(1.0, values);
 		ins.setDataset(train);
