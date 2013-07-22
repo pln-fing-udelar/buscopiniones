@@ -1,8 +1,8 @@
 package scraper;
 
 import java.io.*;
-import java.util.Hashtable;
 import java.util.LinkedList;
+import java.util.Map;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -12,7 +12,7 @@ import sun.misc.BASE64Decoder;
 public class Main {
 
 	static public void generarCVSEntrenamiento() throws IOException {
-		Hashtable<String,Boolean> tablaUrls = new Hashtable();
+		Map<String,Boolean> tablaUrls = LectorCVS.run();
 		LinkedList<Ejemplo> ejemplos = new LinkedList();
 		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\");
 		File[] listOfFiles = folder.listFiles();
@@ -34,7 +34,7 @@ public class Main {
 					html = readFile(file, "Windows-1252");
 				}
 				ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
-				Ejemplo ej = new Ejemplo(procHTML, true);
+				Ejemplo ej = new Ejemplo(procHTML, tablaUrls.get(file.getName()));
 				ejemplos.add(ej);
 			}
 		}
@@ -74,8 +74,7 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
-			LectorCVS lectorCVS = new LectorCVS();
-			lectorCVS.run();
+
 			Configuracion config = new Configuracion();
 			final int maxIterFreeling = 25;
 
@@ -86,9 +85,10 @@ public class Main {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			String entrenarClasificador = in.readLine();			
 			if (entrenarClasificador.equals("s")) {
-					Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
-					clasif.crearModelo();
-					return;
+				Main.generarCVSEntrenamiento();
+				Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
+				clasif.crearModelo();
+				return;
 			}
 			/**
 			 * *******************************************************************
