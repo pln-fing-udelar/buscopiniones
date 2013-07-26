@@ -1,5 +1,6 @@
 package temaDeLaSemana;
 
+import buscopiniones.Noticia;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,7 +13,10 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 import java.util.TreeMap;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -171,5 +175,90 @@ public class ProcesadorTemas {
 				return 1;
 			} // returning 0 would merge keys
 		}
+	}
+
+	public static String transformarAFechaSolr(String fecha) {
+		Pattern p = Pattern.compile("(?i)([0-3][0-9])/([0-1][0-9])/([0-9][0-9][0-1][0-9])");
+		Matcher m = p.matcher(fecha);
+
+		if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(1)) <= 31)) {
+			fecha = m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
+		}
+		return fecha;
+	}
+
+	public Noticia getNoticiaDeLaSemana(String fechaInicial, String fechaFinal) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+		String fechaIni = transformarAFechaSolr(fechaInicial);
+		String fechaFin = transformarAFechaSolr(fechaFinal);
+		Map<String, Double> temas = getTemasDeLaSemana(fechaIni, fechaFin);
+		Set<Map.Entry<String, Double>> temasEntrySet = temas.entrySet();
+		if (temasEntrySet.isEmpty()) {
+			System.out.println("Esta todo mal!!!!");
+		}
+		String busqueda = "title:(";
+		int cant = 0;
+		for (Map.Entry<String, Double> tema : temasEntrySet) {
+			busqueda += tema.getKey() + "^" + tema.getValue() + " ";
+			if (cant > 7){
+				break;
+			}
+			cant++;
+		}
+		busqueda += ")";
+
+		busqueda = URLEncoder.encode(busqueda, "UTF-8");
+		String paramStart = "0";
+		String paramRows = "1";
+		String paramFecha = "fecha:[" + fechaIni + " TO " + fechaFin + "]";
+		String url = urlSolrSelect + "?q=" + busqueda + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(url);
+		doc.getDocumentElement().normalize();
+		
+		System.out.println(url);
+
+		Noticia noti = new Noticia();
+		
+		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
+		Element elementoResult = (Element) nodoResult;
+		NodeList listaDocs = elementoResult.getElementsByTagName("doc");
+		for (int i = 0; i < listaDocs.getLength(); i++) {
+			Node nodoDoc = listaDocs.item(i);
+			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
+				Element elementoDoc = (Element) nodoDoc;
+				NodeList listaElems = elementoDoc.getChildNodes();
+				
+				
+				for (int j = 0; j < listaElems.getLength(); j++) {
+					Node nodoElem = listaElems.item(j);
+					if (nodoElem.getNodeType() == Node.ELEMENT_NODE) {
+						Element elementoRes = (Element) nodoElem;
+						if (elementoRes.getAttribute("name").equals("url")) {
+							noti.setUrl(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("articulo")) {
+							noti.setArticulo(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("title")) {
+							noti.setTitle(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("metatitle")) {
+							noti.setMetatitle(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("h1")) {
+							noti.setH1(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("fecha")) {
+							noti.setFecha(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("categorias")) {
+							noti.setCategorias(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("descripcion")) {
+							noti.setDescripcion(elementoRes.getTextContent());
+						} else if (elementoRes.getAttribute("name").equals("autor")) {
+							noti.setAutor(elementoRes.getTextContent());
+						}
+					}
+				}
+				
+				
+			}
+		}
+		return noti;
 	}
 }
