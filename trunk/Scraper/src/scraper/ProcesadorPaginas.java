@@ -29,7 +29,7 @@ public class ProcesadorPaginas {
 	public ProcesadorPaginas(Configuracion config, String medioDePrensa) {
 		this.config = config;
 		this.medioDePrensa = medioDePrensa;
-		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
+		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
 		clasificador.crearModelo();
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}

@@ -92,7 +92,7 @@ public class Main {
 				clasif.crearModelo();
 				return;
 			}
-			Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
+	
 			/**
 			 * *******************************************************************
 			 * Cambie la carpeta para una de pruebas con archivos bajados a mano
