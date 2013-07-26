@@ -1,7 +1,9 @@
 package scraper;
 
 import java.io.*;
+import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Map;
 import sun.misc.BASE64Decoder;
 
@@ -12,8 +14,8 @@ import sun.misc.BASE64Decoder;
 public class Main {
 
 	static public void generarCVSEntrenamiento() throws IOException {
-		Map<String,Boolean> tablaUrls = LectorCVS.run();
-		LinkedList<Ejemplo> ejemplos = new LinkedList();
+		Map<String,Boolean> tablaUrls = LectorCSV.run();
+		List<Ejemplo> ejemplos = new LinkedList();
 		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
@@ -38,7 +40,7 @@ public class Main {
 				ejemplos.add(ej);
 			}
 		}
-		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs", ejemplos);
+		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv", ejemplos);
 	}
 
 	static public String readFile(String file, String encoding) throws IOException {
@@ -86,7 +88,7 @@ public class Main {
 			String entrenarClasificador = in.readLine();			
 			if (entrenarClasificador.equals("s")) {
 				Main.generarCVSEntrenamiento();
-				Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\cvs\\ejemplos.cvs");
+				Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
 				clasif.crearModelo();
 				return;
 			}
