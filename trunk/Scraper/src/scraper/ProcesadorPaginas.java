@@ -34,7 +34,7 @@ public class ProcesadorPaginas {
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
 
-	public void procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, Exception {
+	public String procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, Exception {
 		// saque para afuera el procesador html, para poder utilizarlo en otros casos
 		System.out.println("Empiezo a procesar HTML");
 		if (medioDePrensa.equals("elpais")){
@@ -43,11 +43,14 @@ public class ProcesadorPaginas {
 				System.out.println("si si si");
 				Noticia noti = proc.procesar(medioDePrensa);
 				coleccionNoticias.add(noti);
+				return noti.toXML();
 			}
 		} else if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
 			Noticia noti = proc.procesar(medioDePrensa);
 			coleccionNoticias.add(noti);
+			return noti.toXML();
 		}
+		return "";		
 	}
 
 	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {

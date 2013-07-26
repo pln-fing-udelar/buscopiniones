@@ -103,8 +103,11 @@ public class Main {
 				File[] listOfFolders = medioPrensa.listFiles();
 				String medioActual = medioPrensa.getName();
 				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + ".xml";
+				String nomArchivoNoti = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + "Noticias.xml";
 				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo)));
+				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti)));
 				bw.append("<add>");
+				bwNoticias.append("<add>");
 				ProcesadorPaginas proc = new ProcesadorPaginas(config, medioActual);
 				int i = 0;
 				for (File carpeta_fecha : listOfFolders) {
@@ -135,9 +138,13 @@ public class Main {
 							}
 							
 							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
-							proc.procesar(procHTML);
+							
 
-
+							String xmlNoticia = "<doc>\r\n";
+							xmlNoticia += proc.procesar(procHTML);
+							xmlNoticia += "</doc>\r\n";
+							bwNoticias.append(xmlNoticia);
+							bwNoticias.flush();
 							i++;
 
 
@@ -164,8 +171,11 @@ public class Main {
 					bw.flush();
 				}
 				bw.append("</add>");
+				bwNoticias.append("</add>");
 				bw.flush();
+				bwNoticias.flush();
 				bw.close();
+				bwNoticias.close();
 			}
 		} catch (Exception e) {
 			System.out.println(e);
