@@ -92,6 +92,7 @@ public class Main {
 				clasif.crearModelo();
 				return;
 			}
+			Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
 			/**
 			 * *******************************************************************
 			 * Cambie la carpeta para una de pruebas con archivos bajados a mano
@@ -122,17 +123,10 @@ public class Main {
 							String url = new String(decodedBytes);
 							System.out.println(url);
 
-//							FileInputStream stream = new FileInputStream(file);
-//							FileChannel fc = stream.getChannel();
-//							MappedByteBuffer bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-//							String html = Charset.forName("UTF-8").decode(bb).toString();
 							String html = readFile(file, "UTF-8");
 
 							if (ProcesadorHTML.obtenerCharset(html).equals("iso-8859-1") || ProcesadorHTML.obtenerCharset(html).equals("ISO-8859-1")) {
-//								stream = new FileInputStream(file);
-//								fc = stream.getChannel();
-//								bb = fc.map(FileChannel.MapMode.READ_ONLY, 0, fc.size());
-//								html = Charset.forName("ISO-8859-1").decode(bb).toString();
+
 								html = readFile(file, "ISO-8859-1");
 
 							} else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")) {
