@@ -4,11 +4,9 @@
  */
 package temaDeLaSemana;
 
+import buscopiniones.Noticia;
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
-import java.util.Map.Entry;
-import java.util.Set;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -35,25 +33,13 @@ public class VerTemas extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try {
-			ProcesadorTemas procTemas = new ProcesadorTemas();
-			Map<String, Double> temas = procTemas.getTemasDeLaSemana("2013-03-01T00:00:00Z", "2013-03-07T00:00:00Z");
-			Set<Map.Entry<String, Double>> temasEntrySet = temas.entrySet();
-			if(temasEntrySet.isEmpty()){
-				out.println("Esta todo mal!!!!");
+			if (request.getParameter("desde") != null && !request.getParameter("desde").equals("")
+					&& request.getParameter("hasta") != null && !request.getParameter("hasta").equals("")) {
+				ProcesadorTemas procTemas = new ProcesadorTemas();
+				Noticia noti = procTemas.getNoticiaDeLaSemana(request.getParameter("desde"), request.getParameter("hasta"));
+				request.setAttribute("Noticia", noti);
 			}
-			/* TODO output your page here. You may use following sample code. */
-			out.println("<!DOCTYPE html>");
-			out.println("<html>");
-			out.println("<head>");
-			out.println("<title>Servlet VerTemas</title>");
-			out.println("</head>");
-			out.println("<body>");
-			out.println("<h1>Servlet VerTemas at " + request.getContextPath() + "</h1>");
-			for (Entry<String, Double> tema : temasEntrySet) {
-				out.println(tema.getKey() + ":" + tema.getValue());
-			}
-			out.println("</body>");
-			out.println("</html>");
+			request.getRequestDispatcher("/VerTemas.jsp").forward(request, response);
 		} catch (Exception e) {
 			System.out.println(e);
 		} finally {
