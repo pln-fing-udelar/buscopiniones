@@ -49,47 +49,14 @@ public class Clasificador {
 			Remove rm = new Remove();
 			rm.setAttributeIndices("1");  // remove 1st attribute
 
-			LWL lwl = new LWL();
-//			String[] optionslwl = weka.core.Utils.splitOptions("-C 0.20 -M 2");
-//			lwl.setOptions(optionslwl);
-
-			// classifier
-			J48 j48 = new J48();
-			//j48.setUnpruned(true);        // using an unpruned J48
-			String[] optionsj48 = weka.core.Utils.splitOptions("-C 0.20 -M 2");
-			j48.setOptions(optionsj48);
-
-			LADTree lad = new LADTree();
-
-			ClassificationViaRegression clasif = new ClassificationViaRegression();
-			String[] optionsclasif = weka.core.Utils.splitOptions("-W weka.classifiers.trees.M5P -- -M 4.0");
-			clasif.setOptions(optionsclasif);
-
-			MultilayerPerceptron redNeuronal = new MultilayerPerceptron();
-			String[] optionsred = weka.core.Utils.splitOptions("-L 0.5 -M 0 -N 10000 -V 0 -S 0 -E 5 -H 4 -R");
-			redNeuronal.setOptions(optionsred);
-
-			//bayesiano comun
-			NaiveBayes bayesiano = new NaiveBayes();
-			bayesiano.setUseKernelEstimator(true);
-
 			//lazy knn
 			IBk knn = new IBk();
 			
-			knn.setOptions(weka.core.Utils.splitOptions("-K 4 -W 0 -A \"weka.core.neighboursearch."
+			knn.setOptions(weka.core.Utils.splitOptions("-K 1 -W 0 -A \"weka.core.neighboursearch."
 					+ "LinearNNSearch -A \\\"weka.core.EuclideanDistance -R first-last\\\"\""));
 			//knn.setWindowSize(60);
-			Vote votacion = new Vote();
 
-			String[] optionsvotacion = weka.core.Utils.splitOptions("weka.classifiers.meta.Vote -S 1 -B \"weka.classifiers.trees.J48 -C 0.2 -M 2\" -B \"weka.classifiers.lazy.IBk -K 7 -W 0 -A \\\"weka.core.neighboursearch.LinearNNSearch -A \\\\\\\"weka.core.ChebyshevDistance -R first-last\\\\\\\"\\\"\" -B \"weka.classifiers.bayes.NaiveBayes \" -B \"weka.classifiers.functions.MultilayerPerceptron -L 0.5 -M 0.2 -N 500 -V 0 -S 0 -E 20 -H a\" -R MED");
-			votacion.setOptions(optionsvotacion);
 
-			BFTree bf = new BFTree();
-			String[] optionsBFTree = weka.core.Utils.splitOptions("-S 1 -M 2 -N 5 -C 1.0 -P POSTPRUNED");
-			bf.setOptions(optionsBFTree);
-
-			NaiveBayes naive = new NaiveBayes();
-			naive.setUseSupervisedDiscretization(true);
 
 			// meta-classifier
 			fc = new FilteredClassifier();
@@ -126,5 +93,36 @@ public class Clasificador {
 		System.out.println("estoy en clasificar4");
 		return valorPredicho.equals("true");
 	}
+	
+	void probar (String archTest) {
+		int malClasificados = 0;
+		int total = 0;
+		try {
+			CSVLoader loader = new CSVLoader();
+			loader.setSource(new File(archTest));
+			Instances test = loader.getDataSet();
+			if (test.classIndex() == -1) {
+				test.setClassIndex(test.numAttributes() - 1);
+			}
+
+			for (int i = 0; i < test.numInstances(); i++) {
+				Instance ins = test.instance(i);
+				double pred = fc.classifyInstance(ins);
+				String valorActual = test.classAttribute().value((int) test.instance(i).classValue());
+				//				System.out.print(", actual: " + valorActual);
+				String valorPredicho = test.classAttribute().value((int) pred);
+				if (!valorActual.equals(valorPredicho)) {
+					malClasificados++;
+				}
+				total++;
+			}
+			System.out.print(malClasificados);
+			System.out.print("/");
+			System.out.println(total);
+		} catch (Exception e) {
+			System.out.println(e.toString());
+		}
+	}
+	
 }
 

@@ -15,11 +15,11 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LectorCVS {
+public class LectorCSV {
 
 	public static Map<String,Boolean> run() throws FileNotFoundException, IOException {
 
-		String csvFile = "C:\\Fing\\ProyGrado\\cvs\\resultados.cvs";
+		String csvFile = "C:\\Fing\\ProyGrado\\csv\\resultados.csv";
 		String coma = ",";
 		Map<String,Boolean> retorno = new HashMap();
 		BufferedReader br = new BufferedReader(new FileReader(csvFile));
