@@ -136,11 +136,17 @@ public class Main {
 							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
 							
 
-							String xmlNoticia = "<doc>\r\n";
-							xmlNoticia += proc.procesar(procHTML);
-							xmlNoticia += "</doc>\r\n";
-							bwNoticias.append(xmlNoticia);
-							bwNoticias.flush();
+							
+							String xmlNoticiaTmp = proc.procesar(procHTML);
+							
+							if (!xmlNoticiaTmp.isEmpty()) {
+								String xmlNoticia = "<doc>\r\n";
+								xmlNoticia += xmlNoticiaTmp;
+								xmlNoticia += "</doc>\r\n";
+								bwNoticias.append(xmlNoticia);
+								bwNoticias.flush();
+							}
+							
 							i++;
 
 
