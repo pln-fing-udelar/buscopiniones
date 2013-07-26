@@ -1,0 +1,18 @@
+{
+"timeline":
+{
+"headline":"Lo que dijo mujica sobre marihuana",
+ "type":"default",
+ "text":"People say stuff",
+ "startDate":"2002,1,26",
+ "date": [{"startDate":"2011,06,07","headline":"Empresa “privada” venderá marihuana","text":"<p>Mujica respondió</p>","asset":{
+                    "media":"http://youtu.be/f-x8t0JOnVw",
+                    "credit":"",
+                    "caption":""
+                }},{"startDate":"2011,06,07","headline":"Mujica comparó legalización de marihuana con Plan Ceibal","text":"<p>Mujica reiteró que ? lo que se busca con esto bajar el consumo de pasta base ?, y rechazó que la medida provoque que el país transforme en una ? isla ? en este tema</p>","asset":{
+                    "media":"http://youtu.be/f-x8t0JOnVw",
+                    "credit":"",
+                    "caption":""
+                }} ]
+ }
+ }
