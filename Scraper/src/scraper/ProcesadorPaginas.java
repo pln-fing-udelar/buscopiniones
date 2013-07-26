@@ -40,6 +40,7 @@ public class ProcesadorPaginas {
 		if (medioDePrensa.equals("elpais")){
 			Ejemplo ej = new Ejemplo(proc, false);
 			if (clasificador.clasificar(ej)) {
+				System.out.println("si si si");
 				Noticia noti = proc.procesar(medioDePrensa);
 				coleccionNoticias.add(noti);
 			}

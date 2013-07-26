@@ -24,7 +24,7 @@ public class LectorCVS {
 		Map<String,Boolean> retorno = new HashMap();
 		BufferedReader br = new BufferedReader(new FileReader(csvFile));
 		String line = br.readLine();
-
+		
 		while ((line = br.readLine()) != null) {		
 			String[] campos = line.split(coma);	
 			
