@@ -90,7 +90,6 @@ public class Main {
 				Main.generarCVSEntrenamiento();
 				Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
 				clasif.crearModelo();
-				return;
 			}
 	
 			/**

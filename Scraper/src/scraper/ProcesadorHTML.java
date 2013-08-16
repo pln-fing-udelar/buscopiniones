@@ -89,7 +89,7 @@ public class ProcesadorHTML {
 	public Noticia procesar(String medioDePrensa) throws BoilerpipeProcessingException {
 
 		return new Noticia(url,
-				ProcesadorHTML.html2text(ArticleExtractor.INSTANCE.getText(html)),
+				ArticleExtractor.INSTANCE.getText(html).replaceAll("“|”", "\""),
 				this.obtenerTitle().trim(),
 				this.obtenerMetaTitle().trim(),
 				this.obtenerH1().trim(),

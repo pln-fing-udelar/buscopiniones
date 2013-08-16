@@ -5,16 +5,28 @@
 package scraper;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.Result;
+import javax.xml.transform.Source;
+import javax.xml.transform.Transformer;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
+import javax.xml.transform.TransformerFactory;
+import javax.xml.transform.dom.DOMSource;
+import javax.xml.transform.stream.StreamResult;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.PrettyXmlSerializer;
@@ -40,7 +52,7 @@ public class TaggerCorreferencias {
 	// Utiliza el proyecto de correferencias para aplicar los tags correspondientes a las opiniones
 	// La salida queda en el archivo salidaFinal.xml
 	// Para entender mejor esto leer el informe de correferencias: Informe_v3.0.pdf
-	public void taggearCorreferencias() throws IOException {
+	public void taggearCorreferencias() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
 
 		//		PythonInterpreter interpreter = new PythonInterpreter();
 		//		interpreter.exec("import sys\nsys.path.append('C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2')\nexecfile('C:\\Fing\\ProyGrado\\Correferencias\\ModuloCorref\\Proyecto_v6.2\\correferencias.py')");
@@ -48,7 +60,7 @@ public class TaggerCorreferencias {
 		//		PyObject someFunc = interpreter.get("funcName");
 		//		PyObject result = someFunc.__call__(new PyString("Test!"));
 		//		String realResult = (String) result.__tojava__(String.class);
-		
+
 		this.arreglarXML();
 		System.out.println(config.getDirPython() + "python.exe" + " correferencias.py");
 		ProcessBuilder builder = new ProcessBuilder(config.getDirPython() + "python.exe", "correferencias.py");
@@ -65,7 +77,7 @@ public class TaggerCorreferencias {
 					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
 					String line;
 					System.out.println("Esto es CORREFERENCIAS:");
-					while ((line = br.readLine()) != null) {						
+					while ((line = br.readLine()) != null) {
 						System.out.println(line);
 					}
 				} catch (java.io.IOException e) {
@@ -82,14 +94,28 @@ public class TaggerCorreferencias {
 		}
 	}
 
-	private void arreglarXML() throws IOException{
+	private void arreglarXML() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
 		String opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "Windows-1252");
+		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirCorreferencias() + "entradaOld.xml"), "iso-8859-1"));
+		bw.write(opinionesXML);
+		bw.close();
 		HtmlCleaner cleaner = new HtmlCleaner();
 		CleanerProperties props = cleaner.getProperties();
 		TagNode node = cleaner.clean(opinionesXML);
 		new PrettyXmlSerializer(props).writeToFile(node, config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
+		opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
+		opinionesXML = opinionesXML.replaceAll("(?s)(<opinion>.*?<)(fuente)(>.*?</)(fuente)(>.*?</opinion>)", "$1$2a$3$4a$5");
+		opinionesXML = opinionesXML.replaceAll("(?s)<fuente>(.*?)</fuente>", "$1");
+		opinionesXML = opinionesXML.replaceAll("<fuentea>", "<fuente>");
+		opinionesXML = opinionesXML.replaceAll("</fuentea>", "</fuente>");
+		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirCorreferencias() + "entrada.xml"), "iso-8859-1"));
+		bw.write(opinionesXML);
+		bw.close();
+//		if (!opinionesXML.equals(opinionesXMLNuevo)) {
+//			System.exit(0);
+//		}
 	}
-	
+
 	// A partir del archivo salidaFinal.xml, genera una lista de las opiniones encontradas en el mismo
 	public Collection<Opinion> obtenerOpiniones(Noticia noti) throws ParserConfigurationException, SAXException, IOException {
 
