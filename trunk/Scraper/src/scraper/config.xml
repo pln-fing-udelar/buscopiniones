@@ -11,9 +11,9 @@
 -->
 
 <Configuracion>
-	<dirOpiniones>C:\Users\Bongo\Jairo\ProyectoDeGrado\opiniones\</dirOpiniones>
-	<dirFreeling>C:\freeling_win\freeling\bin\</dirFreeling>
-	<dirCorreferencias>C:\Users\Bongo\Jairo\ProyectoDeGrado\InformeFinalCorreferencias\Proyecto_v6.2\</dirCorreferencias>
+	<dirOpiniones>C:\Fing\ProyGrado\opiniones\</dirOpiniones>
+	<dirFreeling>C:\Fing\ProyGrado\Freeling\freeling_win\freeling\bin\</dirFreeling>
+	<dirCorreferencias>C:\Fing\ProyGrado\Correferencias\ModuloCorref\Proyecto_v6.2\</dirCorreferencias>
 	<dirPython>C:\Python27\</dirPython>
-	<dirProlog>C:\Program Files\pl\bin\</dirProlog>
+	<dirProlog>C:\Program Files (x86)\swipl\bin\</dirProlog>
 </Configuracion>

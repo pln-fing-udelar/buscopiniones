@@ -13,6 +13,8 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.transform.TransformerConfigurationException;
+import javax.xml.transform.TransformerException;
 import org.xml.sax.SAXException;
 
 /**
@@ -53,7 +55,7 @@ public class ProcesadorPaginas {
 		return "";		
 	}
 
-	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException {
+	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
 		if (coleccionNoticias.isEmpty()){
 			return "";
 		}
@@ -71,7 +73,7 @@ public class ProcesadorPaginas {
 		TaggerOpiniones tagger = new TaggerOpiniones(config.getDirOpiniones(), config.getDirFreeling(), config.getDirProlog());
 		System.out.println("Empiezo a taggear con freeling");
 		tagger.taggearFreelingDesdeArchivo(config.getDirFreeling() + "entradaFreeling.txt", config.getDirFreeling() + "salidaFreeling.txt");
-
+		
 		String[] arrFreeling = null;
 		int contador = 0;
 		while (arrFreeling == null || ((arrFreeling.length - 1) != coleccionNoticias.size() && contador < 10)) {
