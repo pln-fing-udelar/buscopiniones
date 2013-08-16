@@ -109,7 +109,7 @@ public class ProcesadorHTML {
 		Pattern p3 = Pattern.compile("(?i)([0-3][0-9]).?([0-1]?[0-9]).?(20[0-1][0-9])");
 		Pattern p4 = Pattern.compile("(?i)([0-3][0-9]).?([0-1][0-9]).?([0-1][0-9])");
 		Pattern p5 = Pattern.compile("(?i)([0-3][0-9])\\.([0-1][0-9])\\.(20[0-1][0-9])");
-		Pattern p6 = Pattern.compile("(?i)(Publicado el )([0-3][0-9])/([0-1][0-9])/(20[0-1][0-9])");
+		Pattern p6 = Pattern.compile("(?i)Publicado el ([0-3][0-9])/([0-1][0-9])/(20[0-1][0-9])");
 		if (medioDePrensa.equals("elobservador")) {
 			Matcher m = p5.matcher(html);
 
