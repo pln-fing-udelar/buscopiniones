@@ -1,0 +1,26 @@
+.socialist {
+ 	background-color:transparent;
+    margin: 10px 14px 10px 0px;
+    width: 220px;
+	height:auto;
+    overflow:hidden;
+}
+.socialist a{color: #fff;}
+.socialist .head { padding:0;}
+.socialist .content {}
+.socialist .content div {
+    padding:0px;
+    padding-top:0px;
+    color:#999;
+}
+.socialist .content img {
+    width: 220px;
+    margin:0;
+}
+.socialist-pinterest .content img { width:220px;} 
+.socialist-loader {
+    min-width:120px;
+    min-height:120px;
+    background-image:url('../img/preload_img.gif');
+    background-repeat:no-repeat;
+}
