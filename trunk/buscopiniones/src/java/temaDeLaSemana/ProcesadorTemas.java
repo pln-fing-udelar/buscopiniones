@@ -198,6 +198,7 @@ public class ProcesadorTemas {
 		String busqueda = "title:(";
 		int cant = 0;
 		for (Map.Entry<String, Double> tema : temasEntrySet) {
+			System.out.println(tema.getKey() + "^" + tema.getValue() + " ");
 			busqueda += tema.getKey() + "^" + tema.getValue() + " ";
 			if (cant > 7){
 				break;

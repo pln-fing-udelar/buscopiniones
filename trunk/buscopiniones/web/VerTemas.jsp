@@ -1,81 +1,39 @@
-<%@page import="buscopiniones.Noticia" %>
+<%@page import="buscopiniones.Noticia"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
-<html class="no-js">
-    <head>
-        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Buscopiniones - Temas de la semana</title>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>flati | responsive html5 template | themeforest | josweb</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta name="description" content="">
+		<meta name="author" content="">
 
-        <!--[if lt IE 9]>
-                <script src="js/css3-mediaqueries.js"></script>
-        <![endif]-->
-        <link type="text/css" rel="stylesheet" media="all" href="css/style.css"/>
-        <meta name="viewport" content="width=device-width, initial-scale=1"/>
-        <!-- Adding "maximum-scale=1" fixes the Mobile Safari auto-zoom bug: http://filamentgroup.com/examples/iosScaleBug/ -->
+		<link href='http://fonts.googleapis.com/css?family=Lato:400,700,300' rel='stylesheet' type='text/css'>
+		<!--[if IE]>
+			<link href="http://fonts.googleapis.com/css?family=Lato" rel="stylesheet" type="text/css">
+			<link href="http://fonts.googleapis.com/css?family=Lato:400" rel="stylesheet" type="text/css">
+			<link href="http://fonts.googleapis.com/css?family=Lato:700" rel="stylesheet" type="text/css">
+			<link href="http://fonts.googleapis.com/css?family=Lato:300" rel="stylesheet" type="text/css">
+		<![endif]-->
 
+		<link href="css/bootstrap.css" rel="stylesheet">
+		<link href="css/font-awesome.min.css" rel="stylesheet">
+		<link href="css/theme.css" rel="stylesheet">
+		<link href="css/prettyPhoto.css" rel="stylesheet" type="text/css"/>
+		<link href="css/zocial.css" rel="stylesheet" type="text/css"/>
+		<link rel="stylesheet" href="css/nerveslider.css">
 
-        <!-- JS -->
-        <script src="js/jquery-1.6.4.min.js"></script>
-
-        <!--  <script src="js/less-grid-4.js"></script> -->
-        <script src="js/custom.js"></script>
-        <script src="js/tabs.js"></script>
-
-        <!-- Masonry -->
-        <script src="js/masonry.min.js" ></script>
-        <script src="js/imagesloaded.js" ></script>
-        <!-- ENDS Masonry -->
-
-        <!-- Tweet -->
-        <link rel="stylesheet" href="css/jquery.tweet.css" media="all"  /> 
-        <script src="js/tweet/jquery.tweet.js" ></script> 
-        <!-- ENDS Tweet -->
-
-        <!-- superfish -->
-        <link rel="stylesheet" media="screen" href="css/superfish.css" /> 
-        <script  src="js/superfish-1.4.8/js/hoverIntent.js"></script>
-        <script  src="js/superfish-1.4.8/js/superfish.js"></script>
-        <script  src="js/superfish-1.4.8/js/supersubs.js"></script>
-        <!-- ENDS superfish -->
-
-        <!-- prettyPhoto -->
-        <script  src="js/prettyPhoto/js/jquery.prettyPhoto.js"></script>
-        <link rel="stylesheet" href="js/prettyPhoto/css/prettyPhoto.css"  media="screen" />
-        <!-- ENDS prettyPhoto -->
-
-        <!-- poshytip -->
-        <link rel="stylesheet" href="js/poshytip-1.1/src/tip-twitter/tip-twitter.css"  />
-        <link rel="stylesheet" href="js/poshytip-1.1/src/tip-yellowsimple/tip-yellowsimple.css"  />
-        <script  src="js/poshytip-1.1/src/jquery.poshytip.min.js"></script>
-        <!-- ENDS poshytip -->
-
-
-        <!-- GOOGLE FONTS 
-        <link href='http://fonts.googleapis.com/css?family=Allan:700' rel='stylesheet' type='text/css'>
-        -->
-        <!-- Flex Slider -->
-        <link rel="stylesheet" href="css/flexslider.css" >
-        <script src="js/jquery.flexslider-min.js"></script>
-        <!-- ENDS Flex Slider -->
-
-
-        <!--[if IE 6]>
-        <link rel="stylesheet" href="css/ie6-hacks.css" media="screen" />
-        <script type="text/javascript" src="js/DD_belatedPNG.js"></script>
-                <script>
-                        /* EXAMPLE */
-                        DD_belatedPNG.fix('*');
-                </script>
-        <![endif]-->
-
-        <!-- Lessgrid -->
-        <link rel="stylesheet" media="all" href="css/lessgrid.css"/>
-
-        <!-- modernizr -->
-        <script src="js/modernizr.js"></script>
+		<!--[if lt IE 9]>
+		<script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+		<![endif]-->
+		<!--[if IE 7]>
+		<link rel="stylesheet" href="css/font-awesome-ie7.min.css">
+		<![endif]-->
 
 		<!-- datepicker -->
+		<script src="js/jquery.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
 		<script src="js/jquery.ui.datepicker-es.js"></script>
 		<link rel="stylesheet" media="all" href="js/jquery-ui.css"/>
@@ -85,119 +43,289 @@
 				$("#hasta").datepicker();
 			});
 		</script>
+	</head>
 
-    </head>
+	<body>
+		<!--header-->
+		<div class="header ">
+			<!--logo-->
+			<div class="container">
+				<div class="logo">
+					<a href="index.html"><img src="img/logoold.png" alt="" class="animated bounceInDown" /></a>  
+				</div>
+				<!--menu-->				
+				<nav id="main_menu">
+					<div class="menu_wrap2">
+						<form method="GET" id="contactForm" class="buscador">
+							<span>El tema desde </span><input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" class="form-poshytip" title="Ingrese la fecha inicial" /> 
 
-    <body lang="es">
+							<span> hasta </span><input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" class="form-poshytip" title="Ingrese la fecha final" /> 
 
+							<input type="submit" name="buscar" value="Buscar!" class="btn  btn-primary btn-form " />
+						</form>
+					</div>
+					<div class="menu_wrap">
 
-        <!-- mobile-nav -->
-        <div id="mobile-nav-holder">
-            <div class="wrapper">
-                <ul id="mobile-nav">
-                    <li  class="current-menu-item"><a href="index.html">home</a></li>
-                    <li><a href="blog.html">blog</a></li>
-                    <li><a href="page.html">about</a>
-                        <ul>
-                            <li><a href="page-full.html">Fullwidth Page</a></li>
-                            <li><a href="page-features.html">Features</a></li>
-                            <li><a href="page-typography.html">Typography</a></li>
-                            <li><a href="page-icons.html">Icons</a></li>
-                        </ul>
-                    </li>
-                    <li><a href="portfolio.html">portfolio</a></li>
-                    <li><a href="contact.html">contact</a></li>
-                    <li><a href="http://luiszuno.com/blog/downloads/modus-html-template">Grab it!</a></li>
-                </ul>
-                <div id="nav-open"><a href="#">Menu</a></div>
-            </div>
-        </div>
-        <!-- ENDS mobile-nav -->
+						<ul class="nav sf-menu">
 
-        <header>
-
-
-            <div class="wrapper">
-
-                <a href="./" id="logo"><img  src="img/logo.png" alt="Tandem"></a>
-                <form method="GET" id="contactForm" class="buscador">
-
-                    <div>
-
-                        <span class="spanBuscador">El tema desde </span><input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" class="form-poshytip" title="Ingrese la fecha inicial" /> 
-
-                        <span class="spanBuscador"> hasta </span><input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" class="form-poshytip" title="Ingrese la fecha final" /> 
-
-                        <input type="submit" name="buscar" value="Buscar!" class="link-button green" />
-
-                    </div>
-
-                </form>
-                <nav>
-                    <ul id="nav" class="sf-menu">
-                        <li class="current-menu-item"><a href="./">Opiniones<span class="subheader">buscá lo que opina la gente</span></a></li>
-                        <li><a href="./VerTemas">Tema de la semana<span class="subheader">fijate de qué se habló</span></a></li>
-
-                    </ul>
-                </nav>
-
-                <div class="clearfix"></div>
-
-            </div>
-
-        </header>
+							<li class="sub-menu "><a href="Home">Opiniones</a> 								
+							</li>
+							<li class="sub-menu active"><a href="VerTemas">Temas</a>								
+							</li>							
+							<li class="last"><a href="contact.html">Contacto</a></li>
+						</ul>
+					</div>
+				</nav>
+			</div>
+		</div>
+		<!--//header-->
+		<!--page-->
 
 
+		<div id="banner">
+			<div class="container intro_wrapper">
+				<div class="inner_content">
 
+					<!--welcome-->
+					<div class="welcome_index">
+						<span class="hue"><% if (request.getAttribute("Noticia") != null) {%> "<%= ((Noticia)request.getAttribute("Noticia")).getTitle() %>" <% }%>
+						</span>
 
-        <!-- MAIN -->
-        <div id="main">
+					</div>
+					<!--//welcome-->
+				</div>
+			</div>
+		</div>
+		<!--//banner-->
 
-            <!-- social -->
-            <div id="social-bar">
-                <ul>
-                    <li><a href="http://www.facebook.com"  title="Become a fan"><img src="img/social/facebook_32.png"  alt="Facebook" /></a></li>
-                    <li><a href="http://www.twitter.com" title="Follow my tweets"><img src="img/social/twitter_32.png"  alt="Facebook" /></a></li>
-                    <li><a href="http://www.google.com"  title="Add to the circle"><img src="img/social/google_plus_32.png" alt="Facebook" /></a></li>
-                </ul>
-            </div>
-            <!-- ENDS social -->
+		<div class="container wrapper">
+			<div class="inner_content">
+				<div class="pad45"></div>
 
+				<!--info boxes-->
+				<div class="row">
+					<div class="span3">
+						<div class="tile">
+							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
+							<h6><small>DESIGN</small>
+								<br><a href="#"><span>built for &amp; by nerds</span></a></h6>
+							<p>Like you, we love building awesome products on the web. We love it so much, we decided to help people just like us do it easier, better, and faster. </p>
+						</div> 
+						<div class="pad25"></div>
+					</div> 
 
+					<div class="span3">
+						<div class="tile">
+							<div class="intro-icon-disc cont-large"><i class="icon-rocket intro-icon-large"></i></div>
+							<h6><small>CODE</small>
+								<br><a href="#"><span>12-column grid</span></a></h6>
+							<p>Bootstrap is designed to help people of all skill levels - designer or developer, huge nerd or early beginner. 
+								Use it as a complete kit or use to start something.</p>
+						</div> 
+						<div class="pad25"></div>
+					</div> 
 
-            <!-- Content -->
-            <div id="content">
+					<div class="span3">
+						<div class="tile">
+							<div class="intro-icon-disc cont-large"><i class="icon-beaker intro-icon-large"></i></div>
+							<h6><small>CREATE</small>
+								<br><a href="#"><span>responsive</span></a></h6>
+							<p>Bootstrap have gone fully responsive. Our components are scaled according to a range of resolutions and devices to provide a consistent 
+								experience.</p>	
+						</div> 
+						<div class="pad25"></div>
+					</div> 
 
+					<div class="span3">
+						<div class="tile tile-hot">
+							<div class="intro-icon-disc cont-large"><i class="icon-book  intro-icon-large"></i></div>
+							<h6> <small>SUPPORT</small>
+								<br><a href="#"><span>growing library</span></a></h6>
+							<p>Despite being only 7kb (gzipped), Bootstrap is one of the most complete front-end toolkits out there with dozens of fully functional components.</p>
+						</div>
+						<div class="pad25"></div>	
+					</div> 
+				</div> 
 
+				<!--//info boxes-->
+				<div class="row">
+					<!--col 1-->
+					<div class="span12">
+						<div class="row">
+							<div class="pad25 hidden-phone"></div>	
 
+							<div class="span4">
+								<h1>Recent Work</h1>
+								<h4>Lorem ipsum dolor sit amet, rebum putant recusabo in ius, pri simul tempor ne, his ei summo virtute.</h4>
+								<p>Nam ea labitur pericula. Meis tamquam pro te, cibo mutat necessitatibus id vim. An his tamquam postulant, pri id mazim nostrud diceret 
+									sapientem eloquentiam sea cu, sea ut exerci delicata. Corrumpit vituperata.</p>
 
+								<a href="#" class="btn btn-primary  btn-custom btn-rounded">view portfolio</a>
+								<div class="pad45"></div>
+							</div>
+							<!--column 2 slider-->
+							<div class="span8 pad15 col_full2">
 
-                <!-- Headline -->
-                <div class="headline">
-                    <% if (request.getAttribute("Noticia") != null) {%> "<%= ((Noticia)request.getAttribute("Noticia")).getTitle() %>" <% }%>
-                </div>
-                <!-- ENDS Headline -->
-            </div>
+								<div id="slider_home">
+									<div class="slider-item">	
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s1.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s1.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">catalogue</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s2.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s2.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">loupe</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s3.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s3.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">retro rocket</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s4.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s4.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">infographics</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s5.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s5.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">mock up</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
-        </div>
-        <!-- ENDS MAIN -->
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s6.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s6.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">retro badges</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
-        <footer>
-            <div class="wrapper">
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s7.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s7.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">details</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
 
-                			
-                <div class="clearfix"></div>
+									<div class="slider-item">
+										<div class="slider-image">
+											<div class="hover_colour">
+												<a href="img/large/s8.jpg" data-rel="prettyPhoto">
+													<img src="img/small/s8.jpg" alt="" /></a>
+											</div>
+										</div>
+										<div class="slider-title">
+											<h3><a href="#">vintage form</a></h3>
+											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
+										</div>
+									</div>
+								</div>
+								<div id="sl-prev" class="widget-scroll-prev"><i class="icon-chevron-left white"></i></div>
+								<div id="sl-next" class="widget-scroll-next"><i class="icon-chevron-right white but_marg"></i></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+			<!--//page-->
 
+			<div class="pad25 hidden-desktop"></div>
+		</div>
 
-            </div>
+		<!-- footer -->
+		<div id="footer">
+			<h1>get in touch</h1>
+			<h3 class="center follow">
+				We're social and we'd love to hear from you! Feel free to send us an email, find us on Google Plus, follow us on Twitter and join us on Facebook.</h3>
 
-            <div id="to-top"></div>
-        </footer>
+			<div class="follow_us">
+				<a href="#" class="zocial twitter"></a>
+				<a href="#" class="zocial facebook"></a>
+				<a href="#" class="zocial linkedin"></a>
+				<a href="#" class="zocial googleplus"></a>
+				<a href="#" class="zocial vimeo"></a>
+			</div>
+		</div>
 
-    </body>
+		<!-- footer 2 -->
+		<div id="footer2">
+			<div class="container">
+				<div class="row">
+					<div class="span12">
+						<div class="copyright">
+							FLATI
+							&copy;
+							<script type="text/javascript">
+								//<![CDATA[
+								var d = new Date()
+								document.write(d.getFullYear())
+								//]]>
+							</script>
+							- All Rights Reserved :
+							Template by <a href="http://spiralpixel.com/">Spiral Pixel</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 
+		<!-- up to top -->
+		<a href="#"><i class="go-top hidden-phone hidden-tablet  icon-double-angle-up"></i></a>
+		<!--//end-->
+
+		
+
+		
+	</body>
 </html>

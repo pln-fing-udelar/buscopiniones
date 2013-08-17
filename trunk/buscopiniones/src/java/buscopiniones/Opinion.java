@@ -36,13 +36,22 @@ public class Opinion {
 	}
 
 	public String toJSON() {
+		String opinionJson = BuscadorOpiniones.html2text(this.getOpinion());
+		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle());
+		String media = "http://www.elpais.com.uy/files/article_main/uploads/2013/07/25/51f1dddb363f0.jpg";
+		String credit = "";
+		if(opinionJson.matches(".*?&quot;.*?&quot;.*?")){
+			media = opinionJson.replaceFirst(".*?&quot;(.*?)&quot;.*?", "<blockquote>&quot;$1&quot;</blockquote>");
+			credit = this.getFuente();
+		}
+
 		String json = "{";
 		json += "\"startDate\":\"" + getFechaParaJSON() + "\",";
-		json += "\"headline\":\"" + BuscadorOpiniones.html2text(noticia.getTitle()) + "\",";
-		json += "\"text\":\"<p>" + BuscadorOpiniones.html2text(this.getOpinion()) + "</p>\",";
+		json += "\"headline\":\"" + tituloJson + "\",";
+		json += "\"text\":\"<p>" + opinionJson + "</p>\",";
 		json += "\"asset\":{\n"
-				+ "                    \"media\":\"\",\n"
-				+ "                    \"credit\":\"\",\n"
+				+ "                    \"media\":\"" + media + "\",\n"
+				+ "                    \"credit\":\"" + credit + "\",\n"
 				+ "                    \"caption\":\"\"\n"
 				+ "                }";
 		json += "}";
