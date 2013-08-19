@@ -12,6 +12,10 @@
         <servlet-name>JsonTimeline</servlet-name>
         <servlet-class>buscopiniones.JsonTimeline</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ImagenNoticia</servlet-name>
+        <servlet-class>buscopiniones.ImagenNoticia</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>VerTemas</servlet-name>
         <url-pattern>/VerTemas</url-pattern>
@@ -23,6 +27,10 @@
     <servlet-mapping>
         <servlet-name>JsonTimeline</servlet-name>
         <url-pattern>/JsonTimeline</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>ImagenNoticia</servlet-name>
+        <url-pattern>/ImagenNoticia/*</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
