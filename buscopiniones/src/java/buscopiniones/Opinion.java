@@ -1,7 +1,16 @@
 package buscopiniones;
 
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.Reader;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import javax.imageio.ImageIO;
+import sun.misc.BASE64Encoder;
 
 /**
  *
@@ -38,9 +47,14 @@ public class Opinion {
 	public String toJSON() {
 		String opinionJson = BuscadorOpiniones.html2text(this.getOpinion());
 		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle());
-		String media = "http://www.elpais.com.uy/files/article_main/uploads/2013/07/25/51f1dddb363f0.jpg";
+		BASE64Encoder encoder = new BASE64Encoder();
+		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "");
+		System.out.println("toy aca");
+		System.out.println(base64);
+		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/" + base64 + ".jpg";
+//		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/aHR0cDovL2hpc3Rvcmljby5lbHBhaXMuY29tLnV5LzEyMDYyNS91bHRtby02NDgyNjcvdWx0aW1vbW9tZW50by9NZWRpZGFzLXNvYnJlLWxhLW1hcmlodWFuYS1zb24tcGFyYS1wcm90ZWdlci1hbC1jb25zdW1pZG9yLWRpam8tTXVqaWNhLw==.jpg";
 		String credit = "";
-		if(opinionJson.matches(".*?&quot;.*?&quot;.*?")){
+		if (opinionJson.matches(".*?&quot;.*?&quot;.*?")) {
 			media = opinionJson.replaceFirst(".*?&quot;(.*?)&quot;.*?", "<blockquote>&quot;$1&quot;</blockquote>");
 			credit = this.getFuente();
 		}
