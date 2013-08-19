@@ -51,19 +51,10 @@
 			<!--logo-->
 			<div class="container">
 				<div class="logo">
-					<a href="index.html"><img src="img/logoold.png" alt="" class="animated bounceInDown" /></a>  
+					<a href="index.html"><img src="img/logo.png" alt="" class="animated bounceInDown" /></a>  
 				</div>
 				<!--menu-->				
-				<nav id="main_menu">
-					<div class="menu_wrap2">
-						<form method="GET" id="contactForm" class="buscador">
-							<span>El tema desde </span><input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" class="form-poshytip" title="Ingrese la fecha inicial" /> 
-
-							<span> hasta </span><input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" class="form-poshytip" title="Ingrese la fecha final" /> 
-
-							<input type="submit" name="buscar" value="Buscar!" class="btn  btn-primary btn-form " />
-						</form>
-					</div>
+				<nav id="main_menu">					
 					<div class="menu_wrap">
 
 						<ul class="nav sf-menu">
@@ -81,6 +72,17 @@
 		<!--//header-->
 		<!--page-->
 
+		<div style="background:rgb(240, 240, 240); box-shadow:3px 3px 3px #cecece;">
+			<div class="container">				
+				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
+					<label>El tema desde: </label>
+					<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
+					<label>hasta: </label>
+					<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
+				</form>
+			</div>
+		</div>
 
 		<div id="banner">
 			<div class="container intro_wrapper">

@@ -39,7 +39,7 @@ body {
 	padding:0 0;
 	background:#323A45;
 	margin:0 auto; 
-	height: 86px;
+	height: 56px;
 	width: 100%;
 	z-index: 1000; 
 }
@@ -231,7 +231,7 @@ h1.intro {  line-height:40px; font-weight:300;}
 /**** LOGO****/
 .logo a{
  	float:left; 
-	margin:26px 0 0 0;
+	margin:13px 0 0 0;
 	webkit-transition:all 0.3s ease-in;  
     -moz-transition:all 0.3s ease-in;  
     -o-transition:all 0.3s ease-in;  
@@ -243,8 +243,7 @@ h1.intro {  line-height:40px; font-weight:300;}
 /*	02: MENU
 /*-----------------------------------------------------------------------------------*/
 #main_menu select { display: none; font-size:12px; }
-.menu_wrap { float:right; margin-top:20px; margin-right:-10px; }
-.menu_wrap2 { float:left; margin-top:40px; margin-right:100px; }
+.menu_wrap { float:right; margin-top:10px; margin-right:-10px; }
 .menu_wrap .nav li {
 	list-style: none;
 	float: left;
@@ -264,7 +263,7 @@ h1.intro {  line-height:40px; font-weight:300;}
 	letter-spacing:2px;
 	font-size: 13px;
 	display: block;
-	padding:24px 0px 22px;
+	padding:12px 0px 14px;
 	text-align: center;
 	text-transform: uppercase;
 }

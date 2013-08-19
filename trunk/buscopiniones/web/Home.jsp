@@ -38,17 +38,10 @@
 			<!--logo-->
 			<div class="container">
 				<div class="logo">
-					<a href="index.html"><img src="img/logoold.png" alt="" class="animated bounceInDown" /></a>  
+					<a href="index.html"><img src="img/logo.png" alt="" class="animated bounceInDown" /></a>  
 				</div>
 				<!--menu-->				
-				<nav id="main_menu">
-					<div class="menu_wrap2">
-						<form method="GET" id="contactForm" class="buscador">
-							<span>Opiniones de </span><input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" class="" title="Ingrese la fuente de la opinion" /> 
-							<span> sobre </span><input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" class="" title="Ingrese el asunto de la opinion" /> 
-							<input type="submit" name="buscar" value="Buscar!" class="btn  btn-primary btn-form " />
-						</form>
-					</div>
+				<nav id="main_menu">					
 					<div class="menu_wrap">
 
 						<ul class="nav sf-menu">
@@ -66,6 +59,18 @@
 		<!--//header-->
 		<!--page-->
 
+		<div style="background:rgb(240, 240, 240); box-shadow:3px 3px 3px #cecece;">
+			<div class="container">				
+				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
+					<label>Opiniones de:</label>
+					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
+					<label>sobre:</label>
+					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
+				</form>
+			</div>
+		</div>
+					
 		<div id="timeline-embed"></div>
 		<script type="text/javascript">
 			var timeline_config = {
@@ -88,7 +93,7 @@
 					<div class="welcome_index">
 						Aca hay que poner para que <a href="#"><span class="hue_block white normal">se pueda</span></a> filtrar 
 						por <span class="hue">fecha</span>
-						
+
 					</div>
 					<!--//welcome-->
 				</div>
