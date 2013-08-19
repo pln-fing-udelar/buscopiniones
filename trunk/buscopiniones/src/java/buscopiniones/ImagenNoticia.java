@@ -62,7 +62,7 @@ public class ImagenNoticia extends HttpServlet {
 		}
 		String str = buf.toString();
 		System.out.println("toy aca 3");
-		p = Pattern.compile("src=(\"|')([^\"\\.']*?\\.(jpg|gif|png|JPG|PNG|GIF))(\"|')");
+		p = Pattern.compile("src=(\"|')([^\"']*?\\.(jpg|gif|png|JPG|PNG|GIF))(\"|')");
 		m = p.matcher(str);
 		int max = 0;
 		while (m.find()) {
@@ -70,22 +70,32 @@ public class ImagenNoticia extends HttpServlet {
 			if (imagenCandidata != null && !imagenCandidata.matches("http://.*")) {
 				imagenCandidata = urlString.replaceFirst("(http://.*?)/.*", "$1") + imagenCandidata;
 			}
-			System.out.println(imagenCandidata);
+			System.out.println("imagenCandidata: " + imagenCandidata);
 			if (imagenCandidata != null) {
-				BufferedImage img = ImageIO.read(new URL(imagenCandidata));
-				if (img != null) {
-					int height = img.getHeight();
-					int width = img.getWidth();
-					if (max <= (height * width)) {
-						imagenRet = img;
-						max = height * width;
+				try {
+					BufferedImage img = ImageIO.read(new URL(imagenCandidata));
+					if (img != null) {
+						int height = img.getHeight();
+						int width = img.getWidth();
+						double proporcion = ((double) height) / ((double) width);
+						System.out.println("height: " + height);
+						System.out.println("width: " + width);
+						System.out.println("proporcion: " + proporcion);
+
+						if (max <= (height * width) && (height * width) >= (200 * 200) && proporcion < 2.0 && proporcion > 0.3) {
+							imagenRet = img;
+							max = height * width;
+						}
 					}
+				} catch (Exception e) {
+					System.out.println(e);
+					System.out.println(e.getCause());
 				}
 			}
 
 		}
 		System.out.println("toy aca 4");
-		if(imagenRet == null){
+		if (imagenRet == null) {
 			throw new Exception("No encontre ninguna imagen");
 		}
 		return imagenRet;
@@ -99,9 +109,7 @@ public class ImagenNoticia extends HttpServlet {
 			BASE64Decoder decoder = new BASE64Decoder();
 			String pathInfo = request.getPathInfo();
 			String[] pathParts = pathInfo.split("/");
-			System.out.println("este es el param 1:");
-			System.out.println(pathParts[1].replaceAll("\\.jpg$", ""));
-			
+
 			byte[] decodedBytes = decoder.decodeBuffer(pathParts[1].replaceAll("\\.jpg$", ""));
 			String url = new String(decodedBytes);
 			BufferedImage img = null;
