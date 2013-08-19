@@ -56,7 +56,7 @@ public class Opinion {
 //		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/aHR0cDovL2hpc3Rvcmljby5lbHBhaXMuY29tLnV5LzEyMDYyNS91bHRtby02NDgyNjcvdWx0aW1vbW9tZW50by9NZWRpZGFzLXNvYnJlLWxhLW1hcmlodWFuYS1zb24tcGFyYS1wcm90ZWdlci1hbC1jb25zdW1pZG9yLWRpam8tTXVqaWNhLw==.jpg";
 		String credit = "";
 		if (opinionJson.matches(".*?&quot;.*?&quot;.*?")) {
-			media = opinionJson.replaceAll(".*?&quot;(.*?)&quot;", "<blockquote>&quot;$1&quot;</blockquote>");
+			media = opinionJson.replaceAll(".*?&quot;(.*?)&quot;.*?", "<blockquote>&quot;$1&quot;</blockquote>");
 			credit = this.getFuente();
 		}
 

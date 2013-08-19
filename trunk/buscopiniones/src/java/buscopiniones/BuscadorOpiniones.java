@@ -122,8 +122,8 @@ public class BuscadorOpiniones {
 				+ "{\n"
 				+ "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n"
 				+ " \"type\":\"default\",\n"
-				+ " \"text\":\"People say stuff\",\n"
-				+ " \"startDate\":\"2002,1,26\",\n"
+				+ " \"text\":\"Powered by Buscopiniones\",\n"
+				+ " \"startDate\":\"2013,10,26\",\n"
 				+ " \"date\": [";
 		if (fuente == null || asunto == null) {
 			//aca hay que hacer algo
