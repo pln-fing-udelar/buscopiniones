@@ -5,16 +5,9 @@
 package scraper;
 
 import java.io.File;
-import weka.classifiers.bayes.NaiveBayes;
-import weka.classifiers.functions.MultilayerPerceptron;
 import weka.classifiers.lazy.IBk;
-import weka.classifiers.lazy.LWL;
-import weka.classifiers.meta.ClassificationViaRegression;
 import weka.classifiers.meta.FilteredClassifier;
-import weka.classifiers.meta.Vote;
-import weka.classifiers.trees.BFTree;
 import weka.classifiers.trees.J48;
-import weka.classifiers.trees.LADTree;
 import weka.core.Instance;
 import weka.core.Instances;
 import weka.core.converters.CSVLoader;

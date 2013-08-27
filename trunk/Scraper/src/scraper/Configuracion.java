@@ -6,7 +6,6 @@ package scraper;
 
 import java.io.File;
 import java.io.IOException;
-
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -19,7 +18,7 @@ import org.xml.sax.SAXException;
  */
 public class Configuracion {
 
-	private static String archConfig = "C:\\Fing\\ProyGrado\\Scraper\\trunk\\Scraper\\src\\scraper\\config.xml";
+	private static String archConfig = "C:\\Users\\Bongo\\Jairo\\ProyectoDeGrado\\scraper_java\\Scraper\\src\\scraper\\config.xml";
 	private String dirOpiniones;
 	private String dirFreeling;
 	private String dirCorreferencias;
