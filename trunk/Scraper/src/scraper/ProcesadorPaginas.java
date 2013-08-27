@@ -31,7 +31,7 @@ public class ProcesadorPaginas {
 	public ProcesadorPaginas(Configuracion config, String medioDePrensa) {
 		this.config = config;
 		this.medioDePrensa = medioDePrensa;
-		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
+		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos" + medioDePrensa + ".csv");
 		clasificador.crearModelo();
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
@@ -39,20 +39,15 @@ public class ProcesadorPaginas {
 	public String procesar(ProcesadorHTML proc) throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, Exception {
 		// saque para afuera el procesador html, para poder utilizarlo en otros casos
 		System.out.println("Empiezo a procesar HTML");
-		if (medioDePrensa.equals("elpais")){
-			Ejemplo ej = new Ejemplo(proc, false);
-			if (clasificador.clasificar(ej)) {
-				System.out.println("si si si");
-				Noticia noti = proc.procesar(medioDePrensa);
-				coleccionNoticias.add(noti);
-				return noti.toXML();
-			}
-		} else if ((new FiltradorPaginas(proc, medioDePrensa)).pasaFiltro()){
+		Ejemplo ej = new Ejemplo(proc, false);
+		if (clasificador.clasificar(ej)) {
+			System.out.println("si si si");
 			Noticia noti = proc.procesar(medioDePrensa);
 			coleccionNoticias.add(noti);
 			return noti.toXML();
-		}
-		return "";		
+		} else {
+			return "";
+		}			
 	}
 
 	public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
