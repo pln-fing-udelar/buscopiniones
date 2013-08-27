@@ -13,10 +13,10 @@ import sun.misc.BASE64Decoder;
  */
 public class Main {
 
-	static public void generarCVSEntrenamiento() throws IOException {
-		Map<String,Boolean> tablaUrls = LectorCSV.run();
+	static public void generarCVSEntrenamiento(String medioPrensa) throws IOException {
+		Map<String,Boolean> tablaUrls = LectorCSV.run(medioPrensa);
 		List<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\");
+		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -40,7 +40,7 @@ public class Main {
 				ejemplos.add(ej);
 			}
 		}
-		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv", ejemplos);
+		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\csv\\ejemplos" + medioPrensa + ".csv", ejemplos);
 	}
 
 	static public String readFile(String file, String encoding) throws IOException {
@@ -87,9 +87,15 @@ public class Main {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			String entrenarClasificador = in.readLine();			
 			if (entrenarClasificador.equals("s")) {
-				Main.generarCVSEntrenamiento();
-				Clasificador clasif = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos.csv");
-				clasif.crearModelo();
+				Main.generarCVSEntrenamiento("elpais");
+				Main.generarCVSEntrenamiento("elobservador");
+				Main.generarCVSEntrenamiento("larepublica");
+				Clasificador clasifelpais = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselpais.csv");
+				Clasificador clasifelobservador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselobservador.csv");
+				Clasificador clasiflarepublica = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploslarepublica.csv");
+				clasifelpais.crearModelo();
+				clasifelobservador.crearModelo();
+				clasiflarepublica.crearModelo();
 			}
 	
 			/**
