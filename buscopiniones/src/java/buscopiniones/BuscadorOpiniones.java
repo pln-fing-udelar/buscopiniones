@@ -55,9 +55,13 @@ public class BuscadorOpiniones {
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "fuente:(" + fuente + ") AND (" + asunto + ")";
+		String paramQ = "fuente:(" + fuente + ") AND "
+				+ "(title:(" + asunto + ") metatitle:(" + asunto + ") h1:(" + asunto + ")"
+				+ "descripcion:(" + asunto + ")"
+				+ "opinion:(" + asunto + ")"
+				+ "articulo:(" + asunto + "))";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		String paramRows = "100";
+		String paramRows = "15";
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
