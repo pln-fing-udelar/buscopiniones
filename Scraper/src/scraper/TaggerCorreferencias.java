@@ -181,7 +181,7 @@ public class TaggerCorreferencias {
 			}
 			for (Opinion op : opiniones) {
 				if (mapa.containsKey(op.getFuente().getId())) {
-					op.getFuente().setFuente(listaFuentes);
+					op.getFuente_corref().setFuente(listaFuentes);
 				}
 			}
 		}
