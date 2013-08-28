@@ -14,8 +14,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
-import java.util.ArrayList;
-import java.util.Collection;
+import java.util.*;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -72,6 +71,7 @@ public class TaggerCorreferencias {
 		final InputStream stdout = process.getInputStream();
 
 		new Thread(new Runnable() {
+
 			public void run() {
 				try {
 					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
@@ -144,25 +144,44 @@ public class TaggerCorreferencias {
 		}
 
 		NodeList listaLinks = doc.getElementsByTagName("link");
+		List<Map<String, String>> listaDeMapas = new LinkedList();
 		for (int i = 0; i < listaLinks.getLength(); i++) {
 			Node nNode = listaLinks.item(i);
 			if (nNode.getNodeType() == Node.ELEMENT_NODE) {
 				Element elemento = (Element) nNode;
 				String idF1 = elemento.getAttribute("idF1");
 				String idF2 = elemento.getAttribute("idF2");
-				Opinion op1 = null;
-				Opinion op2 = null;
-				for (Opinion op : opiniones) {
-					if (op.getFuente().getId().equals(idF1)) {
-						op1 = op;
-					} else if (op.getFuente().getId().equals(idF2)) {
-						op2 = op;
+				if (!idF2.isEmpty()) {
+
+
+					Iterator itMAPS = listaDeMapas.iterator();
+					boolean termine = false;
+					while (itMAPS.hasNext() && !termine) {
+						Map<String, String> mapaDeElems = (Map<String, String>) itMAPS.next();
+						if (mapaDeElems.containsKey(idF1)) {
+							mapaDeElems.put(idF2, idF2);
+							termine = true;
+						}
+					}
+					if (!termine) {
+						Map<String, String> nuevaCadenaCorrefs = new HashMap();
+						nuevaCadenaCorrefs.put(idF2, idF2);
+						listaDeMapas.add(nuevaCadenaCorrefs);
 					}
 				}
-				if (op1 != null && op2 != null) {
-					String fuente1 = op1.getFuente().getFuente();
-					op1.getFuente().setFuente(fuente1 + ", " + op2.getFuente().getFuente());
-					op2.getFuente().setFuente(fuente1 + ", " + op2.getFuente().getFuente());
+			}
+		}
+
+		for (Map<String, String> mapa : listaDeMapas) {
+			String listaFuentes = "";
+			for (Opinion op : opiniones) {
+				if (mapa.containsKey(op.getFuente().getId())) {
+					listaFuentes = listaFuentes + ", " + op.getFuente().getFuente();
+				}
+			}
+			for (Opinion op : opiniones) {
+				if (mapa.containsKey(op.getFuente().getId())) {
+					op.getFuente().setFuente(listaFuentes);
 				}
 			}
 		}
