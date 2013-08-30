@@ -56,12 +56,12 @@ public class BuscadorOpiniones {
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
 		String paramQ = "fuente:(" + fuente + ") AND "
-				+ "(title:(" + asunto + ") metatitle:(" + asunto + ") h1:(" + asunto + ")"
-				+ "descripcion:(" + asunto + ")"
-				+ "opinion:(" + asunto + ")"
-				+ "articulo:(" + asunto + "))";
+				+ "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
+				+ " descripcion:(" + asunto + ")"
+				+ " opinion:(" + asunto + ")^10"
+				+ " articulo:(" + asunto + "))";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		String paramRows = "15";
+		String paramRows = "10";
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -121,24 +121,44 @@ public class BuscadorOpiniones {
 	}
 
 	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
-		String json = "{\n"
+		String json;
+		if (fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null")) {
+			json = "{\n"
+				+ "\"timeline\":\n"
+				+ "{\n"
+				+ "\"headline\":\"Utilice la barra de búsqueda para encontrar opiniones\",\n"
+				+ " \"type\":\"default\",\n"
+				+ " \"text\":\"Powered by Buscopiniones\",\n"
+				+ " \"startDate\":\"2013,10,26\",\n"
+				+ " \"date\": [ ";
+			json += "{";
+			json += "\"startDate\":\"2013,10,26\",";
+			json += "\"headline\":\"\",";
+			json += "\"text\":\"\",";
+			json += "\"asset\":{\n"
+					+ "                    \"media\":\"img/large/4.jpg\",\n"
+					+ "                    \"credit\":\"\",\n"
+					+ "                    \"caption\":\"\"\n"
+					+ "                }";
+			json += "}";
+			
+		} else {
+			json = "{\n"
 				+ "\"timeline\":\n"
 				+ "{\n"
 				+ "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n"
 				+ " \"type\":\"default\",\n"
 				+ " \"text\":\"Powered by Buscopiniones\",\n"
 				+ " \"startDate\":\"2013,10,26\",\n"
-				+ " \"date\": [";
-		if (fuente == null || asunto == null) {
-			//aca hay que hacer algo
-		} else {
+				+ " \"date\": [ ";
 			Collection<Opinion> opiniones = this.getOpiniones(fuente, asunto, fechaIni, fechaFin);
 
 			for (Opinion op : opiniones) {
 				json += op.toJSON() + ",";
 			}
+			json = json.substring(0, json.length() - 1);
 		}
-		json = json.substring(0, json.length() - 1);
+
 		json += " ]\n"
 				+ " }\n"
 				+ " }";
