@@ -123,14 +123,21 @@ public class ProcesadorHTML {
 				return m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
 			}	
 		}
-
-		Matcher m = p.matcher(url);
-
+		Matcher m = p1.matcher(url);
+		
 		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
 			System.out.println("hola1");
 			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
 		}
 
+		m = p.matcher(url);
+
+		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
+			System.out.println("hola1");
+			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
+		}
+		
+		
 		m = p2.matcher(html);
 
 
