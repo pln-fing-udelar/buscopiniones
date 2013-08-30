@@ -34,8 +34,10 @@ public class JsonTimeline extends HttpServlet {
 		try {			
 			String fuente = request.getParameter("fuente");
 			String asunto = request.getParameter("asunto");
+			String fechaIni = request.getParameter("desde");
+			String fechaFin = request.getParameter("hasta"); 
 			BuscadorOpiniones buscador = new BuscadorOpiniones();
-			String json = buscador.getJSONOpiniones(fuente, asunto, null, null);
+			String json = buscador.getJSONOpiniones(fuente, asunto, fechaIni, fechaFin);
 			out.print(json);
 		} catch (Exception e) {
 			System.err.println(e);
