@@ -48,11 +48,57 @@ public class BuscadorOpiniones {
 		return ret;
 	}
 
+	public Collection<String> getFuentesRelacionadas(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+		String paramFecha = "";
+		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
+			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
+		}
+
+		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
+		String paramStart = "0";
+		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
+				+ " descripcion:(" + asunto + ")"
+				+ " opinion:(" + asunto + ")^10"
+				+ " articulo:(" + asunto + "))";
+		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		String paramRows = "0";
+		String paramFacetLimit = "10";
+		String paramFacetField = "fuente_sin_stemm";
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit;
+		System.out.println(url);
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(url);
+		doc.getDocumentElement().normalize();
+
+		Collection<String> fuentes = new ArrayList<String>();
+
+		Node nodoFacet_counts = doc.getDocumentElement().getElementsByTagName("lst").item(2);
+		Element elementoFacet_counts = (Element) nodoFacet_counts;
+
+		Node nodoFacet_fields = elementoFacet_counts.getElementsByTagName("lst").item(1);
+		Element elementoFacet_fields = (Element) nodoFacet_fields;
+
+		Node nodoFuente_sin_stemm = elementoFacet_fields.getElementsByTagName("lst").item(0);
+		Element elementoFuente_sin_stemm = (Element) nodoFuente_sin_stemm;
+
+		NodeList listaFuentes = elementoFuente_sin_stemm.getElementsByTagName("int");
+
+		for (int i = 0; i < listaFuentes.getLength(); i++) {
+			Node nodoDoc = listaFuentes.item(i);
+			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
+				Element elementoDoc = (Element) nodoDoc;
+				fuentes.add(elementoDoc.getAttribute("name"));
+			}
+		}
+
+		return fuentes;
+	}
+
 	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
-			System.out.println("Jajajajajajaajajajajjua");
-			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin)  + "]";
+			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
 		}
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
@@ -126,13 +172,13 @@ public class BuscadorOpiniones {
 		String json;
 		if (fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null")) {
 			json = "{\n"
-				+ "\"timeline\":\n"
-				+ "{\n"
-				+ "\"headline\":\"Utilice la barra de búsqueda para encontrar opiniones\",\n"
-				+ " \"type\":\"default\",\n"
-				+ " \"text\":\"Powered by Buscopiniones\",\n"
-				+ " \"startDate\":\"2013,10,26\",\n"
-				+ " \"date\": [ ";
+					+ "\"timeline\":\n"
+					+ "{\n"
+					+ "\"headline\":\"Utilice la barra de búsqueda para encontrar opiniones\",\n"
+					+ " \"type\":\"default\",\n"
+					+ " \"text\":\"Powered by Buscopiniones\",\n"
+					+ " \"startDate\":\"2013,10,26\",\n"
+					+ " \"date\": [ ";
 			json += "{";
 			json += "\"startDate\":\"2013,10,26\",";
 			json += "\"headline\":\"\",";
@@ -143,16 +189,16 @@ public class BuscadorOpiniones {
 					+ "                    \"caption\":\"\"\n"
 					+ "                }";
 			json += "}";
-			
+
 		} else {
 			json = "{\n"
-				+ "\"timeline\":\n"
-				+ "{\n"
-				+ "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n"
-				+ " \"type\":\"default\",\n"
-				+ " \"text\":\"Powered by Buscopiniones\",\n"
-				+ " \"startDate\":\"2013,10,26\",\n"
-				+ " \"date\": [ ";
+					+ "\"timeline\":\n"
+					+ "{\n"
+					+ "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n"
+					+ " \"type\":\"default\",\n"
+					+ " \"text\":\"Powered by Buscopiniones\",\n"
+					+ " \"startDate\":\"2013,10,26\",\n"
+					+ " \"date\": [ ";
 			Collection<Opinion> opiniones = this.getOpiniones(fuente, asunto, fechaIni, fechaFin);
 
 			for (Opinion op : opiniones) {
