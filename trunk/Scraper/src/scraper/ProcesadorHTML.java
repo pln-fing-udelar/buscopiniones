@@ -134,7 +134,7 @@ public class ProcesadorHTML {
 
 		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
 			System.out.println("hola1");
-			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
+			return "20" + m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
 		}
 		
 		
