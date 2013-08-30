@@ -21,6 +21,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.SAXException;
+import temaDeLaSemana.ProcesadorTemas;
 
 /**
  *
@@ -49,8 +50,9 @@ public class BuscadorOpiniones {
 
 	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
 		String paramFecha = "";
-		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("")) {
-			paramFecha = "fecha:[" + fechaIni + " TO " + fechaFin + "]";
+		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
+			System.out.println("Jajajajajajaajajajajjua");
+			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin)  + "]";
 		}
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");

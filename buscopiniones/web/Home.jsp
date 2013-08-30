@@ -30,6 +30,18 @@
 		<!--[if IE 7]>
 		<link rel="stylesheet" href="css/font-awesome-ie7.min.css">
 		<![endif]-->
+		
+		<!-- datepicker -->
+		<script src="js/jquery.js"></script>
+		<script src="js/jquery-ui.min.js"></script>
+		<script src="js/jquery.ui.datepicker-es.js"></script>
+		<link rel="stylesheet" media="all" href="js/jquery-ui.css"/>
+		<script>
+			$(function() {
+				$("#desde").datepicker();
+				$("#hasta").datepicker();
+			});
+		</script>
 	</head>
 
 	<body>
@@ -76,7 +88,7 @@
 			var timeline_config = {
 				width: "100%",
 				height: "100%",
-				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>',
+				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>',
 				//source: 'example_json.json',
 				start_at_end: true,
 				lang: 'es'
@@ -90,11 +102,17 @@
 				<div class="inner_content">
 
 					<!--welcome-->
-					<div class="welcome_index">
-						Aca hay que poner para que <a href="#"><span class="hue_block white normal">se pueda</span></a> filtrar 
-						por <span class="hue">fecha</span>
-
-					</div>
+			<div class="container">				
+				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
+					<label>Opiniones desde: </label>
+					<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
+					<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+					<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
+					<label>hasta: </label>
+					<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+					<input type="submit" name="filtrar" value="Filtrar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
+				</form>
+			</div>
 					<!--//welcome-->
 				</div>
 			</div>
@@ -327,7 +345,7 @@
 		<a href="#"><i class="go-top hidden-phone hidden-tablet  icon-double-angle-up"></i></a>
 		<!--//end-->
 
-		<script src="js/jquery.js"></script>			
+					
 		<script src="js/bootstrap.min.js"></script>	
 		<script src="js/jquery.touchSwipe.min.js"></script>
 		<script src="js/jquery.mousewheel.min.js"></script>				
@@ -353,7 +371,6 @@
 		</script>
 
 		<!-- slider -->
-		<script src="js/jquery-ui.min.js"></script>
 		<script type="text/javascript" src="js/jquery.nerveSlider.min.js"></script>
 		<script>
 								//<![CDATA[
