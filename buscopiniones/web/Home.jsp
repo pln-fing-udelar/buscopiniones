@@ -1,3 +1,4 @@
+<%@page import="java.util.Collection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -30,7 +31,7 @@
 		<!--[if IE 7]>
 		<link rel="stylesheet" href="css/font-awesome-ie7.min.css">
 		<![endif]-->
-		
+
 		<!-- datepicker -->
 		<script src="js/jquery.js"></script>
 		<script src="js/jquery-ui.min.js"></script>
@@ -82,7 +83,7 @@
 				</form>
 			</div>
 		</div>
-					
+
 		<div id="timeline-embed"></div>
 		<script type="text/javascript">
 			var timeline_config = {
@@ -102,17 +103,17 @@
 				<div class="inner_content">
 
 					<!--welcome-->
-			<div class="container">				
-				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
-					<label>Opiniones desde: </label>
-					<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
-					<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
-					<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
-					<label>hasta: </label>
-					<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
-					<input type="submit" name="filtrar" value="Filtrar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
-				</form>
-			</div>
+					<div class="container">				
+						<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
+							<label>Opiniones desde: </label>
+							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
+							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+							<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
+							<label>hasta: </label>
+							<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+							<input type="submit" name="filtrar" value="Filtrar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
+						</form>
+					</div>
 					<!--//welcome-->
 				</div>
 			</div>
@@ -129,8 +130,17 @@
 						<div class="tile">
 							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
 							<h6><small>DESIGN</small>
-								<br><a href="#"><span>built for &amp; by nerds</span></a></h6>
-							<p>Like you, we love building awesome products on the web. We love it so much, we decided to help people just like us do it easier, better, and faster. </p>
+								<br><a href="#"><span>Otras fuentes que opinaron sobre este tema</span></a></h6>
+								<p>
+								<%
+									Collection<String> fuentes = (Collection<String>) request.getAttribute("fuentes");
+									for (String fuente : fuentes) {
+								%>
+								<%= fuente %><br/>
+								<%	
+									}
+								%>
+								</p>
 						</div> 
 						<div class="pad25"></div>
 					</div> 
@@ -345,7 +355,7 @@
 		<a href="#"><i class="go-top hidden-phone hidden-tablet  icon-double-angle-up"></i></a>
 		<!--//end-->
 
-					
+
 		<script src="js/bootstrap.min.js"></script>	
 		<script src="js/jquery.touchSwipe.min.js"></script>
 		<script src="js/jquery.mousewheel.min.js"></script>				
@@ -373,18 +383,18 @@
 		<!-- slider -->
 		<script type="text/javascript" src="js/jquery.nerveSlider.min.js"></script>
 		<script>
-								//<![CDATA[
-								$(document).ready(function() {
-									$(".myslider").show();
-									$(".myslider").startslider({
-										slideTransitionSpeed: 500,
-										slideTransitionEasing: "easeOutExpo",
-										slidesDraggable: true,
-										sliderResizable: true,
-										showDots: true,
-									});
-								});
-								//]]>
+			//<![CDATA[
+			$(document).ready(function() {
+				$(".myslider").show();
+				$(".myslider").startslider({
+					slideTransitionSpeed: 500,
+					slideTransitionEasing: "easeOutExpo",
+					slidesDraggable: true,
+					sliderResizable: true,
+					showDots: true,
+				});
+			});
+			//]]>
 		</script>
 	</body>
 </html>
