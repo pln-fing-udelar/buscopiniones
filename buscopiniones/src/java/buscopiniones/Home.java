@@ -7,6 +7,7 @@ package buscopiniones;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Collection;
+import java.util.Map;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -33,8 +34,10 @@ public class Home extends HttpServlet {
 	protected void processRequest(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
 		PrintWriter out = response.getWriter();
+		request.setCharacterEncoding("UTF-8");
+		response.setCharacterEncoding("UTF-8");
 		try {
-			String fuente = request.getParameter("fuente");
+			String fuente = request.getParameter("fuente");			
 			String asunto = request.getParameter("asunto");
 			BuscadorOpiniones buscador = new BuscadorOpiniones();
 			Collection<String> fuentes = buscador.getFuentesRelacionadas(fuente, asunto, null, null);

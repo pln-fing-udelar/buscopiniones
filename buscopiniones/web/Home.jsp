@@ -1,5 +1,5 @@
 <%@page import="java.util.Collection"%>
-<%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
 
 
 <html>
@@ -129,18 +129,20 @@
 					<div class="span3">
 						<div class="tile">
 							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
-							<h6><small>DESIGN</small>
-								<br><a href="#"><span>Otras fuentes que opinaron sobre este tema</span></a></h6>
+							<h6><small>FUENTES</small>
+								<br /><span>Otras fuentes que opinaron sobre este tema</span></h6>
+								<h5>
 								<p>
 								<%
 									Collection<String> fuentes = (Collection<String>) request.getAttribute("fuentes");
 									for (String fuente : fuentes) {
 								%>
-								<%= fuente %><br/>
+								<a href="?fuente=<%= fuente%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente %></b></a><br/>
 								<%	
 									}
 								%>
 								</p>
+								</h5>
 						</div> 
 						<div class="pad25"></div>
 					</div> 
@@ -335,16 +337,15 @@
 				<div class="row">
 					<div class="span12">
 						<div class="copyright">
-							FLATI
+							BUSCOPINIONES
 							&copy;
 							<script type="text/javascript">
 								//<![CDATA[
-								var d = new Date()
-								document.write(d.getFullYear())
+								var d = new Date();
+								document.write(d.getFullYear());
 								//]]>
 							</script>
-							- All Rights Reserved :
-							Template by <a href="http://spiralpixel.com/">Spiral Pixel</a>
+							- Todos los derechos reservados por Buscopiniones&#8482;							
 						</div>
 					</div>
 				</div>
