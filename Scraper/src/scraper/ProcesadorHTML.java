@@ -103,7 +103,7 @@ public class ProcesadorHTML {
 
 		//span[@class='tiempo_transcurrido']
 
-		Pattern p = Pattern.compile("(?i)((20)?[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
+		Pattern p = Pattern.compile("(?i)([0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
 		Pattern p1 = Pattern.compile("(?i)(20[0-1][0-9]).?([0-1][0-9]).?([0-3][0-9])");
 		Pattern p2 = Pattern.compile("(?i)([0-3]?[0-9]).de.(enero|febrero|marzo|abril|mayo|junio|julio|agosto|septiembre|octubre|noviembre|diciembre)(.de|,| ,).?(20[0-1][0-9])");
 		Pattern p3 = Pattern.compile("(?i)([0-3][0-9]).?([0-1]?[0-9]).?(20[0-1][0-9])");
@@ -125,16 +125,16 @@ public class ProcesadorHTML {
 		}
 		Matcher m = p1.matcher(url);
 		
-		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
+		if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(3)) <= 31)) { // trato de matchear la fecha en la url con el patron p
 			System.out.println("hola1");
-			return m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
+			return m.group(1) + "-" + m.group(2) + "-" + m.group(3) + "T00:00:00Z";
 		}
 
 		m = p.matcher(url);
 
-		if (m.find() && (Integer.parseInt(m.group(3)) <= 12) && (Integer.parseInt(m.group(4)) <= 31)) { // trato de matchear la fecha en la url con el patron p
+		if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(3)) <= 31)) { // trato de matchear la fecha en la url con el patron p
 			System.out.println("hola1");
-			return "20" + m.group(1) + "-" + m.group(3) + "-" + m.group(4) + "T00:00:00Z";
+			return "20" + m.group(1) + "-" + m.group(2) + "-" + m.group(3) + "T00:00:00Z";
 		}
 		
 		
