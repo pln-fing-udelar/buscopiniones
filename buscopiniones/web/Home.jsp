@@ -128,7 +128,7 @@
 				<div class="row">
 					<div class="span3">
 						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
+							<div class="intro-icon-disc cont-large"><i class="icon-user intro-icon-large"></i></div>
 							<h6><small>FUENTES</small>
 								<br /><span>Otras fuentes que opinaron sobre este tema</span></h6>
 								<h5>
