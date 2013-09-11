@@ -49,10 +49,10 @@ public class Opinion {
 		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle());
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
 		BASE64Encoder encoder = new BASE64Encoder();
-		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "");
+		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
 		System.out.println("toy aca");
 		System.out.println(base64);
-		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/" + base64 + ".jpg";
+		String media = "ImagenNoticia/" + base64 + ".jpg";
 //		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/aHR0cDovL2hpc3Rvcmljby5lbHBhaXMuY29tLnV5LzEyMDYyNS91bHRtby02NDgyNjcvdWx0aW1vbW9tZW50by9NZWRpZGFzLXNvYnJlLWxhLW1hcmlodWFuYS1zb24tcGFyYS1wcm90ZWdlci1hbC1jb25zdW1pZG9yLWRpam8tTXVqaWNhLw==.jpg";
 		String credit = "";
 		if (opinionJson.matches(".*?&quot;.*?&quot;.*?")) {
@@ -62,8 +62,8 @@ public class Opinion {
 
 		String json = "{";
 		json += "\"startDate\":\"" + getFechaParaJSON() + "\",";
-		json += "\"headline\":\"" + tituloJson + "\",";
-		json += "\"text\":\"<p>" + opinionJson + "</p><p>" + urlJson + "</p>\",";
+		json += "\"headline\":\"" + opinionJson + "\",";
+		json += "\"text\":\"<p>" + tituloJson + "</p><p>" + urlJson + "</p>\",";
 		json += "\"asset\":{\n"
 				+ "                    \"media\":\"" + media + "\",\n"
 				+ "                    \"credit\":\"" + credit + "\",\n"
