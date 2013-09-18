@@ -261,6 +261,7 @@ public class ProcesadorHTML {
 		return ProcesadorHTML.html2text(resultado);
 	}
 
+	// de momento es imposible parsear la categoria para la republica...
 	String parseCategorias(String medioDePrensa) {
 		String resultado = "";
 		if (medioDePrensa.equals("elobservador")) {
