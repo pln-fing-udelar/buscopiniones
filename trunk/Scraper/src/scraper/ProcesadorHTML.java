@@ -56,8 +56,17 @@ public class ProcesadorHTML {
 		return charset.trim();
 	}
 
-	public String obtenerTitle() {
+	public String obtenerTitle(String medioDePrensa) {
 		String title = "";
+		// acá va para hacer el de el pais al 17 09 2013
+		if (medioDePrensa.equals("elpais")) {
+			Pattern pattTitle = Pattern.compile("(?s)(?i)<title.*?>(.*?)</title>");
+			Matcher mTitle = pattTitle.matcher(html);
+			if (mTitle.find()) {
+				title = html2text(mTitle.group(1));
+			}
+			return title;
+		}
 		Pattern pattTitle = Pattern.compile("(?s)(?i)<title.*?>(.*?)</title>");
 		Matcher mTitle = pattTitle.matcher(html);
 		if (mTitle.find()) {
@@ -90,7 +99,7 @@ public class ProcesadorHTML {
 
 		return new Noticia(url,
 				ArticleExtractor.INSTANCE.getText(html).replaceAll("“|”", "\""),
-				this.obtenerTitle().trim(),
+				this.obtenerTitle(medioDePrensa).trim(),
 				this.obtenerMetaTitle().trim(),
 				this.obtenerH1().trim(),
 				this.parseFechaPublicacion(medioDePrensa),
@@ -267,8 +276,17 @@ public class ProcesadorHTML {
 				}
 			}
 		} else if (medioDePrensa.equals("elpais")) {
-			Pattern p = Pattern.compile("(?s)(?i)<h2.*?>(.*?)</h2>");
+			// para agarrar la categoria de el pais al 17 09 2013
+			Pattern p = Pattern.compile("(?s)(?i)<a.class=\"logo\".*?>(.*?)</a>");
 			Matcher m = p.matcher(html);
+			if (m.find()) {
+				resultado = m.group(1);
+				return ProcesadorHTML.html2text(resultado);
+			} 
+			
+			// otro
+			p = Pattern.compile("(?s)(?i)<h2.*?>(.*?)</h2>");
+			m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(1);
 				String[] aux = resultado.split("<b>|</b>");
