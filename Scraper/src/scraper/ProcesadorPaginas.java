@@ -105,7 +105,9 @@ public class ProcesadorPaginas {
 				System.out.println("Empiezo a scrapear opiniones");
 				Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
 				for (Opinion op : opiniones) {
-					xml += op.toXML();
+					if(!op.esDescartable()){
+						xml += op.toXML();
+					}
 				}
 			}
 			System.out.println("Termine con el taggeo!");

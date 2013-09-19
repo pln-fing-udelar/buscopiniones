@@ -15,17 +15,13 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.transform.Result;
-import javax.xml.transform.Source;
-import javax.xml.transform.Transformer;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
-import javax.xml.transform.TransformerFactory;
-import javax.xml.transform.dom.DOMSource;
-import javax.xml.transform.stream.StreamResult;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.PrettyXmlSerializer;
@@ -71,7 +67,6 @@ public class TaggerCorreferencias {
 		final InputStream stdout = process.getInputStream();
 
 		new Thread(new Runnable() {
-
 			public void run() {
 				try {
 					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
@@ -104,16 +99,34 @@ public class TaggerCorreferencias {
 		TagNode node = cleaner.clean(opinionesXML);
 		new PrettyXmlSerializer(props).writeToFile(node, config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
 		opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
+		opinionesXML = opinionesXML.replaceAll("(?s)</body>.*$", "");
+		opinionesXML = opinionesXML.replaceAll("(?s)<html>.*;\\?\\&gt;", "");
 		opinionesXML = opinionesXML.replaceAll("(?s)(<opinion>.*?<)(fuente)(>.*?</)(fuente)(>.*?</opinion>)", "$1$2a$3$4a$5");
 		opinionesXML = opinionesXML.replaceAll("(?s)<fuente>(.*?)</fuente>", "$1");
 		opinionesXML = opinionesXML.replaceAll("<fuentea>", "<fuente>");
 		opinionesXML = opinionesXML.replaceAll("</fuentea>", "</fuente>");
+		opinionesXML = opinionesXML.replaceAll("atributos=", "Atributos=");
+		opinionesXML = opinionesXML.replaceAll("=\"\\[cant", "=\"[C");
+//		opinionesXML = opinionesXML.replaceAll("<predicado>", "<predop>");
+//		opinionesXML = opinionesXML.replaceAll("</predicado>", "</predop>");
+
+		opinionesXML = replaceLowerCase(opinionesXML, "=(\"\\[([a-z],)*([a-z])\\]\")");
+		//opinionesXML = opinionesXML.replaceAll("Atributos=\"\\[([a-z],)*([a-z])\\]\"", "$1");
 		bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirCorreferencias() + "entrada.xml"), "iso-8859-1"));
 		bw.write(opinionesXML);
 		bw.close();
-//		if (!opinionesXML.equals(opinionesXMLNuevo)) {
-//			System.exit(0);
-//		}
+
+	}
+
+	public String replaceLowerCase(final String input, final String pattern) {
+		Pattern p = Pattern.compile(pattern);
+		Matcher m = p.matcher(input);
+		StringBuffer sb = new StringBuffer();
+		while (m.find()) {			
+			m.appendReplacement(sb, m.group().toUpperCase());
+		}
+		m.appendTail(sb);
+		return sb.toString();
 	}
 
 	// A partir del archivo salidaFinal.xml, genera una lista de las opiniones encontradas en el mismo
