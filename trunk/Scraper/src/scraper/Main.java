@@ -78,7 +78,7 @@ public class Main {
 		try {
 
 			Configuracion config = new Configuracion();
-			final int maxIterFreeling = 25;
+			final int maxIterFreeling = 50;
 
 			// Creo una lista de ejemplos vacia, para entrenar
 			

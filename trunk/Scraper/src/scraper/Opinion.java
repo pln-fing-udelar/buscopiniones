@@ -31,6 +31,22 @@ public class Opinion {
 		return xml;
 	}
 
+	int countWords(String in) {
+		String trim = in.trim();
+		if (trim.isEmpty()) {
+			return 0;
+		}
+		return trim.split("\\s+").length; //separate string around spaces
+	}
+
+	public boolean esDescartable() {
+		if (countWords(fuente.getFuente()) < 1
+				&& countWords(getFuente_corref().getFuente().replaceAll(",", "")) < 1) {
+			return true;
+		}
+		return false;
+	}
+
 	/**
 	 * @return the noticia
 	 */
