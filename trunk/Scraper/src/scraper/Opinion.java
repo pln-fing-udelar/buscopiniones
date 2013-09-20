@@ -40,8 +40,10 @@ public class Opinion {
 	}
 
 	public boolean esDescartable() {
-		if (countWords(fuente.getFuente()) < 1
-				&& countWords(getFuente_corref().getFuente().replaceAll(",", "")) < 1) {
+		if ((countWords(fuente.getFuente()) < 1
+				&& countWords(getFuente_corref().getFuente().replaceAll(",", "")) < 1)
+			|| (countWords(getFuente_corref().getFuente().replaceAll(",", "")) < 1
+				&& fuente.getFuente().trim().equals("se"))) {
 			return true;
 		}
 		return false;
