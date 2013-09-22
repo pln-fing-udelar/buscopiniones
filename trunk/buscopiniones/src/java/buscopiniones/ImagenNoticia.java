@@ -13,6 +13,9 @@ import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import javax.imageio.ImageIO;
@@ -65,6 +68,7 @@ public class ImagenNoticia extends HttpServlet {
 		p = Pattern.compile("src=(\"|')([^\"']*?\\.(jpg|gif|png|JPG|PNG|GIF))(\"|')");
 		m = p.matcher(str);
 		int max = 0;
+		ExecutorService pool = Executors.newFixedThreadPool(20);
 		while (m.find()) {
 			String imagenCandidata = m.group(2);
 			if (imagenCandidata != null && !imagenCandidata.matches("http://.*")) {
@@ -72,29 +76,13 @@ public class ImagenNoticia extends HttpServlet {
 			}
 			System.out.println("imagenCandidata: " + imagenCandidata);
 			if (imagenCandidata != null) {
-				try {
-					BufferedImage img = ImageIO.read(new URL(imagenCandidata));
-					if (img != null) {
-						int height = img.getHeight();
-						int width = img.getWidth();
-						double proporcion = ((double) height) / ((double) width);
-						System.out.println("height: " + height);
-						System.out.println("width: " + width);
-						System.out.println("proporcion: " + proporcion);
-
-						if (max <= (height * width) && (height * width) >= (200 * 200) && proporcion < 2.0 && proporcion > 0.3) {
-							imagenRet = img;
-							max = height * width;
-						}
-					}
-				} catch (Exception e) {
-					System.out.println(e);
-					System.out.println(e.getCause());
-				}
+				pool.submit(new DownloadTask(imagenCandidata));
 			}
-
 		}
+		pool.shutdown();
+		pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 		System.out.println("toy aca 4");
+		imagenRet = DownloadTask.getMejorImagen();
 		if (imagenRet == null) {
 			throw new Exception("No encontre ninguna imagen");
 		}

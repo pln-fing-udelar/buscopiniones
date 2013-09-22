@@ -125,7 +125,7 @@ public class ProcesadorTemas {
 				}
 			}
 
-			url = urlSolrMLTTitle + "?q=" + paramUrl + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
+			/*url = urlSolrMLTTitle + "?q=" + paramUrl + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
 
 			dbFactory = DocumentBuilderFactory.newInstance();
 			dBuilder = dbFactory.newDocumentBuilder();
@@ -150,7 +150,7 @@ public class ProcesadorTemas {
 					relevancia += boost;
 					temas.put(nombreTema, relevancia);
 				}
-			}
+			}*/
 
 		}
 		ValueComparator bvc = new ValueComparator(temas);
