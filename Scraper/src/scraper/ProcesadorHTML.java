@@ -278,7 +278,7 @@ public class ProcesadorHTML {
 			}
 		} else if (medioDePrensa.equals("elpais")) {
 			// para agarrar la categoria de el pais al 17 09 2013
-			Pattern p = Pattern.compile("(?s)(?i)<a.class=\"logo\".*?>(.*?)</a>");
+			Pattern p = Pattern.compile("(?s)(?i)<a href=\"/(.*?)\" class=\"logo\">");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
 				resultado = m.group(1);
