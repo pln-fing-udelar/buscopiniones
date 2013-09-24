@@ -7,6 +7,7 @@ package temaDeLaSemana;
 import buscopiniones.Noticia;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Collection;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,8 +37,8 @@ public class VerTemas extends HttpServlet {
 			if (request.getParameter("desde") != null && !request.getParameter("desde").equals("")
 					&& request.getParameter("hasta") != null && !request.getParameter("hasta").equals("")) {
 				ProcesadorTemas procTemas = new ProcesadorTemas();
-				Noticia noti = procTemas.getNoticiaDeLaSemana(request.getParameter("desde"), request.getParameter("hasta"));
-				request.setAttribute("Noticia", noti);
+				Collection<Noticia> noticias = procTemas.getNoticiaDeLaSemana(request.getParameter("desde"), request.getParameter("hasta"));
+				request.setAttribute("Noticias", noticias);
 			}
 			request.getRequestDispatcher("/VerTemas.jsp").forward(request, response);
 		} catch (Exception e) {

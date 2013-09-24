@@ -1,4 +1,5 @@
 <%@page import="buscopiniones.Noticia"%>
+<%@page import="java.util.Collection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
 
@@ -90,7 +91,8 @@
 
 					<!--welcome-->
 					<div class="welcome_index">
-						<span class="hue"><% if (request.getAttribute("Noticia") != null) {%> "<%= ((Noticia)request.getAttribute("Noticia")).getTitle() %>" <% }%>
+						<span class="hue">
+
 						</span>
 
 					</div>
@@ -106,47 +108,26 @@
 
 				<!--info boxes-->
 				<div class="row">
+					<%
+						if (request.getAttribute("Noticias") != null) {
+							Collection<Noticia> noticias = ((Collection<Noticia>) request.getAttribute("Noticias"));
+							for (Noticia noti : noticias) {
+					%>
 					<div class="span3">
 						<div class="tile">
 							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
-							<h6><small>DESIGN</small>
-								<br><a href="#"><span>built for &amp; by nerds</span></a></h6>
-							<p>Like you, we love building awesome products on the web. We love it so much, we decided to help people just like us do it easier, better, and faster. </p>
+							<h6><small>Noticia</small>
+								<br/><a href="<%= noti.getUrl()%>"><span><%= noti.getTitle()%></span></a></h6>
+							<p><%= noti.getDescripcion()%></p>
+							<p><%= noti.getFecha() %></p>
 						</div> 
 						<div class="pad25"></div>
-					</div> 
+					</div>
+					<%
+							}
+						}
+					%>
 
-					<div class="span3">
-						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-rocket intro-icon-large"></i></div>
-							<h6><small>CODE</small>
-								<br><a href="#"><span>12-column grid</span></a></h6>
-							<p>Bootstrap is designed to help people of all skill levels - designer or developer, huge nerd or early beginner. 
-								Use it as a complete kit or use to start something.</p>
-						</div> 
-						<div class="pad25"></div>
-					</div> 
-
-					<div class="span3">
-						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-beaker intro-icon-large"></i></div>
-							<h6><small>CREATE</small>
-								<br><a href="#"><span>responsive</span></a></h6>
-							<p>Bootstrap have gone fully responsive. Our components are scaled according to a range of resolutions and devices to provide a consistent 
-								experience.</p>	
-						</div> 
-						<div class="pad25"></div>
-					</div> 
-
-					<div class="span3">
-						<div class="tile tile-hot">
-							<div class="intro-icon-disc cont-large"><i class="icon-book  intro-icon-large"></i></div>
-							<h6> <small>SUPPORT</small>
-								<br><a href="#"><span>growing library</span></a></h6>
-							<p>Despite being only 7kb (gzipped), Bootstrap is one of the most complete front-end toolkits out there with dozens of fully functional components.</p>
-						</div>
-						<div class="pad25"></div>	
-					</div> 
 				</div> 
 
 				<!--//info boxes-->
@@ -326,8 +307,8 @@
 		<a href="#"><i class="go-top hidden-phone hidden-tablet  icon-double-angle-up"></i></a>
 		<!--//end-->
 
-		
 
-		
+
+
 	</body>
 </html>
