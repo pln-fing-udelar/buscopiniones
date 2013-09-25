@@ -257,11 +257,17 @@ public class ProcesadorHTML {
 			if (m.find()) {
 				resultado = m.group(2);
 			}
+		} else if (medioDePrensa.equals("larepublica")) {
+			Pattern p = Pattern.compile("(?s)(?i)<meta.*?description.*?content=(\"|')((\"|.)*?)(\"|')./>");
+			Matcher m = p.matcher(html);
+			if (m.find()) {
+				resultado = m.group(2);
+			}
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
 
-	// de momento es imposible parsear la categoria para la republica...
+	
 	String parseCategorias(String medioDePrensa) {
 		String resultado = "";
 		if (medioDePrensa.equals("elobservador")) {
@@ -277,7 +283,7 @@ public class ProcesadorHTML {
 				}
 			}
 		} else if (medioDePrensa.equals("elpais")) {
-			// para agarrar la categoria de el pais al 17 09 2013
+			// para agarrar la categoria de el pais al 24 09 2013
 			Pattern p = Pattern.compile("(?s)(?i)<a href=\"/(.*?)\" class=\"logo\">");
 			Matcher m = p.matcher(html);
 			if (m.find()) {
@@ -297,6 +303,15 @@ public class ProcesadorHTML {
 					resultado = resultado + aux[i];
 				}
 			}
+		} else if (medioDePrensa.equals("larepublica")) {
+			// de momento es imposible parsear la categoria para la republica...
+			// para la republica 24 09 2013
+			Pattern p = Pattern.compile("(?s)(?i)<p class=\"colgado\">(.*?)</p>");
+			Matcher m = p.matcher(html);
+			if (m.find()) {
+				resultado = m.group(1);
+				return ProcesadorHTML.html2text(resultado);
+			} 
 		}
 		return ProcesadorHTML.html2text(resultado);
 	}
