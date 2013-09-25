@@ -40,7 +40,8 @@ public class ProcesadorPaginas {
 		// saque para afuera el procesador html, para poder utilizarlo en otros casos
 		System.out.println("Empiezo a procesar HTML");
 		Ejemplo ej = new Ejemplo(proc, false);
-		if (clasificador.clasificar(ej) || medioDePrensa.equals("elpais")) {
+		System.out.println(ej);
+		if (clasificador.clasificar(ej)) {
 			System.out.println("si si si");
 			Noticia noti = proc.procesar(medioDePrensa);
 			coleccionNoticias.add(noti);
