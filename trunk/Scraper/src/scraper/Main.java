@@ -101,8 +101,10 @@ public class Main {
 			System.out.println("Esto puede ser muy lento");
 			System.out.println("Borrar duplicados?s/n");
 			in = new BufferedReader(new InputStreamReader(System.in));
-			if (entrenarClasificador.equals("s")) {
+			String borrarDuplicados = in.readLine();
+			if (borrarDuplicados.equals("s")) {
 				BorrarDuplicados.borrar();
+				return;
 			}
 			/**
 			 * *******************************************************************

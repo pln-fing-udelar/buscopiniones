@@ -31,10 +31,11 @@ public class BorrarDuplicados {
 						String fecha_string1 = tablaArchivos.get(nomb_arch);
 						String fecha_string2 = carpeta_fecha.getName();
 						if (fecha_string1.compareTo(fecha_string2) < 0) {
-							File archivoBorrar = new File (medioPrensa.getName() + "\\" + fecha_string1 + "\\" + nomb_arch);
+							File archivoBorrar = new File (medioPrensa.getPath() + "\\" + fecha_string1 + "\\" + nomb_arch);
 							archivoBorrar.delete();
+							tablaArchivos.put(nomb_arch, fecha_string2);
 						} else if (fecha_string1.compareTo(fecha_string2) > 0) {
-							File archivoBorrar = new File (medioPrensa.getName() + "\\" + fecha_string2 + "\\" + nomb_arch);
+							File archivoBorrar = new File (medioPrensa.getPath() + "\\" + fecha_string2 + "\\" + nomb_arch);
 							archivoBorrar.delete();
 						} else {
 							throw new IOException("son el mismo archivo, aca hay algo mal");
