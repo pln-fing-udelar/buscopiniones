@@ -97,7 +97,13 @@ public class Main {
 				clasifelobservador.crearModelo();
 				clasiflarepublica.crearModelo();
 			}
-	
+			
+			System.out.println("Esto puede ser muy lento");
+			System.out.println("Borrar duplicados?s/n");
+			in = new BufferedReader(new InputStreamReader(System.in));
+			if (entrenarClasificador.equals("s")) {
+				BorrarDuplicados.borrar();
+			}
 			/**
 			 * *******************************************************************
 			 * Cambie la carpeta para una de pruebas con archivos bajados a mano
