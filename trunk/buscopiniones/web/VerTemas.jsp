@@ -1,3 +1,5 @@
+<%@page import="sun.misc.BASE64Encoder"%>
+<%@page import="java.net.URLEncoder"%>
 <%@page import="buscopiniones.Noticia"%>
 <%@page import="java.util.Collection"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
@@ -39,11 +41,12 @@
 		<script src="js/jquery.ui.datepicker-es.js"></script>
 		<link rel="stylesheet" media="all" href="js/jquery-ui.css"/>
 		<script>
-			$(function() {
+			$( document ).ready(function() {
 				$("#desde").datepicker();
-				$("#hasta").datepicker();
+				$("#hasta").datepicker();				
 			});
-		</script>
+		</script>		
+		
 	</head>
 
 	<body>
@@ -84,26 +87,73 @@
 				</form>
 			</div>
 		</div>
-
-		<div id="banner">
-			<div class="container intro_wrapper">
-				<div class="inner_content">
-
-					<!--welcome-->
-					<div class="welcome_index">
-						<span class="hue">
-
-						</span>
-
-					</div>
-					<!--//welcome-->
-				</div>
-			</div>
-		</div>
 		<!--//banner-->
 
 		<div class="container wrapper">
 			<div class="inner_content">
+
+				<div id="options">                                           
+                    <ul id="filters" class="option-set" data-option-key="filter">
+                        <li><a href="#filter" data-option-value="*" class=" selected">All</a></li>
+                        <li><a href="#filter" data-option-value=".category01">Category 01</a></li>                                            
+                        <li><a href="#filter" data-option-value=".category02">Category 02</a></li>
+                        <li><a href="#filter" data-option-value=".category03">Category 03</a></li> 
+                    </ul>                                           
+                    <div class="clear"></div>
+                </div>
+				<!-- portfolio_block -->
+				<div class="row">      
+                    <div class="projects">
+						<%
+							if (request.getAttribute("Noticias") != null) {
+								Collection<Noticia> noticias = ((Collection<Noticia>) request.getAttribute("Noticias"));
+								String category = "category01";
+								int j = 0;
+								for (Noticia noti : noticias) {
+									BASE64Encoder encoder = new BASE64Encoder();
+									String base64 = encoder.encode(noti.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
+									String imagen = "ImagenNoticia/" + base64 + ".jpg";
+									if(j > 3){
+										category = "category02";
+									}else if(j > 7){
+										category = "category03";
+									}
+									j++;
+						%>
+                        <div class="span3 element <%= category%>" data-category=" <%= category%>">
+                            <div class="hover_img">
+								<a href="<%= noti.getUrl()%>" data-rel="prettyPhoto[portfolio1]">	
+									<img src="<%= imagen%>" alt="<%= noti.getTitle()%>" /></a>
+                            </div>  
+                            <div class="item_description">
+								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle()%></span></a><br/>
+								<p><%= noti.getDescripcion()%></p>
+								<p><%= noti.getFecha()%></p>
+								<p>
+									Personas que opinaron sobre este tema:
+									<br/>
+									<%
+										Collection<String> fuentes = noti.getFuentesRel();
+										int i = 0;
+										for (String fuente : fuentes) {
+											if (i++ > 3) {
+												break;
+											}
+									%>
+									<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente%></b></a><br/>
+									<%
+										}
+									%>
+								</p>
+                            </div>                                    
+                        </div>
+						<%
+								}
+							}
+						%>
+					</div>
+				</div>
+
 				<div class="pad45"></div>
 
 				<!--info boxes-->
@@ -119,7 +169,23 @@
 							<h6><small>Noticia</small>
 								<br/><a href="<%= noti.getUrl()%>"><span><%= noti.getTitle()%></span></a></h6>
 							<p><%= noti.getDescripcion()%></p>
-							<p><%= noti.getFecha() %></p>
+							<p><%= noti.getFecha()%></p>
+							<p>
+								Personas que opinaron sobre este tema:
+								<br/>
+								<%
+									Collection<String> fuentes = noti.getFuentesRel();
+									int i = 0;
+									for (String fuente : fuentes) {
+										if (i++ > 3) {
+											break;
+										}
+								%>
+								<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente%></b></a><br/>
+										<%
+											}
+										%>
+							</p>
 						</div> 
 						<div class="pad25"></div>
 					</div>
@@ -291,8 +357,8 @@
 							&copy;
 							<script type="text/javascript">
 								//<![CDATA[
-								var d = new Date()
-								document.write(d.getFullYear())
+								var d = new Date();
+								document.write(d.getFullYear());
 								//]]>
 							</script>
 							- All Rights Reserved :
@@ -309,6 +375,38 @@
 
 
 
-
+		
+		<script src="js/jquery.isotope.min.js" type="text/javascript"></script>
+		<script type="text/javascript" src="js/sorting.html"></script>
+		<script type="text/javascript">
+								//<![CDATA[
+								$(window).load(function() {
+									
+									$('.projects').isotope({
+									});
+								});
+								//]]>
+		</script>		
+		<script type="text/javascript">
+			//<![CDATA[
+			$(function() {
+				$('div.element').hide();
+			});
+			var i = 0;//initialize
+			var int = 0;
+			$(window).bind("load", function() {
+				var int = setInterval("doThis(i)", 100);
+				fade in speed in milliseconds
+			});
+			function doThis() {
+				var imgs = $('div.element').length;
+				if (i >= imgs) {
+					clearInterval(int);
+				}
+				$('div.element:hidden').eq(0).fadeIn(100);
+				i++;//add 1 to the count
+			}
+			//]]>
+		</script>
 	</body>
 </html>

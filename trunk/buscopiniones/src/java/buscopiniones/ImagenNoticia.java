@@ -24,6 +24,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -43,7 +44,7 @@ public class ImagenNoticia extends HttpServlet {
 	 * @throws ServletException if a servlet-specific error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public BufferedImage obtenerImagenDeURL(String urlString) throws MalformedURLException, IOException, Exception {
+	public BufferedImage obtenerImagenDeURL(String urlString, HttpSession session) throws MalformedURLException, IOException, Exception {
 		System.out.println("toy aca 1");
 		BufferedImage imagenRet = null;
 		URL url = new URL(urlString);
@@ -68,6 +69,8 @@ public class ImagenNoticia extends HttpServlet {
 		p = Pattern.compile("src=(\"|')([^\"']*?\\.(jpg|gif|png|JPG|PNG|GIF))(\"|')");
 		m = p.matcher(str);
 		int max = 0;
+		String idImg = Math.random() + "";
+		session.setAttribute(idImg + "max", 0);
 		ExecutorService pool = Executors.newFixedThreadPool(20);
 		while (m.find()) {
 			String imagenCandidata = m.group(2);
@@ -76,13 +79,14 @@ public class ImagenNoticia extends HttpServlet {
 			}
 			System.out.println("imagenCandidata: " + imagenCandidata);
 			if (imagenCandidata != null) {
-				pool.submit(new DownloadTask(imagenCandidata));
+				pool.submit(new DownloadTask(imagenCandidata, idImg, session));
 			}
 		}
 		pool.shutdown();
 		pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
 		System.out.println("toy aca 4");
-		imagenRet = DownloadTask.getMejorImagen();
+//		imagenRet = DownloadTask.getMejorImagen();
+		imagenRet = (BufferedImage) session.getAttribute(idImg + "img");
 		if (imagenRet == null) {
 			throw new Exception("No encontre ninguna imagen");
 		}
@@ -93,6 +97,8 @@ public class ImagenNoticia extends HttpServlet {
 			throws ServletException, IOException {
 		response.setContentType("image/jpg");
 		OutputStream out = response.getOutputStream();
+		HttpSession session = request.getSession();
+
 		try {
 			BASE64Decoder decoder = new BASE64Decoder();
 			String pathInfo = request.getPathInfo();
@@ -101,7 +107,7 @@ public class ImagenNoticia extends HttpServlet {
 			byte[] decodedBytes = decoder.decodeBuffer(pathParts[1].replaceAll("\\.jpg$", ""));
 			String url = new String(decodedBytes);
 			BufferedImage img = null;
-			img = obtenerImagenDeURL(url);
+			img = obtenerImagenDeURL(url, session);
 			if (img != null) {
 				ImageIO.write(img, "jpg", out);
 			}

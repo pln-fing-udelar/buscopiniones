@@ -103,7 +103,8 @@ public class BuscadorOpiniones {
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "(fuente:(" + fuente + ") fuente_corref:(" + fuente + ")^0.001) AND "
+		// fuente_corref:(" + fuente + ")^0.001)
+		String paramQ = "fuente:(" + fuente + ")  AND "
 				+ "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
 				+ " descripcion:(" + asunto + ")"
 				+ " opinion:(" + asunto + ")^10"

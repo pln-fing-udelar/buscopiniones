@@ -1,5 +1,7 @@
 package buscopiniones;
 
+import java.util.Collection;
+
 /**
  *
  * @author Rodrigo
@@ -15,7 +17,8 @@ public class Noticia {
 	private String categorias;
 	private String descripcion;
 	private String autor;
-
+	private Collection<String> fuentesRel;
+	
 	public Noticia(){
 		
 	}
@@ -29,6 +32,7 @@ public class Noticia {
 		this.categorias = categorias;
 		this.descripcion = descripcion;
 		this.autor = autor;
+		this.fuentesRel = null;
 	}
 
 	public String toXML() {
@@ -169,5 +173,19 @@ public class Noticia {
 	 */
 	public void setAutor(String autor) {
 		this.autor = autor;
+	}
+
+	/**
+	 * @return the fuentesRel
+	 */
+	public Collection<String> getFuentesRel() {
+		return fuentesRel;
+	}
+
+	/**
+	 * @param fuentesRel the fuentesRel to set
+	 */
+	public void setFuentesRel(Collection<String> fuentesRel) {
+		this.fuentesRel = fuentesRel;
 	}
 }

@@ -7,6 +7,7 @@ package buscopiniones;
 import java.awt.image.BufferedImage;
 import java.net.URL;
 import javax.imageio.ImageIO;
+import javax.servlet.http.HttpSession;
 
 /**
  *
@@ -15,6 +16,8 @@ import javax.imageio.ImageIO;
 public class DownloadTask implements Runnable {
 
 	private String imagenCandidata;
+	private String idImg;
+	private HttpSession session;
 	private static BufferedImage mejorImagen = null;
 	private static int max = 0;
 	private static int maxHeight = 200;
@@ -22,15 +25,17 @@ public class DownloadTask implements Runnable {
 	private static double maxProporcion = 2.0;
 	private static double minProporcion = 0.3;
 
-	public DownloadTask(String imagenCandidata) {
+	public DownloadTask(String imagenCandidata, String idImg, HttpSession session) {
 		this.imagenCandidata = imagenCandidata;
+		this.idImg = idImg;
+		this.session = session;
 	}
 
 	public static BufferedImage getMejorImagen() {
 		return mejorImagen;
 	}
 
-	public static synchronized void probarMejorImagen(BufferedImage img) {
+	public static synchronized void probarMejorImagen(BufferedImage img, String idImg, HttpSession session) {
 		if (img != null) {
 			int height = img.getHeight();
 			int width = img.getWidth();
@@ -38,7 +43,9 @@ public class DownloadTask implements Runnable {
 			System.out.println("height: " + height);
 			System.out.println("width: " + width);
 			System.out.println("proporcion: " + proporcion);
-			if (max <= (height * width) && (height * width) >= (maxHeight * maxWidth) && proporcion < maxProporcion && proporcion > minProporcion) {
+			if (((Integer)session.getAttribute(idImg+ "max")) <= (height * width) && (height * width) >= (maxHeight * maxWidth) && proporcion < maxProporcion && proporcion > minProporcion) {
+				session.setAttribute(idImg + "img", img);
+				session.setAttribute(idImg + "max", (height * width));
 				mejorImagen = img;
 				max = height * width;
 			}
@@ -49,7 +56,7 @@ public class DownloadTask implements Runnable {
 	public void run() {
 		try {
 			BufferedImage img = ImageIO.read(new URL(imagenCandidata));
-			probarMejorImagen(img);
+			probarMejorImagen(img, idImg, session);
 		} catch (Exception e) {
 			System.out.println(e);
 			System.out.println(e.getCause());

@@ -1,5 +1,6 @@
 package temaDeLaSemana;
 
+import buscopiniones.BuscadorOpiniones;
 import buscopiniones.Noticia;
 import java.io.BufferedReader;
 import java.io.FileOutputStream;
@@ -275,15 +276,17 @@ public class ProcesadorTemas {
 				System.out.println("Esta todo mal!!!!");
 			}
 			String busqueda = "title:(";
+			String asunto = "";
 			int cant = 0;
 			for (Map.Entry<String, Double> tema : temasEntrySet) {
 				System.out.println(tema.getKey() + "^" + tema.getValue() + " ");
-				busqueda += tema.getKey() + "^" + tema.getValue() + " ";
+				asunto += tema.getKey() + "^" + tema.getValue() + " ";
 				if (cant > 7) {
 					break;
 				}
 				cant++;
 			}
+			busqueda += asunto;
 			busqueda += ")";
 
 			busqueda = URLEncoder.encode(busqueda, "UTF-8");
@@ -339,6 +342,10 @@ public class ProcesadorTemas {
 
 				}
 			}
+			BuscadorOpiniones buscOp = new BuscadorOpiniones();
+			Collection<String> fuentesRel = buscOp.getFuentesRelacionadas("", asunto, fechaInicial, fechaFinal);
+			noti.setFuentesRel(fuentesRel);
+			
 			noticias.add(noti);
 		}
 		return noticias;
