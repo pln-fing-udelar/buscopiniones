@@ -16,7 +16,7 @@ public class Main {
 	static public void generarCVSEntrenamiento(String medioPrensa) throws IOException {
 		Map<String,Boolean> tablaUrls = LectorCSV.run(medioPrensa);
 		List<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");
+		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");		
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -105,7 +105,7 @@ public class Main {
 			 * *******************************************************************
 			 */
 			File folder = new File("C:\\Fing\\ProyGrado\\pruebas");
-
+		
 			File[] listOfMediosPrensa = folder.listFiles();
 			for (File medioPrensa : listOfMediosPrensa) {
 				File[] listOfFolders = medioPrensa.listFiles();
