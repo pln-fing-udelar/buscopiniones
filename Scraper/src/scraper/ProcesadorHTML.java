@@ -131,7 +131,45 @@ public class ProcesadorHTML {
 			if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(1)) <= 31)) { // trato de matchear la fecha en el contenido de la pagina con el patron p4
 				return m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
 			}	
-		}
+		} else if (medioDePrensa.equals("elpais")) {
+			Pattern p7 = Pattern.compile("(?i)<span class=\"published\">.*?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic).([0-3]?[0-9]).(20[0-9][0-9]).*?</span>");
+			Matcher m = p7.matcher(html);
+			
+			if (m.find()) {
+				String aux2 = "";
+				String mes = "01";
+				if (m.group(1).toLowerCase().equals("ene")) {
+					mes = "01";
+				} else if (m.group(1).toLowerCase().equals("feb")) {
+					mes = "02";
+				} else if (m.group(1).toLowerCase().equals("mar")) {
+					mes = "03";
+				} else if (m.group(1).toLowerCase().equals("abr")) {
+					mes = "04";
+				} else if (m.group(1).toLowerCase().equals("may")) {
+					mes = "05";
+				} else if (m.group(1).toLowerCase().equals("jun")) {
+					mes = "06";
+				} else if (m.group(1).toLowerCase().equals("jul")) {
+					mes = "07";
+				} else if (m.group(1).toLowerCase().equals("ago")) {
+					mes = "08";
+				} else if (m.group(1).toLowerCase().equals("sep")) {
+					mes = "09";
+				} else if (m.group(1).toLowerCase().equals("oct")) {
+					mes = "10";
+				} else if (m.group(1).toLowerCase().equals("nov")) {
+					mes = "11";
+				} else if (m.group(1).toLowerCase().equals("dic")) {
+					mes = "12";
+				}
+				if ((Integer.parseInt(m.group(2)) < 10) && (m.group(2).length() == 1)) {
+					aux2 = "0";
+				}
+				System.out.println(m.group(1));
+				return m.group(3) + "-" + mes + "-" + aux2 + m.group(2) + "T00:00:00Z";
+			}
+		} 
 		Matcher m = p1.matcher(url);
 		
 		if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(3)) <= 31)) { // trato de matchear la fecha en la url con el patron p
