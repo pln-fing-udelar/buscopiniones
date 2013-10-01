@@ -1,10 +1,9 @@
 package scraper;
 
 import java.io.*;
-import java.util.Collections;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import sun.misc.BASE64Decoder;
 
 /**
@@ -14,9 +13,9 @@ import sun.misc.BASE64Decoder;
 public class Main {
 
 	static public void generarCVSEntrenamiento(String medioPrensa) throws IOException {
-		Map<String,Boolean> tablaUrls = LectorCSV.run(medioPrensa);
+		Map<String, Boolean> tablaUrls = LectorCSV.run(medioPrensa);
 		List<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");		
+		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -78,14 +77,14 @@ public class Main {
 		try {
 
 			Configuracion config = new Configuracion();
-			final int maxIterFreeling = 50;
+			final int maxIterFreeling = 5;
 
 			// Creo una lista de ejemplos vacia, para entrenar
-			
+
 			System.out.println("toy aca!!!!!!!");
 			System.out.println("Entrenar clasificador?s/n");
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
-			String entrenarClasificador = in.readLine();			
+			String entrenarClasificador = in.readLine();
 			if (entrenarClasificador.equals("s")) {
 				Main.generarCVSEntrenamiento("elpais");
 				Main.generarCVSEntrenamiento("elobservador");
@@ -97,7 +96,7 @@ public class Main {
 				clasifelobservador.crearModelo();
 				clasiflarepublica.crearModelo();
 			}
-			
+
 			System.out.println("Esto puede ser muy lento");
 			System.out.println("Borrar duplicados?s/n");
 			in = new BufferedReader(new InputStreamReader(System.in));
@@ -112,25 +111,83 @@ public class Main {
 			 * *
 			 * *******************************************************************
 			 */
+//			File status = new File("log.txt");
 			File folder = new File("C:\\Fing\\ProyGrado\\pruebas");
-		
 			File[] listOfMediosPrensa = folder.listFiles();
-			for (File medioPrensa : listOfMediosPrensa) {
+			Arrays.sort(listOfMediosPrensa);
+			File empiezoEnA = new File("C:\\Fing\\ProyGrado\\log.txt");
+			String empiezoEn = "";
+			if (empiezoEnA.exists()) {
+				empiezoEn = readFile(empiezoEnA, "UTF-8");
+			}
+			int totMediosPrensa = listOfMediosPrensa.length;
+			System.out.println(empiezoEn);
+			String[] informacionParaParar = empiezoEn.split(System.getProperty("line.separator"));
+			File archivoParar;
+			if (empiezoEnA.exists()) {
+				archivoParar = new File(informacionParaParar[0]);
+				System.out.println(informacionParaParar[0]);
+			} else {
+				archivoParar = new File("");
+			}
+
+			DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
+			//get current date time with Date()
+			Date date = new Date();
+			String timeStamp = dateFormat.format(date);
+
+			int iterMediosPrensa = 0;
+
+			while ((iterMediosPrensa < totMediosPrensa) && (listOfMediosPrensa[iterMediosPrensa].compareTo(archivoParar) <= 0)) {
+				System.out.println(listOfMediosPrensa[iterMediosPrensa].compareTo(archivoParar));
+				iterMediosPrensa++;
+			}
+			System.out.println(iterMediosPrensa);
+			if ((iterMediosPrensa > 0) && (listOfMediosPrensa[iterMediosPrensa - 1].compareTo(archivoParar) < 0)) {
+				iterMediosPrensa--;
+			}
+			
+			while (iterMediosPrensa < totMediosPrensa) {
+				File medioPrensa = listOfMediosPrensa[iterMediosPrensa];
 				File[] listOfFolders = medioPrensa.listFiles();
+				Arrays.sort(listOfFolders);
 				String medioActual = medioPrensa.getName();
-				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + ".xml";
-				String nomArchivoNoti = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + "Noticias.xml";
+				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + ".xml";
+				String nomArchivoNoti = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + "Noticias.xml";
 				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo)));
 				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti)));
 				bw.append("<add>");
 				bwNoticias.append("<add>");
 				ProcesadorPaginas proc = new ProcesadorPaginas(config, medioActual);
 				int i = 0;
-				for (File carpeta_fecha : listOfFolders) {
+				int iterCarpetaFecha = 0;
+				int totCarpetasFecha = listOfFolders.length;
+				while ((iterCarpetaFecha < totCarpetasFecha) && (listOfFolders[iterCarpetaFecha].compareTo(archivoParar) <= 0)) {
+					iterCarpetaFecha++;
+				}
+				if ((iterCarpetaFecha > 0) && listOfFolders[iterCarpetaFecha - 1].compareTo(archivoParar) < 0) {
+					iterCarpetaFecha--;
+				}
+				
+				// Para el tema de la semana
+				String xmlNoticia = "";
+				
+				while (iterCarpetaFecha < totCarpetasFecha) {
+					System.out.println("jairo");
+					File carpeta_fecha = listOfFolders[iterCarpetaFecha];
 					File[] listOfFiles = carpeta_fecha.listFiles();
-					for (File file : listOfFiles) {
+					Arrays.sort(listOfFiles);
+					String ultimo = "";
+					int iterArchivo = 0;
+					int totArchivo = listOfFiles.length;
+					while ((iterArchivo < totArchivo) && (listOfFiles[iterArchivo].compareTo(archivoParar) <= 0)) {
+						iterArchivo++;
+					}
+					while (iterArchivo < totArchivo) {
+						File file = listOfFiles[iterArchivo];
 						if (file.isFile()) {
-							System.out.println(file.getName());
+							ultimo = file.getName();
+							System.out.println(ultimo);
 							BASE64Decoder decoder = new BASE64Decoder();
 							byte[] decodedBytes = decoder.decodeBuffer(file.getName());
 							String url = new String(decodedBytes);
@@ -145,21 +202,19 @@ public class Main {
 							} else if (ProcesadorHTML.obtenerCharset(html).equals("Windows-1252") || ProcesadorHTML.obtenerCharset(html).equals("windows-1252")) {
 								html = readFile(file, "Windows-1252");
 							}
-							
-							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
-							
 
-							
+							ProcesadorHTML procHTML = new ProcesadorHTML(html, url);
+
+
+
 							String xmlNoticiaTmp = proc.procesar(procHTML);
-							
+
 							if (!xmlNoticiaTmp.isEmpty()) {
-								String xmlNoticia = "<doc>\r\n";
+								xmlNoticia += "<doc>\r\n";
 								xmlNoticia += xmlNoticiaTmp;
 								xmlNoticia += "</doc>\r\n";
-								bwNoticias.append(xmlNoticia);
-								bwNoticias.flush();
 							}
-							
+
 							i++;
 
 
@@ -168,29 +223,49 @@ public class Main {
 							String xml = proc.taggear();
 							bw.append(xml);
 							bw.flush();
+							bwNoticias.append(xmlNoticia);
+							bwNoticias.flush();
+							xmlNoticia = "";
 							i = 0;
+							Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+							status.write(file.getPath());
+							status.close();
 						}
+						iterArchivo++;
 					}
 
 					if (i >= maxIterFreeling) {
 						String xml = proc.taggear();
 						bw.append(xml);
 						bw.flush();
+						bwNoticias.append(xmlNoticia);
+						bwNoticias.flush();
+						xmlNoticia = "";
 						i = 0;
+						Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+						status.write(carpeta_fecha.getPath());
+						status.close();
 					}
-
+					iterCarpetaFecha++;
 				}
 				if (i != 0) {
 					String xml = proc.taggear();
 					bw.append(xml);
 					bw.flush();
+					bwNoticias.append(xmlNoticia);
+					bwNoticias.flush();
+					xmlNoticia = "";
 				}
+				Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+				status.write(medioPrensa.getPath() + System.getProperty("line.separator"));
+				status.close();
 				bw.append("</add>");
 				bwNoticias.append("</add>");
 				bw.flush();
 				bwNoticias.flush();
 				bw.close();
 				bwNoticias.close();
+				iterMediosPrensa++;
 			}
 		} catch (Exception e) {
 			System.out.println(e);
