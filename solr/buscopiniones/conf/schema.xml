@@ -128,6 +128,8 @@
    <field name="text_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false" multiValued="true"/>
 
    <field name="fuente_facetado" type="text_facetado" indexed="true" stored="false"/>
+   
+   <field name="spellcheck_es" type="textSpell_es" indexed="true" stored="true" multiValued="true"/>
    <!-- uncomment the following to ignore any fields that don't already match an existing 
         field name or dynamic field, rather than reporting them as an error. 
         alternately, change the type="ignored" to some other type e.g. "text" if you want 
@@ -170,6 +172,8 @@
 		<copyField source="autor" dest="text"/>
 		<copyField source="fuente" dest="text"/>
 		<copyField source="opinion" dest="text"/>
+		
+		<copyField source="articulo" dest="spellcheck_es"/>
 		
 		<copyField source="articulo" dest="articulo_sin_stemm"/>
 		<copyField source="title" dest="title_sin_stemm"/>
@@ -749,6 +753,24 @@
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_es.txt" format="snowball" enablePositionIncrements="true"/>		
       </analyzer>
     </fieldType>
+	
+	<!-- SpellCheck analysis config based off of http://wiki.apache.org/solr/SpellCheckingAnalysis -->
+	<fieldType name="textSpell_es" class="solr.TextField" positionIncrementGap="100" stored="false" multiValued="true">
+		<analyzer type="index">
+			<tokenizer class="solr.StandardTokenizerFactory"/>
+			<filter class="solr.LowerCaseFilterFactory"/>		
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_es.txt" format="snowball" enablePositionIncrements="true"/>
+			<filter class="solr.StandardFilterFactory"/>
+			<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+		</analyzer>
+		<analyzer type="query">
+			<tokenizer class="solr.StandardTokenizerFactory"/>
+			<filter class="solr.LowerCaseFilterFactory"/>
+			<filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_es.txt" format="snowball" enablePositionIncrements="true"/>
+			<filter class="solr.StandardFilterFactory"/>
+			<filter class="solr.RemoveDuplicatesTokenFilterFactory"/>
+		</analyzer>
+	</fieldType>
     
     <!-- Basque -->
     <fieldType name="text_eu" class="solr.TextField" positionIncrementGap="100">
