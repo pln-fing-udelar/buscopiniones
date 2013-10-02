@@ -1,15 +1,10 @@
 package buscopiniones;
 
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.Reader;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.net.URLConnection;
+import java.text.BreakIterator;
+import java.util.ArrayList;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import javax.imageio.ImageIO;
 import sun.misc.BASE64Encoder;
 
 /**
@@ -22,6 +17,7 @@ public class Opinion {
 	private String fuente;
 	private String opinion;
 	private String id;
+	private String textoParaMostrar;
 
 	public Opinion() {
 	}
@@ -31,6 +27,7 @@ public class Opinion {
 		this.fuente = fuente;
 		this.opinion = opinion;
 		this.id = id;
+		this.textoParaMostrar = "";
 	}
 
 	private String getFechaParaJSON() {
@@ -44,20 +41,72 @@ public class Opinion {
 		return fecha;
 	}
 
+	public String getTextoOpinionOrig() {
+		BreakIterator iterSentence = BreakIterator.getSentenceInstance();
+		String source = this.getNoticia().getArticulo();
+		iterSentence.setText(source);
+		int start = iterSentence.first();
+		ArrayList<String> arr = new ArrayList<String>();
+		int i = 0;
+		ArrayList<Integer> puntajeArr = new ArrayList<Integer>();
+		for (int end = iterSentence.next(); end != BreakIterator.DONE; start = end, end = iterSentence.next()) {
+			String sub = source.substring(start, end);
+			arr.add(sub);			
+			BreakIterator iterWord = BreakIterator.getWordInstance();
+			iterWord.setText(sub);
+			int puntaje = 0;
+			int startWord = iterWord.first();
+			for (int endWord = iterWord.next(); endWord != BreakIterator.DONE; startWord = endWord, endWord = iterWord.next()) {
+				String wordFraseOrig = sub.substring(startWord, endWord);
+				BreakIterator iterOpinion = BreakIterator.getWordInstance();
+				String op = this.getOpinion();
+				iterOpinion.setText(op);
+				int startOpinion = iterOpinion.first();
+				for (int endOpinion = iterOpinion.next(); endOpinion != BreakIterator.DONE; startOpinion = endOpinion, endOpinion = iterOpinion.next()) {
+					String wordOpinion = op.substring(startOpinion, endOpinion);
+					if (wordOpinion.length() > 2 && wordOpinion.equals(wordFraseOrig)){						
+						puntaje++;
+						break;
+					}
+				}				
+			}
+			puntajeArr.add(puntaje);
+		}
+		int maxInd = 0;
+		int max = -1;
+		int j = 0;
+		for(int puntaje: puntajeArr){
+			if (puntaje > max){
+				maxInd = j;
+				max = puntaje;
+			}
+			j++;
+		}
+		System.out.println(maxInd);
+		return arr.get(maxInd);		
+	}
+
 	public String toJSON() {
 		String opinionJson = BuscadorOpiniones.html2text(this.getOpinion());
-		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle());
+		
+		opinionJson = opinionJson.replaceAll("(?i) de el ", " del ");
+		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
+		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
+		if (opinionJson.length() < 50) {
+			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
+		}
+		opinionJson = opinionJson.replaceAll(".*A\\+", "");
+		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "");
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
 		BASE64Encoder encoder = new BASE64Encoder();
-		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
-		System.out.println("toy aca");
+		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");		
 		System.out.println(base64);
 		String media = "ImagenNoticia/" + base64 + ".jpg";
 //		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/aHR0cDovL2hpc3Rvcmljby5lbHBhaXMuY29tLnV5LzEyMDYyNS91bHRtby02NDgyNjcvdWx0aW1vbW9tZW50by9NZWRpZGFzLXNvYnJlLWxhLW1hcmlodWFuYS1zb24tcGFyYS1wcm90ZWdlci1hbC1jb25zdW1pZG9yLWRpam8tTXVqaWNhLw==.jpg";
 		String credit = "";
 		if (opinionJson.matches(".*?&quot;.*?&quot;.*?")) {
-			media = opinionJson.replaceAll(".*?&quot;(.*?)&quot;.*?", "<blockquote>&quot;$1&quot;</blockquote>");
-			credit = this.getFuente();
+			media = opinionJson.replaceAll(".*?&quot;(.*?)&quot;.*", "<blockquote>&quot;$1&quot;</blockquote>");
+			credit = this.getFuente().replaceAll("A\\+", "");;
 		}
 
 		String json = "{";
@@ -128,5 +177,19 @@ public class Opinion {
 	 */
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the textoParaMostrar
+	 */
+	public String getTextoParaMostrar() {
+		return textoParaMostrar;
+	}
+
+	/**
+	 * @param textoParaMostrar the textoParaMostrar to set
+	 */
+	public void setTextoParaMostrar(String textoParaMostrar) {
+		this.textoParaMostrar = textoParaMostrar;
 	}
 }

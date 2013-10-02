@@ -3,9 +3,11 @@ package temaDeLaSemana;
 import buscopiniones.BuscadorOpiniones;
 import buscopiniones.Noticia;
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectOutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.io.Writer;
@@ -345,9 +347,23 @@ public class ProcesadorTemas {
 			BuscadorOpiniones buscOp = new BuscadorOpiniones();
 			Collection<String> fuentesRel = buscOp.getFuentesRelacionadas("", asunto, fechaInicial, fechaFinal);
 			noti.setFuentesRel(fuentesRel);
-			
+
 			noticias.add(noti);
 		}
+
+		System.out.println("toy aca amistiqui");
+		File dir = new File("C:\\Fing\\ProyGrado\\tmpTemas");
+		if (!dir.exists()) {
+			dir.mkdirs();
+		}
+		String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\salida.bin";
+		FileOutputStream fileOut = new FileOutputStream(filePath);
+		ObjectOutputStream out = new ObjectOutputStream(fileOut);
+		out.writeObject(noticias);
+		out.close();
+		fileOut.close();
+		System.out.println("toy aca amistiqui2");
+
 		return noticias;
 	}
 }

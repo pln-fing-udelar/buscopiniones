@@ -1,12 +1,13 @@
 package buscopiniones;
 
+import java.io.Serializable;
 import java.util.Collection;
 
 /**
  *
  * @author Rodrigo
  */
-public class Noticia {
+public class Noticia implements Serializable{
 
 	private String url;
 	private String articulo;
