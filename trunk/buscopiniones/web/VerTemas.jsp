@@ -167,7 +167,7 @@
 						<div class="tile">
 							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
 							<h6><small>Noticia</small>
-								<br/><a href="<%= noti.getUrl()%>"><span><%= noti.getTitle()%></span></a></h6>
+								<br/><a href="<%= noti.getUrl()%>"><span style="color: #2BA6CB;"><%= noti.getTitle()%></span></a></h6>
 							<p><%= noti.getDescripcion()%></p>
 							<p><%= noti.getFecha()%></p>
 							<p>

@@ -5,7 +5,9 @@
 package temaDeLaSemana;
 
 import buscopiniones.Noticia;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.io.PrintWriter;
 import java.util.Collection;
 import javax.servlet.ServletException;
@@ -38,6 +40,12 @@ public class VerTemas extends HttpServlet {
 					&& request.getParameter("hasta") != null && !request.getParameter("hasta").equals("")) {
 				ProcesadorTemas procTemas = new ProcesadorTemas();
 				Collection<Noticia> noticias = procTemas.getNoticiaDeLaSemana(request.getParameter("desde"), request.getParameter("hasta"));
+//				FileInputStream fileIn = new FileInputStream("C:\\Fing\\ProyGrado\\tmpTemas\\salida.bin");
+//				ObjectInputStream in = new ObjectInputStream(fileIn);
+//				noticias = (Collection<Noticia>) in.readObject();
+//				in.close();
+//				fileIn.close();
+
 				request.setAttribute("Noticias", noticias);
 			}
 			request.getRequestDispatcher("/VerTemas.jsp").forward(request, response);

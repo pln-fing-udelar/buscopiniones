@@ -95,6 +95,30 @@ public class BuscadorOpiniones {
 		return fuentes;
 	}
 
+	public String getTextoParaMostrar(String idOpinion, String opinion) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+		String paramIdOpinion = "id:(" + idOpinion.replace(":", "\\:") + ")";
+		paramIdOpinion = URLEncoder.encode(paramIdOpinion, "UTF-8");
+		String paramStart = "0";
+		String paramQ = "articulo:(" + opinion.replaceAll("\"","").replaceAll(":","") + ")";
+		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		String paramRows = "1";
+		String fragsize = "200";
+		String fl = "articulo";
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramIdOpinion + "&wt=xml&start=" + paramStart + "&rows=" + paramRows +"&hl=true&hl.fragsize=" + fragsize +"&hl.fl=" + fl;
+		System.out.println(url);
+
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(url);
+		doc.getDocumentElement().normalize();
+		
+		Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(0);
+		Element elementoResult = (Element) nodoResult;
+		String ret = elementoResult.getElementsByTagName("str").item(0).getTextContent();
+		
+		return ret;
+	}
+
 	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
@@ -162,6 +186,7 @@ public class BuscadorOpiniones {
 					}
 				}
 				opinion.setNoticia(noti);
+				//opinion.setTextoParaMostrar(getTextoParaMostrar(opinion.getId(), opinion.getOpinion()));
 				opiniones.add(opinion);
 			}
 		}
