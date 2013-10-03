@@ -80,7 +80,26 @@
 					<label>sobre:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
+					<% 
+					String spellCheckFuente = request.getParameter("fuente");
+					String spellCheckAsunto = request.getParameter("asunto");
+					boolean sugiero = false;
+					if (request.getAttribute("spellCheckFuente") != null && !((String)request.getAttribute("spellCheckFuente")).isEmpty()) {
+						sugiero = true;
+						spellCheckFuente = (String) request.getAttribute("spellCheckFuente");
+					}
+					if (request.getAttribute("spellCheckAsunto") != null && !((String)request.getAttribute("spellCheckAsunto")).isEmpty()) {
+						sugiero = true;
+						spellCheckAsunto = (String) request.getAttribute("spellCheckAsunto");
+					}
+					if(sugiero){
+						%>
+						<label>           Quizás quiso decir: <a href="?fuente=<%= spellCheckFuente%>&asunto=<%= spellCheckAsunto%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"> Opiniones de <%= spellCheckFuente%> sobre <%= spellCheckAsunto%></a></label>
+						<%
+					}
+					%>
 				</form>
+				
 			</div>
 		</div>
 
@@ -131,18 +150,18 @@
 							<div class="intro-icon-disc cont-large"><i class="icon-user intro-icon-large"></i></div>
 							<h6><small>FUENTES</small>
 								<br /><span>Otras fuentes que opinaron sobre este tema</span></h6>
-								<h5>
+							<h5>
 								<p>
-								<%
-									Collection<String> fuentes = (Collection<String>) request.getAttribute("fuentes");
-									for (String fuente : fuentes) {
-								%>
-								<a href="?fuente=<%= fuente%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente %></b></a><br/>
-								<%	
-									}
-								%>
+									<%
+										Collection<String> fuentes = (Collection<String>) request.getAttribute("fuentes");
+										for (String fuente : fuentes) {
+									%>
+									<a href="?fuente=<%= fuente%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente%></b></a><br/>
+											<%
+												}
+											%>
 								</p>
-								</h5>
+							</h5>
 						</div> 
 						<div class="pad25"></div>
 					</div> 
