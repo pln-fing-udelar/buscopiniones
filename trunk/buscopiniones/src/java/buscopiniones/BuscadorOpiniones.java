@@ -30,6 +30,7 @@ import temaDeLaSemana.ProcesadorTemas;
 public class BuscadorOpiniones {
 
 	private static String urlSolrSelect = "http://127.0.0.1:8983/solr/collection1/select";
+	private static String urlSolrSpell = "http://127.0.0.1:8983/solr/collection1/spell";
 
 	public static String html2text(String html) {
 		if (html == null || html.equals("")) {
@@ -48,6 +49,55 @@ public class BuscadorOpiniones {
 		return ret;
 	}
 
+	public void getSpellCheckFuenteAsunto(String fuente, String asunto, StringBuilder spellCheckFuente, StringBuilder spellCheckAsunto) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+		spellCheckAsunto.append(getSpellCheck(asunto));
+		spellCheckFuente.append(getSpellCheck(fuente));
+	}
+
+	public String getSpellCheck(String asunto) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+		if (asunto == null) {
+			return "";
+		}
+		String paramStart = "0";
+		String paramQ = asunto;
+		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		String paramRows = "0";
+
+		String url = urlSolrSpell + "?q=" + paramQ + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&spellcheck=true&spellcheck.count=1&spellcheck.collate=true&spellcheck.maxCollations=1";
+		System.out.println(url);
+		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
+		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
+		Document doc = dBuilder.parse(url);
+		doc.getDocumentElement().normalize();
+
+		if(doc.getDocumentElement().getElementsByTagName("lst").getLength() <= 1){
+			return "";
+		}
+		Node nodoSpellCheck = doc.getDocumentElement().getElementsByTagName("lst").item(1);
+		Element elementoSpellCheck = (Element) nodoSpellCheck;
+
+		Node nodoSuggestions = elementoSpellCheck.getElementsByTagName("lst").item(0);
+		Element elementoSuggestions = (Element) nodoSuggestions;
+
+		String correctlySpelled = elementoSuggestions.getElementsByTagName("bool").item(0).getTextContent();
+		System.out.println("correctlySpelled:" + correctlySpelled);
+		if (correctlySpelled.equals("false")) {
+
+			NodeList listaLst = elementoSuggestions.getElementsByTagName("lst");
+			for (int i = 0; i < listaLst.getLength(); i++) {
+				Node nodoDoc = listaLst.item(i);
+				if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
+					Element elementoDoc = (Element) nodoDoc;
+					if (elementoDoc.getAttribute("name").equals("collation")) {
+						return elementoDoc.getElementsByTagName("str").item(0).getTextContent();
+					}
+				}
+			}
+		}
+
+		return "";
+	}
+
 	public Collection<String> getFuentesRelacionadas(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
@@ -63,7 +113,7 @@ public class BuscadorOpiniones {
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "0";
 		String paramFacetLimit = "10";
-		String paramFacetField = "fuente_sin_stemm";
+		String paramFacetField = "fuente_facetado";
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -99,23 +149,23 @@ public class BuscadorOpiniones {
 		String paramIdOpinion = "id:(" + idOpinion.replace(":", "\\:") + ")";
 		paramIdOpinion = URLEncoder.encode(paramIdOpinion, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "articulo:(" + opinion.replaceAll("\"","").replaceAll(":","") + ")";
+		String paramQ = "articulo:(" + opinion.replaceAll("\"", "").replaceAll(":", "") + ")";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "1";
 		String fragsize = "200";
 		String fl = "articulo";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramIdOpinion + "&wt=xml&start=" + paramStart + "&rows=" + paramRows +"&hl=true&hl.fragsize=" + fragsize +"&hl.fl=" + fl;
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramIdOpinion + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&hl=true&hl.fragsize=" + fragsize + "&hl.fl=" + fl;
 		System.out.println(url);
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(url);
 		doc.getDocumentElement().normalize();
-		
+
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(0);
 		Element elementoResult = (Element) nodoResult;
 		String ret = elementoResult.getElementsByTagName("str").item(0).getTextContent();
-		
+
 		return ret;
 	}
 

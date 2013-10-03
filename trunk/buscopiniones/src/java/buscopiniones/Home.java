@@ -37,11 +37,18 @@ public class Home extends HttpServlet {
 		request.setCharacterEncoding("UTF-8");
 		response.setCharacterEncoding("UTF-8");
 		try {
-			String fuente = request.getParameter("fuente");			
+			String fuente = request.getParameter("fuente");
 			String asunto = request.getParameter("asunto");
 			BuscadorOpiniones buscador = new BuscadorOpiniones();
 			Collection<String> fuentes = buscador.getFuentesRelacionadas(fuente, asunto, null, null);
+			StringBuilder spellCheckFuente = new StringBuilder();
+			StringBuilder spellCheckAsunto = new StringBuilder();
+			buscador.getSpellCheckFuenteAsunto(fuente, asunto, spellCheckFuente, spellCheckAsunto);
+			System.out.println("spellCheckFuente:" + spellCheckFuente);
+			System.out.println("spellCheckAsunto:" + spellCheckAsunto);
 			request.setAttribute("fuentes", fuentes);
+			request.setAttribute("spellCheckFuente", spellCheckFuente.toString());
+			request.setAttribute("spellCheckAsunto", spellCheckAsunto.toString());
 			request.getRequestDispatcher("/Home.jsp").forward(request, response);
 		} catch (Exception e) {
 			System.err.println(e);
