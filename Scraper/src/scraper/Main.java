@@ -86,14 +86,20 @@ public class Main {
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			String entrenarClasificador = in.readLine();
 			if (entrenarClasificador.equals("s")) {
+				System.out.println("csv el pais");
 				Main.generarCVSEntrenamiento("elpais");
+				System.out.println("csv el observador");
 				Main.generarCVSEntrenamiento("elobservador");
+				System.out.println("csv la republica");
 				Main.generarCVSEntrenamiento("larepublica");
 				Clasificador clasifelpais = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselpais.csv");
 				Clasificador clasifelobservador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselobservador.csv");
 				Clasificador clasiflarepublica = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploslarepublica.csv");
+				System.out.println("entrenando el pais");
 				clasifelpais.crearModelo();
+				System.out.println("entrenando el observador");
 				clasifelobservador.crearModelo();
+				System.out.println("entrenando la republica");
 				clasiflarepublica.crearModelo();
 			}
 
@@ -103,7 +109,7 @@ public class Main {
 			String borrarDuplicados = in.readLine();
 			if (borrarDuplicados.equals("s")) {
 				BorrarDuplicados.borrar();
-				return;
+				//return;
 			}
 			/**
 			 * *******************************************************************
