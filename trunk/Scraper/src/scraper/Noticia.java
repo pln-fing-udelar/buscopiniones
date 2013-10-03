@@ -30,7 +30,7 @@ public class Noticia {
 
 	public String toXML() {
 		String xml = "";
-		xml += "<field name=\"url\">" + url + "</field>\r\n";
+		xml += "<field name=\"url\">" + ProcesadorHTML.html2text(url) + "</field>\r\n";
 		xml += "<field name=\"articulo\">" + ProcesadorHTML.html2text(articulo) + "</field>\r\n";
 		xml += "<field name=\"title\">" + title + "</field>\r\n";
 		xml += "<field name=\"metatitle\">" + metatitle + "</field>\r\n";
