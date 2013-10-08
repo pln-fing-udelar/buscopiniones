@@ -107,6 +107,7 @@ public class ProcesadorPaginas {
 				Collection<Opinion> opiniones = taggerCorref.obtenerOpiniones(noti);
 				for (Opinion op : opiniones) {
 					if(!op.esDescartable()){
+						System.out.println(op.getOpinion());
 						xml += op.toXML();
 					}
 				}
