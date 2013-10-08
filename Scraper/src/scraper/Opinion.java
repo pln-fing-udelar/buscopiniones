@@ -26,7 +26,7 @@ public class Opinion {
 		xml += "<field name=\"fuente\">" + ProcesadorHTML.html2text(fuente.getFuente()) + "</field>\r\n";
 		xml += "<field name=\"fuente_corref\">" + ProcesadorHTML.html2text(getFuente_corref().getFuente()) + "</field>\r\n";
 		xml += "<field name=\"opinion\">" + ProcesadorHTML.html2text(opinion) + "</field>\r\n";
-		xml += "<field name=\"id\">" + noticia.getUrl() + "/" + id + "</field>\r\n";
+		xml += "<field name=\"id\">" + ProcesadorHTML.html2text(noticia.getUrl()) + "/" + id + "</field>\r\n";
 		xml += "</doc>\r\n";
 		return xml;
 	}
