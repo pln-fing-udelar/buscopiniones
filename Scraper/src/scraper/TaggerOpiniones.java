@@ -46,15 +46,15 @@ public class TaggerOpiniones {
 		OutputStream stdin = process.getOutputStream();
 		final InputStream stdout = process.getInputStream();
 
-		BufferedReader reader = new BufferedReader(new InputStreamReader(stdout));
-		PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(stdin)));
+		BufferedReader reader = new BufferedReader(new InputStreamReader(stdout, "UTF-8"));
+		PrintWriter writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(stdin, "UTF-8")));
 
 		new Thread(new Runnable() {
 
 			public void run() {
 				try {
-					Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOutput)));
-					BufferedReader br = new BufferedReader(new InputStreamReader(stdout));
+					Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOutput), "UTF-8"));
+					BufferedReader br = new BufferedReader(new InputStreamReader(stdout, "UTF-8"));
 					String line;
 					String articuloTaggeado = "";
 					while ((line = br.readLine()) != null) {

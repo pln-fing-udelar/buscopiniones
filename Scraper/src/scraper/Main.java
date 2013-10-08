@@ -77,7 +77,7 @@ public class Main {
 		try {
 
 			Configuracion config = new Configuracion();
-			final int maxIterFreeling = 5;
+			final int maxIterFreeling = 25;
 
 			// Creo una lista de ejemplos vacia, para entrenar
 
@@ -160,8 +160,8 @@ public class Main {
 				String medioActual = medioPrensa.getName();
 				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + ".xml";
 				String nomArchivoNoti = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + "Noticias.xml";
-				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo)));
-				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti)));
+				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo), "UTF-8"));
+				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti), "UTF-8"));
 				bw.append("<add>");
 				bwNoticias.append("<add>");
 				ProcesadorPaginas proc = new ProcesadorPaginas(config, medioActual);
@@ -191,7 +191,7 @@ public class Main {
 					}
 					while (iterArchivo < totArchivo) {
 						File file = listOfFiles[iterArchivo];
-						if (file.isFile()) {
+						if (file.isFile() && file.length() > 0) {
 							ultimo = file.getName();
 							System.out.println(ultimo);
 							BASE64Decoder decoder = new BASE64Decoder();
