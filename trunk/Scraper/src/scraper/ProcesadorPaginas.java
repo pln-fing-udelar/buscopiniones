@@ -44,6 +44,9 @@ public class ProcesadorPaginas {
 		if (clasificador.clasificar(ej)) {
 			System.out.println("si si si");
 			Noticia noti = proc.procesar(medioDePrensa);
+			if(noti.getArticulo().trim().isEmpty()){
+				return "";
+			}
 			coleccionNoticias.add(noti);
 			return noti.toXML();
 		} else {
