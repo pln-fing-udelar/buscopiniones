@@ -92,7 +92,7 @@ public class Opinion {
 		opinionJson = opinionJson.replaceAll("(?i) de el ", " del ");
 		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
 		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
-		if (opinionJson.length() < 50) {
+		if (opinionJson.length() <= 50) {
 			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
 		}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");

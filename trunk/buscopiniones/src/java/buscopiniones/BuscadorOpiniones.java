@@ -182,33 +182,43 @@ public class BuscadorOpiniones {
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
+		String paramFuente = "fuente:(" + fuente + ")";
 		// fuente_corref:(" + fuente + ")^0.001)
-		String paramQ = "fuente:(" + fuente + ")  AND "
-				+ "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
-				+ " descripcion:(" + asunto + ")"
-				+ " opinion:(" + asunto + ")^10"
-				+ " articulo:(" + asunto + "))";
+//		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
+//				+ " descripcion:(" + asunto + ")"
+//				+ " opinion:(" + asunto + ")^10"
+//				+ " articulo:(" + asunto + "))";
+		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		String paramRows = "10";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm"; //+ "&group=true&group.field=opinion"
+		String paramRows = "30";
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(url);
 		doc.getDocumentElement().normalize();
 
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+
+		XPathExpression exprMatches = xpath.compile("//int[@name='matches']");
+		NodeList listaMatches = (NodeList) exprMatches.evaluate(doc, XPathConstants.NODESET);
+		String cantMatches = (String) listaMatches.item(0).getTextContent();
+		Integer matches = Integer.parseInt(cantMatches);
+		int cantResult = ((int) (Math.log(matches) / Math.log(2))) * 2;
+		System.out.println("cantMatches: " + cantMatches);
+		System.out.println("cantResult: " + cantResult);
+
 		Collection<Opinion> opiniones = new ArrayList<Opinion>();
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
 		Element elementoResult = (Element) nodoResult;
 
-		XPathFactory xPathfactory = XPathFactory.newInstance();
-		XPath xpath = xPathfactory.newXPath();
-		XPathExpression expr = xpath.compile("//doc");
-		NodeList listaDocs = (NodeList) expr.evaluate(elementoResult, XPathConstants.NODESET);
-		System.out.println("listaDocs: "+listaDocs.getLength());
+		XPathExpression exprDoc = xpath.compile("//doc");
+		NodeList listaDocs = (NodeList) exprDoc.evaluate(doc, XPathConstants.NODESET);
+		System.out.println("listaDocs: " + listaDocs.getLength());
 		//NodeList listaDocs = elementoResult.getElementsByTagName("doc");
-		for (int i = 0; i < listaDocs.getLength(); i++) {
+		for (int i = 0; i < Math.min(listaDocs.getLength(), cantResult); i++) {
 			Node nodoDoc = listaDocs.item(i);
 			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
 				Element elementoDoc = (Element) nodoDoc;
