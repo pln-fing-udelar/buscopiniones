@@ -118,7 +118,7 @@ public class ProcesadorHTML {
 		Pattern p3 = Pattern.compile("(?i)([0-3][0-9]).?([0-1]?[0-9]).?(20[0-1][0-9])");
 		Pattern p4 = Pattern.compile("(?i)([0-3][0-9]).?([0-1][0-9]).?([0-1][0-9])");
 		Pattern p5 = Pattern.compile("(?i)([0-3][0-9])\\.([0-1][0-9])\\.(20[0-1][0-9])");
-		Pattern p6 = Pattern.compile("(?i)Publicado el ([0-3][0-9])/([0-1][0-9])/(20[0-1][0-9])");
+		Pattern p6 = Pattern.compile("(?i)Publicado el ([0-3]?[0-9])/([0-1]?[0-9])/(20[0-1][0-9])");
 		if (medioDePrensa.equals("elobservador")) {
 			Matcher m = p5.matcher(html);
 
@@ -129,7 +129,15 @@ public class ProcesadorHTML {
 			Matcher m = p6.matcher(html);
 			
 			if (m.find() && (Integer.parseInt(m.group(2)) <= 12) && (Integer.parseInt(m.group(1)) <= 31)) { // trato de matchear la fecha en el contenido de la pagina con el patron p4
-				return m.group(3) + "-" + m.group(2) + "-" + m.group(1) + "T00:00:00Z";
+				String aux1 = m.group(1);
+				if (aux1.length() == 1){
+					aux1 = "0" + aux1;
+				}
+				String aux2 = m.group(2);
+				if (aux2.length() == 1){
+					aux2 = "0" + aux2;
+				}
+				return m.group(3) + "-" + aux2 + "-" + aux1 + "T00:00:00Z";
 			}	
 		} else if (medioDePrensa.equals("elpais")) {
 			Pattern p7 = Pattern.compile("(?i)<span class=\"published\">.*?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic).([0-3]?[0-9]).(20[0-9][0-9]).*?</span>");
