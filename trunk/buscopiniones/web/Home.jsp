@@ -88,7 +88,7 @@
 					<label>sobre:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
-					<a href="#" class="bsqAvanzada"> <div class="intro-icon-disc cont-large"><i class="icon-expand-alt intro-icon-large"></i></div> Búsqueda avanzada</a>
+					<a href="#" class="bsqAvanzada"> <i class="icon-expand-alt "></i> Búsqueda avanzada</a>
 					
 					<%
 						String spellCheckFuente = request.getParameter("fuente");
@@ -140,6 +140,7 @@
 				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>',
 				//source: 'example_json.json',
 				start_at_end: true,
+				start_at_slide: '4',
 				lang: 'es'
 			};
 		</script>
