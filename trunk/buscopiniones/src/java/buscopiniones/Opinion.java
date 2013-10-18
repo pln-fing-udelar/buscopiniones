@@ -92,11 +92,13 @@ public class Opinion {
 		opinionJson = opinionJson.replaceAll("(?i) de el ", " del ");
 		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
 		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
-		if (opinionJson.length() <= 50) {
+		if (opinionJson.length() <= 80) {
 			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
 		}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");
-		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "");
+		opinionJson = opinionJson.replaceAll("^[A-Z ]* ", "");
+		opinionJson = opinionJson.replaceAll("Publicado el [0-9 /:-]* ", "");
+		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "").replace("- Diario EL PAIS - Montevideo - Uruguay","");
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
 		BASE64Encoder encoder = new BASE64Encoder();
 		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");		
