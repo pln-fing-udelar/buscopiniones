@@ -137,7 +137,7 @@
 			var timeline_config = {
 				width: "100%",
 				height: "100%",
-				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>',
+				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>&medioDePrensa=<%= request.getParameter("medioDePrensa")%>&cantResultados=<%= request.getParameter("cantResultados")%>',
 				//source: 'example_json.json',
 				start_at_end: true,
 				start_at_slide: '4',
