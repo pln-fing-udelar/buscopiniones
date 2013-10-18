@@ -12,6 +12,11 @@ import java.util.Collection;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
@@ -70,7 +75,7 @@ public class BuscadorOpiniones {
 		Document doc = dBuilder.parse(url);
 		doc.getDocumentElement().normalize();
 
-		if(doc.getDocumentElement().getElementsByTagName("lst").getLength() <= 1){
+		if (doc.getDocumentElement().getElementsByTagName("lst").getLength() <= 1) {
 			return "";
 		}
 		Node nodoSpellCheck = doc.getDocumentElement().getElementsByTagName("lst").item(1);
@@ -169,7 +174,7 @@ public class BuscadorOpiniones {
 		return ret;
 	}
 
-	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
 			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
@@ -185,7 +190,7 @@ public class BuscadorOpiniones {
 				+ " articulo:(" + asunto + "))";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "10";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm"; //+ "&group=true&group.field=opinion"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -196,7 +201,13 @@ public class BuscadorOpiniones {
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
 		Element elementoResult = (Element) nodoResult;
-		NodeList listaDocs = elementoResult.getElementsByTagName("doc");
+
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression expr = xpath.compile("//doc");
+		NodeList listaDocs = (NodeList) expr.evaluate(elementoResult, XPathConstants.NODESET);
+		System.out.println("listaDocs: "+listaDocs.getLength());
+		//NodeList listaDocs = elementoResult.getElementsByTagName("doc");
 		for (int i = 0; i < listaDocs.getLength(); i++) {
 			Node nodoDoc = listaDocs.item(i);
 			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
@@ -244,7 +255,7 @@ public class BuscadorOpiniones {
 		return opiniones;
 	}
 
-	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String json;
 		if (fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null")) {
 			json = "{\n"

@@ -43,6 +43,14 @@
 				$("#hasta").datepicker();
 			});
 		</script>
+		<script>
+			$(function() {
+				$(".bsqAvanzada").click(function(event) {
+					event.preventDefault();
+					$(".divOcultar").slideToggle();
+				});
+			});
+		</script>
 	</head>
 
 	<body>
@@ -80,26 +88,35 @@
 					<label>sobre:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
-					<% 
-					String spellCheckFuente = request.getParameter("fuente");
-					String spellCheckAsunto = request.getParameter("asunto");
-					boolean sugiero = false;
-					if (request.getAttribute("spellCheckFuente") != null && !((String)request.getAttribute("spellCheckFuente")).isEmpty()) {
-						sugiero = true;
-						spellCheckFuente = (String) request.getAttribute("spellCheckFuente");
-					}
-					if (request.getAttribute("spellCheckAsunto") != null && !((String)request.getAttribute("spellCheckAsunto")).isEmpty()) {
-						sugiero = true;
-						spellCheckAsunto = (String) request.getAttribute("spellCheckAsunto");
-					}
-					if(sugiero){
-						%>
-						<label>           Quizás quiso decir: <a href="?fuente=<%= spellCheckFuente%>&asunto=<%= spellCheckAsunto%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"> Opiniones de <%= spellCheckFuente%> sobre <%= spellCheckAsunto%></a></label>
-						<%
-					}
+					<a href="#" class="bsqAvanzada">Búsqueda avanzada</a>
+					<%
+						String spellCheckFuente = request.getParameter("fuente");
+						String spellCheckAsunto = request.getParameter("asunto");
+						boolean sugiero = false;
+						if (request.getAttribute("spellCheckFuente") != null && !((String) request.getAttribute("spellCheckFuente")).isEmpty()) {
+							sugiero = true;
+							spellCheckFuente = (String) request.getAttribute("spellCheckFuente");
+						}
+						if (request.getAttribute("spellCheckAsunto") != null && !((String) request.getAttribute("spellCheckAsunto")).isEmpty()) {
+							sugiero = true;
+							spellCheckAsunto = (String) request.getAttribute("spellCheckAsunto");
+						}
+						if (sugiero) {
 					%>
+					<label>           Quizás quiso decir: <a href="?fuente=<%= spellCheckFuente%>&asunto=<%= spellCheckAsunto%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"> Opiniones de <%= spellCheckFuente%> sobre <%= spellCheckAsunto%></a></label>
+					<%
+						}
+					%>
+					<div class="divOcultar" style="display:none;">
+						<label>Opiniones desde: </label>
+							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
+							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+							<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
+							<label>hasta: </label>
+							<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+					</div>
 				</form>
-				
+
 			</div>
 		</div>
 
