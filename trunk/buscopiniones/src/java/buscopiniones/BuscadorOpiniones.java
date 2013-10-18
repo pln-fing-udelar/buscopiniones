@@ -192,16 +192,16 @@ public class BuscadorOpiniones {
 		String paramMedioDePrensa = "";
 		if (medioDePrensa != null && !medioDePrensa.equals("") && !medioDePrensa.equals("null")) {
 			if (medioDePrensa.equals("elobservador")) {
-				paramMedioDePrensa = "&fq=url:*www.elobservador.com.uy*";
+				paramMedioDePrensa = "url:*elobservador.com.uy*";				
 			} else if (medioDePrensa.equals("elpais")) {
-				paramMedioDePrensa = "&fq=url:*www.elpais.com.uy*";
+				paramMedioDePrensa = "url:*elpais.com.uy*";
 			} else if (medioDePrensa.equals("larepublica")) {
-				paramMedioDePrensa = "&fq=url:*republica.com.uy*+url:*republica.com.uy*";
+				paramMedioDePrensa = "url:*republica.com.uy* url:*diariolarepublica.net*";
 				// *diariolarepublica.net*
 			}
-		}
-
-		paramMedioDePrensa = URLEncoder.encode(paramMedioDePrensa, "UTF-8");
+			paramMedioDePrensa = URLEncoder.encode(paramMedioDePrensa, "UTF-8");
+			paramMedioDePrensa = "&fq="+paramMedioDePrensa;
+		}	
 
 		// Para la fecha
 		String paramFecha = "";
