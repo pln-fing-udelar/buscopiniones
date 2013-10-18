@@ -38,15 +38,15 @@ public class BuscadorOpiniones {
 	private static String urlSolrSpell = "http://127.0.0.1:8983/solr/collection1/spell";
 
 	private static boolean isInteger(String s) {
-		try { 
-			Integer.parseInt(s); 
-		} catch(NumberFormatException e) { 
-			return false; 
+		try {
+			Integer.parseInt(s);
+		} catch (NumberFormatException e) {
+			return false;
 		}
 		// only got here if we didn't return false
 		return true;
-	}	
-	
+	}
+
 	public static String html2text(String html) {
 		if (html == null || html.equals("")) {
 			return "";
@@ -183,11 +183,11 @@ public class BuscadorOpiniones {
 
 		return ret;
 	}
-	
+
 	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados)
-								throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
-		
-			
+			throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+
+
 		// Para el medio de prensa
 		String paramMedioDePrensa = "";
 		if (medioDePrensa != null && !medioDePrensa.equals("") && !medioDePrensa.equals("null")) {
@@ -199,11 +199,10 @@ public class BuscadorOpiniones {
 				paramMedioDePrensa = "&fq=url:*republica.com.uy*+url:*republica.com.uy*";
 				// *diariolarepublica.net*
 			}
-			
 		}
-		
-		
-		
+
+		paramMedioDePrensa = URLEncoder.encode(paramMedioDePrensa, "UTF-8");
+
 		// Para la fecha
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
@@ -213,6 +212,7 @@ public class BuscadorOpiniones {
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
 		String paramFuente = "fuente:(" + fuente + ")";
+		paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
 		// fuente_corref:(" + fuente + ")^0.001)
 //		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
 //				+ " descripcion:(" + asunto + ")"
@@ -220,12 +220,12 @@ public class BuscadorOpiniones {
 //				+ " articulo:(" + asunto + "))";
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		
+
 		String paramRows = "30";
 		if ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados)) {
 			paramRows = cantResultados;
 		}
-		
+
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
