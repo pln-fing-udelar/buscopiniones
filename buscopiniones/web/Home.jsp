@@ -88,7 +88,8 @@
 					<label>sobre:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
-					<a href="#" class="bsqAvanzada">Búsqueda avanzada</a>
+					<a href="#" class="bsqAvanzada"> <div class="intro-icon-disc cont-large"><i class="icon-expand-alt intro-icon-large"></i></div> Búsqueda avanzada</a>
+					
 					<%
 						String spellCheckFuente = request.getParameter("fuente");
 						String spellCheckAsunto = request.getParameter("asunto");
@@ -114,6 +115,17 @@
 							<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
 							<label>hasta: </label>
 							<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+							<br />
+							<label>Medio de prensa:</label>
+							<input type="text" <% if (request.getParameter("medioDePresna") != null) {
+								%>value="<%= request.getParameter("medioDePresna")%>" <% 
+								}%> name="medioDePrensa" id="medioDePrensa" title="Ingrese el medio de Prensa" style="margin-right:10px" />
+							<br />
+							<label>Cantidad de resultados:</label>
+							<input type="text" <% if (request.getParameter("cantResultados") != null) {
+								%>value="<%= request.getParameter("cantResultados")%>" <% 
+								}%> name="cantResultados" id="cantResultados" title="Ingrese la cantidad de resultados" style="margin-right:10px" />
+							<br />
 					</div>
 				</form>
 
