@@ -240,7 +240,7 @@ public class BuscadorOpiniones {
 		NodeList listaMatches = (NodeList) exprMatches.evaluate(doc, XPathConstants.NODESET);
 		String cantMatches = (String) listaMatches.item(0).getTextContent();
 		Integer matches = Integer.parseInt(cantMatches);
-		int cantResult = ((int) (Math.log(matches) / Math.log(2))) * 2;
+		int cantResult = ((int) (Math.log(matches) / Math.log(1.5)));
 		System.out.println("cantMatches: " + cantMatches);
 		System.out.println("cantResult: " + cantResult);
 
