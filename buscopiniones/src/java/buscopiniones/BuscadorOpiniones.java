@@ -37,6 +37,16 @@ public class BuscadorOpiniones {
 	private static String urlSolrSelect = "http://127.0.0.1:8983/solr/collection1/select";
 	private static String urlSolrSpell = "http://127.0.0.1:8983/solr/collection1/spell";
 
+	private static boolean isInteger(String s) {
+		try { 
+			Integer.parseInt(s); 
+		} catch(NumberFormatException e) { 
+			return false; 
+		}
+		// only got here if we didn't return false
+		return true;
+	}	
+	
 	public static String html2text(String html) {
 		if (html == null || html.equals("")) {
 			return "";
@@ -173,8 +183,28 @@ public class BuscadorOpiniones {
 
 		return ret;
 	}
-
-	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+	
+	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados)
+								throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+		
+			
+		// Para el medio de prensa
+		String paramMedioDePrensa = "";
+		if (medioDePrensa != null && !medioDePrensa.equals("") && !medioDePrensa.equals("null")) {
+			if (medioDePrensa.equals("elobservador")) {
+				paramMedioDePrensa = "&fq=url:*www.elobservador.com.uy*";
+			} else if (medioDePrensa.equals("elpais")) {
+				paramMedioDePrensa = "&fq=url:*www.elpais.com.uy*";
+			} else if (medioDePrensa.equals("larepublica")) {
+				paramMedioDePrensa = "&fq=url:*republica.com.uy*+url:*republica.com.uy*";
+				// *diariolarepublica.net*
+			}
+			
+		}
+		
+		
+		
+		// Para la fecha
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
 			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
@@ -190,8 +220,13 @@ public class BuscadorOpiniones {
 //				+ " articulo:(" + asunto + "))";
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		
 		String paramRows = "30";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
+		if ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados)) {
+			paramRows = cantResultados;
+		}
+		
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -265,7 +300,7 @@ public class BuscadorOpiniones {
 		return opiniones;
 	}
 
-	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String json;
 		if (fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null")) {
 			json = "{\n"
@@ -296,7 +331,7 @@ public class BuscadorOpiniones {
 					+ " \"text\":\"Powered by Buscopiniones\",\n"
 					+ " \"startDate\":\"2013,10,26\",\n"
 					+ " \"date\": [ ";
-			Collection<Opinion> opiniones = this.getOpiniones(fuente, asunto, fechaIni, fechaFin);
+			Collection<Opinion> opiniones = this.getOpiniones(fuente, asunto, fechaIni, fechaFin, medioDePrensa, cantResultados);
 
 			for (Opinion op : opiniones) {
 				json += op.toJSON() + ",";
