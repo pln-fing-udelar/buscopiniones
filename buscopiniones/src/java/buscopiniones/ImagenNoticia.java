@@ -45,7 +45,7 @@ public class ImagenNoticia extends HttpServlet {
 	 * @throws IOException if an I/O error occurs
 	 */
 	public BufferedImage obtenerImagenDeURL(String urlString, HttpSession session) throws MalformedURLException, IOException, Exception {
-		System.out.println("toy aca 1");
+		//System.out.println("toy aca 1");
 		BufferedImage imagenRet = null;
 		URL url = new URL(urlString);
 		URLConnection con = url.openConnection();
@@ -56,7 +56,7 @@ public class ImagenNoticia extends HttpServlet {
 		String charset = m.matches() ? m.group(1) : "ISO-8859-1";
 		Reader r = new InputStreamReader(con.getInputStream(), charset);
 		StringBuilder buf = new StringBuilder();
-		System.out.println("toy aca 2");
+		//System.out.println("toy aca 2");
 		while (true) {
 			int ch = r.read();
 			if (ch < 0) {
@@ -65,7 +65,7 @@ public class ImagenNoticia extends HttpServlet {
 			buf.append((char) ch);
 		}
 		String str = buf.toString();
-		System.out.println("toy aca 3");
+		//System.out.println("toy aca 3");
 		p = Pattern.compile("src=(\"|')([^\"']*?\\.(jpg|gif|png|JPG|PNG|GIF))(\"|')");
 		m = p.matcher(str);
 		int max = 0;
@@ -77,14 +77,14 @@ public class ImagenNoticia extends HttpServlet {
 			if (imagenCandidata != null && !imagenCandidata.matches("http://.*")) {
 				imagenCandidata = urlString.replaceFirst("(http://.*?)/.*", "$1") + imagenCandidata;
 			}
-			System.out.println("imagenCandidata: " + imagenCandidata);
+			//System.out.println("imagenCandidata: " + imagenCandidata);
 			if (imagenCandidata != null) {
 				pool.submit(new DownloadTask(imagenCandidata, idImg, session));
 			}
 		}
 		pool.shutdown();
 		pool.awaitTermination(Long.MAX_VALUE, TimeUnit.MILLISECONDS);
-		System.out.println("toy aca 4");
+		//System.out.println("toy aca 4");
 //		imagenRet = DownloadTask.getMejorImagen();
 		imagenRet = (BufferedImage) session.getAttribute(idImg + "img");
 		if (imagenRet == null) {
@@ -112,8 +112,8 @@ public class ImagenNoticia extends HttpServlet {
 				ImageIO.write(img, "jpg", out);
 			}
 		} catch (Exception e) {
-			System.out.println(e);
-			System.out.println(e.getCause());
+			//System.out.println(e);
+			//System.out.println(e.getCause());
 			BufferedImage img = ImageIO.read(new File("C:\\Fing\\ProyGrado\\buscopiniones\\buscopiniones\\web\\img\\default.jpg"));
 			ImageIO.write(img, "jpg", out);
 		}
