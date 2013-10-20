@@ -113,23 +113,26 @@ public class BuscadorOpiniones {
 		return "";
 	}
 
-	public Collection<String> getFuentesRelacionadas(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public Collection<String> getFuentesRelacionadas(String fuente, String asunto, String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
 			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
 		}
-
+		if (asunto == null || asunto.equals("") || asunto.equals("null")) {
+			return new ArrayList<String>();
+		}
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
-				+ " descripcion:(" + asunto + ")"
-				+ " opinion:(" + asunto + ")^10"
-				+ " articulo:(" + asunto + "))";
+//		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
+//				+ " descripcion:(" + asunto + ")"
+//				+ " opinion:(" + asunto + ")^10"
+//				+ " articulo:(" + asunto + "))";
+		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "0";
 		String paramFacetLimit = "10";
 		String paramFacetField = "fuente_facetado";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit;
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true";
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -138,25 +141,25 @@ public class BuscadorOpiniones {
 
 		Collection<String> fuentes = new ArrayList<String>();
 
-		Node nodoFacet_counts = doc.getDocumentElement().getElementsByTagName("lst").item(2);
-		Element elementoFacet_counts = (Element) nodoFacet_counts;
-
-		Node nodoFacet_fields = elementoFacet_counts.getElementsByTagName("lst").item(1);
-		Element elementoFacet_fields = (Element) nodoFacet_fields;
-
-		Node nodoFuente_sin_stemm = elementoFacet_fields.getElementsByTagName("lst").item(0);
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression exprMatches = xpath.compile("//lst[@name='fuente_facetado']");
+		NodeList listaMatches = (NodeList) exprMatches.evaluate(doc, XPathConstants.NODESET);
+		Node nodoFuente_sin_stemm = listaMatches.item(0);
 		Element elementoFuente_sin_stemm = (Element) nodoFuente_sin_stemm;
 
 		NodeList listaFuentes = elementoFuente_sin_stemm.getElementsByTagName("int");
-
 		for (int i = 0; i < listaFuentes.getLength(); i++) {
 			Node nodoDoc = listaFuentes.item(i);
 			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
 				Element elementoDoc = (Element) nodoDoc;
-				fuentes.add(elementoDoc.getAttribute("name"));
+				int cant = Integer.parseInt(elementoDoc.getTextContent());
+				if (cant > 0) {
+					fuentes.add(elementoDoc.getAttribute("name"));
+				}
+
 			}
 		}
-
 		return fuentes;
 	}
 
@@ -192,7 +195,7 @@ public class BuscadorOpiniones {
 		String paramMedioDePrensa = "";
 		if (medioDePrensa != null && !medioDePrensa.equals("") && !medioDePrensa.equals("null")) {
 			if (medioDePrensa.equals("elobservador")) {
-				paramMedioDePrensa = "url:*elobservador.com.uy*";				
+				paramMedioDePrensa = "url:*elobservador.com.uy*";
 			} else if (medioDePrensa.equals("elpais")) {
 				paramMedioDePrensa = "url:*elpais.com.uy*";
 			} else if (medioDePrensa.equals("larepublica")) {
@@ -200,8 +203,8 @@ public class BuscadorOpiniones {
 				// *diariolarepublica.net*
 			}
 			paramMedioDePrensa = URLEncoder.encode(paramMedioDePrensa, "UTF-8");
-			paramMedioDePrensa = "&fq="+paramMedioDePrensa;
-		}	
+			paramMedioDePrensa = "&fq=" + paramMedioDePrensa;
+		}
 
 		// Para la fecha
 		String paramFecha = "";
