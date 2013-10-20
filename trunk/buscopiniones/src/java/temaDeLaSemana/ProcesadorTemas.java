@@ -28,6 +28,11 @@ import java.util.regex.Pattern;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpression;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -65,14 +70,15 @@ public class ProcesadorTemas {
 		return result;
 	}
 
-	public ArrayList<String> getUrlsNoticiasDeLaSemana(String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public ArrayList<String> getUrlsNoticiasDeLaSemana(String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String paramFecha = "fecha:[" + fechaIni + " TO " + fechaFin + "]";
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "url2:elpais.com.uy";
+//		String paramQ = "url2:elpais.com.uy";
+		String paramQ = "*:*";
+		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "1000";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows;
-//		String xmlNoticiasDeLaSemana = getXML("http://127.0.0.1:8984/solr/collection1/select?q=*%3A*&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows);
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows +"&group=true&group.field=articulo";
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -84,7 +90,11 @@ public class ProcesadorTemas {
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
 		Element elementoResult = (Element) nodoResult;
-		NodeList listaDocs = elementoResult.getElementsByTagName("doc");
+		
+		XPathFactory xPathfactory = XPathFactory.newInstance();
+		XPath xpath = xPathfactory.newXPath();
+		XPathExpression exprDoc = xpath.compile("//doc");
+		NodeList listaDocs = (NodeList) exprDoc.evaluate(doc, XPathConstants.NODESET);
 		for (int i = 0; i < listaDocs.getLength(); i++) {
 			Node nodoDoc = listaDocs.item(i);
 			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
@@ -93,11 +103,11 @@ public class ProcesadorTemas {
 				urls.add(urlElementoDoc);
 			}
 		}
-
+		System.out.println("Cantidad de noticias encontradas en la semana: " + urls.size());
 		return urls;
 	}
 
-	public ArrayList<Map<String, Double>> getTemasDeLaSemana(String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public ArrayList<Map<String, Double>> getTemasDeLaSemana(String fechaIni, String fechaFin) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		Map<String, Double> temas = new HashMap<String, Double>();
 		ArrayList<String> urls = getUrlsNoticiasDeLaSemana(fechaIni, fechaFin);
 		Collection<NoticiaCluster> arrNoticias = new ArrayList();
@@ -267,7 +277,7 @@ public class ProcesadorTemas {
 		return fecha;
 	}
 
-	public Collection<Noticia> getNoticiaDeLaSemana(String fechaInicial, String fechaFinal) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException {
+	public Collection<Noticia> getNoticiaDeLaSemana(String fechaInicial, String fechaFinal) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String fechaIni = transformarAFechaSolr(fechaInicial);
 		String fechaFin = transformarAFechaSolr(fechaFinal);
 		Collection<Map<String, Double>> temasCluster = getTemasDeLaSemana(fechaIni, fechaFin);
@@ -277,7 +287,7 @@ public class ProcesadorTemas {
 			if (temasEntrySet.isEmpty()) {
 				System.out.println("Esta todo mal!!!!");
 			}
-			String busqueda = "title:(";
+
 			String asunto = "";
 			int cant = 0;
 			for (Map.Entry<String, Double> tema : temasEntrySet) {
@@ -288,8 +298,8 @@ public class ProcesadorTemas {
 				}
 				cant++;
 			}
-			busqueda += asunto;
-			busqueda += ")";
+			String busqueda = "title:(" + asunto + ") descripcion:(" + asunto + ") " + asunto;
+
 
 			busqueda = URLEncoder.encode(busqueda, "UTF-8");
 			String paramStart = "0";

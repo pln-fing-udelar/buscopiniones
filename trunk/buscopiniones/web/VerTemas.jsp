@@ -123,10 +123,10 @@
                         <div class="span3 element <%= category%>" data-category=" <%= category%>">
                             <div class="hover_img">
 								<a href="<%= noti.getUrl()%>" data-rel="prettyPhoto[portfolio1]">	
-									<img src="<%= imagen%>" alt="<%= noti.getTitle()%>" /></a>
+									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","")%>" /></a>
                             </div>  
                             <div class="item_description">
-								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle()%></span></a><br/>
+								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","")%></span></a><br/>
 								<p><%= noti.getDescripcion()%></p>
 								<p><%= noti.getFecha()%></p>
 								<p>
@@ -156,47 +156,7 @@
 
 				<div class="pad45"></div>
 
-				<!--info boxes-->
-				<div class="row">
-					<%
-						if (request.getAttribute("Noticias") != null) {
-							Collection<Noticia> noticias = ((Collection<Noticia>) request.getAttribute("Noticias"));
-							for (Noticia noti : noticias) {
-					%>
-					<div class="span3">
-						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-wrench intro-icon-large"></i></div>
-							<h6><small>Noticia</small>
-								<br/><a href="<%= noti.getUrl()%>"><span style="color: #2BA6CB;"><%= noti.getTitle()%></span></a></h6>
-							<p><%= noti.getDescripcion()%></p>
-							<p><%= noti.getFecha()%></p>
-							<p>
-								Personas que opinaron sobre este tema:
-								<br/>
-								<%
-									Collection<String> fuentes = noti.getFuentesRel();
-									int i = 0;
-									for (String fuente : fuentes) {
-										if (i++ > 3) {
-											break;
-										}
-								%>
-								<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente%></b></a><br/>
-										<%
-											}
-										%>
-							</p>
-						</div> 
-						<div class="pad25"></div>
-					</div>
-					<%
-							}
-						}
-					%>
-
-				</div> 
-
-				<!--//info boxes-->
+				
 				<div class="row">
 					<!--col 1-->
 					<div class="span12">

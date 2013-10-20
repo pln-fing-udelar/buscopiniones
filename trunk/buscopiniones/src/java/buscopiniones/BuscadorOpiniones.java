@@ -226,7 +226,7 @@ public class BuscadorOpiniones {
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
