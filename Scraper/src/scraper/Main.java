@@ -12,10 +12,10 @@ import sun.misc.BASE64Decoder;
  */
 public class Main {
 
-	static public void generarCVSEntrenamiento(String medioPrensa) throws IOException {
-		Map<String, Boolean> tablaUrls = LectorCSV.run(medioPrensa);
+	static public void generarCVSEntrenamiento(String medioPrensa, Configuracion config) throws IOException {
+		Map<String, Boolean> tablaUrls = LectorCSV.run(medioPrensa, config);
 		List<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File("C:\\Fing\\ProyGrado\\entrenar\\" + medioPrensa + "\\");
+		File folder = new File(config.getDirTrabajo() + "entrenar\\" + medioPrensa + "\\");
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -39,7 +39,7 @@ public class Main {
 				ejemplos.add(ej);
 			}
 		}
-		Ejemplo.guardarCSV("C:\\Fing\\ProyGrado\\csv\\ejemplos" + medioPrensa + ".csv", ejemplos);
+		Ejemplo.guardarCSV(config.getDirTrabajo() + "csv\\ejemplos" + medioPrensa + ".csv", ejemplos);
 	}
 
 	static public String readFile(String file, String encoding) throws IOException {
@@ -87,14 +87,14 @@ public class Main {
 			String entrenarClasificador = in.readLine();
 			if (entrenarClasificador.equals("s")) {
 				System.out.println("csv el pais");
-				Main.generarCVSEntrenamiento("elpais");
+				Main.generarCVSEntrenamiento("elpais", config);
 				System.out.println("csv el observador");
-				Main.generarCVSEntrenamiento("elobservador");
+				Main.generarCVSEntrenamiento("elobservador", config);
 				System.out.println("csv la republica");
-				Main.generarCVSEntrenamiento("larepublica");
-				Clasificador clasifelpais = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselpais.csv");
-				Clasificador clasifelobservador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploselobservador.csv");
-				Clasificador clasiflarepublica = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemploslarepublica.csv");
+				Main.generarCVSEntrenamiento("larepublica", config);
+				Clasificador clasifelpais = new Clasificador(config.getDirTrabajo() + "csv\\ejemploselpais.csv");
+				Clasificador clasifelobservador = new Clasificador(config.getDirTrabajo() + "csv\\ejemploselobservador.csv");
+				Clasificador clasiflarepublica = new Clasificador(config.getDirTrabajo() + "csv\\ejemploslarepublica.csv");
 				System.out.println("entrenando el pais");
 				clasifelpais.crearModelo();
 				System.out.println("entrenando el observador");
@@ -108,7 +108,7 @@ public class Main {
 			in = new BufferedReader(new InputStreamReader(System.in));
 			String borrarDuplicados = in.readLine();
 			if (borrarDuplicados.equals("s")) {
-				BorrarDuplicados.borrar();
+				BorrarDuplicados.borrar(config);
 				//return;
 			}
 			/**
@@ -118,10 +118,10 @@ public class Main {
 			 * *******************************************************************
 			 */
 //			File status = new File("log.txt");
-			File folder = new File("C:\\Fing\\ProyGrado\\pruebas");
+			File folder = new File(config.getDirTrabajo() + "pruebas");
 			File[] listOfMediosPrensa = folder.listFiles();
 			Arrays.sort(listOfMediosPrensa);
-			File empiezoEnA = new File("C:\\Fing\\ProyGrado\\log.txt");
+			File empiezoEnA = new File(config.getDirTrabajo() + "log.txt");
 			String empiezoEn = "";
 			if (empiezoEnA.exists()) {
 				empiezoEn = readFile(empiezoEnA, "UTF-8");
@@ -158,8 +158,8 @@ public class Main {
 				File[] listOfFolders = medioPrensa.listFiles();
 				Arrays.sort(listOfFolders);
 				String medioActual = medioPrensa.getName();
-				String nomArchivo = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + ".xml";
-				String nomArchivoNoti = "C:\\Fing\\ProyGrado\\htmlprocesado\\" + medioActual + timeStamp + "Noticias.xml";
+				String nomArchivo = config.getDirTrabajo() + "htmlprocesado\\" + medioActual + timeStamp + ".xml";
+				String nomArchivoNoti = config.getDirTrabajo() + "htmlprocesado\\" + medioActual + timeStamp + "Noticias.xml";
 				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo), "UTF-8"));
 				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti), "UTF-8"));
 				bw.append("<add>");
@@ -233,7 +233,7 @@ public class Main {
 							bwNoticias.flush();
 							xmlNoticia = "";
 							i = 0;
-							Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+							Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
 							status.write(file.getPath());
 							status.close();
 						}
@@ -248,7 +248,7 @@ public class Main {
 						bwNoticias.flush();
 						xmlNoticia = "";
 						i = 0;
-						Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+						Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
 						status.write(carpeta_fecha.getPath());
 						status.close();
 					}
@@ -262,7 +262,7 @@ public class Main {
 					bwNoticias.flush();
 					xmlNoticia = "";
 				}
-				Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream("C:\\Fing\\ProyGrado\\log.txt"), "UTF-8"));
+				Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
 				status.write(medioPrensa.getPath() + System.getProperty("line.separator"));
 				status.close();
 				bw.append("</add>");
