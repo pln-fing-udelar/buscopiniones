@@ -15,8 +15,8 @@ import java.util.Map;
  */
 public class BorrarDuplicados {
 	
-	static void borrar() throws IOException{		
-		File folder = new File("C:\\Fing\\ProyGrado\\pruebas");		
+	static void borrar(Configuracion config) throws IOException{		
+		File folder = new File(config.getDirTrabajo() + "pruebas");				
 		File[] listOfMediosPrensa = folder.listFiles();
 		for (File medioPrensa : listOfMediosPrensa) {
 			Map<String,String> tablaArchivos = new HashMap();

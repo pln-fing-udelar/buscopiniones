@@ -31,7 +31,7 @@ public class ProcesadorPaginas {
 	public ProcesadorPaginas(Configuracion config, String medioDePrensa) {
 		this.config = config;
 		this.medioDePrensa = medioDePrensa;
-		clasificador = new Clasificador("C:\\Fing\\ProyGrado\\csv\\ejemplos" + medioDePrensa + ".csv");
+		clasificador = new Clasificador(config.getDirTrabajo() + "csv\\ejemplos" + medioDePrensa + ".csv");
 		clasificador.crearModelo();
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
@@ -101,9 +101,9 @@ public class ProcesadorPaginas {
 				//---<borrar>
 //			java.util.Date date = new java.util.Date();
 //			long unixTime = System.currentTimeMillis() / 1000L;
-//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "entrada.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "entrada.xml", false);
-//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaFinal.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaFinal.xml", false);
-//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaRec.xml", "C:\\Fing\\ProyGrado\\basura\\" + unixTime + "salidaRec.xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "entrada.xml", config.getDirTrabajo() + "basura\\" + unixTime + "entrada.xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaFinal.xml", config.getDirTrabajo() + "basura\\" + unixTime + "salidaFinal.xml", false);
+//			CopyFiles.copyWithChannels(config.getDirCorreferencias() + "salidaRec.xml", config.getDirTrabajo() + "basura\\" + unixTime + "salidaRec.xml", false);
 				//---</borrar>
 
 				System.out.println("Empiezo a scrapear opiniones");

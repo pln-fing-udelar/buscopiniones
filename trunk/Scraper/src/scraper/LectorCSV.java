@@ -17,9 +17,8 @@ import java.util.Map;
 
 public class LectorCSV {
 
-	public static Map<String,Boolean> run(String medioPrensa) throws FileNotFoundException, IOException {
-
-		String csvFile = "C:\\Fing\\ProyGrado\\csv\\resultados"+ medioPrensa +".csv";
+	public static Map<String,Boolean> run(String medioPrensa, Configuracion config) throws FileNotFoundException, IOException {
+		String csvFile = config.getDirTrabajo() + "csv\\resultados"+ medioPrensa +".csv";
 		String coma = ",";
 		Map<String,Boolean> retorno = new HashMap();
 		BufferedReader br = new BufferedReader(new FileReader(csvFile));
