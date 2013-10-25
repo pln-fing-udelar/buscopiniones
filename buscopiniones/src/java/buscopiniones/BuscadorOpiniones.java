@@ -225,7 +225,8 @@ public class BuscadorOpiniones {
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 
 		String paramRows = "30";
-		if ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados)) {
+		boolean validoCantResult = ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados) && (Integer.parseInt(cantResultados) > 0));
+		if (validoCantResult) {
 			paramRows = cantResultados;
 		}
 
@@ -243,10 +244,14 @@ public class BuscadorOpiniones {
 		NodeList listaMatches = (NodeList) exprMatches.evaluate(doc, XPathConstants.NODESET);
 		String cantMatches = (String) listaMatches.item(0).getTextContent();
 		Integer matches = Integer.parseInt(cantMatches);
-		int cantResult = ((int) (Math.log(matches) / Math.log(1.5)));
+		int cantResult = ((int) (Math.log(matches + 1) / Math.log(1.5)));
 		System.out.println("cantMatches: " + cantMatches);
 		System.out.println("cantResult: " + cantResult);
-
+		int paramRowsInt = Math.min(matches, Integer.parseInt(paramRows));
+		if (validoCantResult) {
+			cantResult = Math.max(cantResult, paramRowsInt);
+		}
+		
 		Collection<Opinion> opiniones = new ArrayList<Opinion>();
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
