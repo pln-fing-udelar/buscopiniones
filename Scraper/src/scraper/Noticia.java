@@ -37,7 +37,7 @@ public class Noticia {
 		xml += "<field name=\"h1\">" + h1 + "</field>\r\n";
 		xml += "<field name=\"fecha\">" + fecha + "</field>\r\n";
 		xml += "<field name=\"categorias\">" + categorias + "</field>\r\n";
-		xml += "<field name=\"descripcion\">" + getDescripcion() + "</field>\r\n";
+		xml += "<field name=\"descripcion\">" + ProcesadorHTML.html2text(getDescripcion()) + "</field>\r\n";
 		xml += "<field name=\"autor\">" + getAutor() + "</field>\r\n";
 		return xml;
 	}
