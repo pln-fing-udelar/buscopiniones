@@ -187,7 +187,7 @@ public class BuscadorOpiniones {
 		return ret;
 	}
 
-	public Collection<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados)
+	public ArrayList<Opinion> getOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados)
 			throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
 
@@ -214,6 +214,7 @@ public class BuscadorOpiniones {
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
+		fuente = fuente.replaceAll("([^ ]+) ([^ ]+)","$1 AND $2");
 		String paramFuente = "fuente:(" + fuente + ")";
 		paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
 		// fuente_corref:(" + fuente + ")^0.001)
@@ -223,6 +224,8 @@ public class BuscadorOpiniones {
 //				+ " articulo:(" + asunto + "))";
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		String paramQf = "text title h1 descripcion opinion^10";
+		paramQf = URLEncoder.encode(paramQf, "UTF-8");
 
 		String paramRows = "30";
 		boolean validoCantResult = ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados) && (Integer.parseInt(cantResultados) > 0));
@@ -230,7 +233,7 @@ public class BuscadorOpiniones {
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true"; //+ "&group=true&group.field=opinion_sin_stemm"
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -251,8 +254,8 @@ public class BuscadorOpiniones {
 		if (validoCantResult) {
 			cantResult = Math.max(cantResult, paramRowsInt);
 		}
-		
-		Collection<Opinion> opiniones = new ArrayList<Opinion>();
+
+		ArrayList<Opinion> opiniones = new ArrayList<Opinion>();
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
 		Element elementoResult = (Element) nodoResult;

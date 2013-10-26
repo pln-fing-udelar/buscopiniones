@@ -2,7 +2,8 @@ package buscopiniones;
 
 import java.text.BreakIterator;
 import java.util.ArrayList;
-import java.util.Locale;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import sun.misc.BASE64Encoder;
@@ -51,7 +52,7 @@ public class Opinion {
 		ArrayList<Integer> puntajeArr = new ArrayList<Integer>();
 		for (int end = iterSentence.next(); end != BreakIterator.DONE; start = end, end = iterSentence.next()) {
 			String sub = source.substring(start, end);
-			arr.add(sub);			
+			arr.add(sub);
 			BreakIterator iterWord = BreakIterator.getWordInstance();
 			iterWord.setText(sub);
 			int puntaje = 0;
@@ -64,44 +65,46 @@ public class Opinion {
 				int startOpinion = iterOpinion.first();
 				for (int endOpinion = iterOpinion.next(); endOpinion != BreakIterator.DONE; startOpinion = endOpinion, endOpinion = iterOpinion.next()) {
 					String wordOpinion = op.substring(startOpinion, endOpinion);
-					if (wordOpinion.length() > 2 && wordOpinion.equals(wordFraseOrig)){						
+					if (wordOpinion.length() > 2 && wordOpinion.equals(wordFraseOrig)) {
 						puntaje++;
 						break;
 					}
-				}				
+				}
 			}
 			puntajeArr.add(puntaje);
 		}
 		int maxInd = 0;
 		int max = -1;
 		int j = 0;
-		for(int puntaje: puntajeArr){
-			if (puntaje > max){
+		for (int puntaje : puntajeArr) {
+			if (puntaje > max) {
 				maxInd = j;
 				max = puntaje;
 			}
 			j++;
 		}
 		System.out.println(maxInd);
-		return arr.get(maxInd);		
+		return arr.get(maxInd);
 	}
 
 	public String toJSON() {
 		String opinionJson = BuscadorOpiniones.html2text(this.getOpinion());
-		
+
 		opinionJson = opinionJson.replaceAll("(?i) de el ", " del ");
 		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
 		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
-		if (opinionJson.length() <= 80) {
+		//if (opinionJson.length() <= 80) {
 			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
-		}
+		//}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");
 		opinionJson = opinionJson.replaceAll("^[A-Z ]* ", "");
 		opinionJson = opinionJson.replaceAll("Publicado el [0-9 /:-]* ", "");
-		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "").replace("- Diario EL PAIS - Montevideo - Uruguay","");
+		opinionJson = opinionJson.replaceAll("¿Te interesa esta noticia\\?", "");
+		opinionJson = opinionJson.trim();
+		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "").replace("- Diario EL PAIS - Montevideo - Uruguay", "");
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
 		BASE64Encoder encoder = new BASE64Encoder();
-		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");		
+		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
 		System.out.println(base64);
 		String media = "ImagenNoticia/" + base64 + ".jpg";
 //		String media = "http://localhost:8084/buscopiniones/ImagenNoticia/aHR0cDovL2hpc3Rvcmljby5lbHBhaXMuY29tLnV5LzEyMDYyNS91bHRtby02NDgyNjcvdWx0aW1vbW9tZW50by9NZWRpZGFzLXNvYnJlLWxhLW1hcmlodWFuYS1zb24tcGFyYS1wcm90ZWdlci1hbC1jb25zdW1pZG9yLWRpam8tTXVqaWNhLw==.jpg";
@@ -123,6 +126,19 @@ public class Opinion {
 		json += "}";
 
 		return json;
+	}
+
+	public Date getDate() {		
+		Pattern p = Pattern.compile("(?i)([0-9][0-9][0-1][0-9])-([0-1][0-9])-([0-3][0-9])");
+		Matcher m = p.matcher(this.noticia.getFecha());
+		Calendar cal = Calendar.getInstance();
+		if (m.find()) {
+			cal.set(Calendar.YEAR, Integer.parseInt(m.group(1)));
+			cal.set(Calendar.MONTH, Integer.parseInt(m.group(2)));
+			cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group(3)));			
+		}
+		Date dateRepresentation = cal.getTime();
+		return dateRepresentation;
 	}
 
 	/**
