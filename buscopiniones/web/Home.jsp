@@ -140,7 +140,7 @@
 				source: './JsonTimeline?fuente=<%= request.getParameter("fuente")%>&asunto=<%= request.getParameter("asunto")%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>&medioDePrensa=<%= request.getParameter("medioDePrensa")%>&cantResultados=<%= request.getParameter("cantResultados")%>',
 				//source: 'example_json.json',
 				start_at_end: true,
-				//start_at_slide: '4',
+				start_at_slide: <%= request.getAttribute("start_at_slide")%>,
 				lang: 'es'
 			};
 		</script>

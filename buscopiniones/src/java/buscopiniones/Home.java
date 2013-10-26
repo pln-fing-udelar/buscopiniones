@@ -6,8 +6,9 @@ package buscopiniones;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Map;
+import java.util.Collections;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -39,6 +40,10 @@ public class Home extends HttpServlet {
 		try {
 			String fuente = request.getParameter("fuente");
 			String asunto = request.getParameter("asunto");
+			String fechaIni = request.getParameter("desde");
+			String fechaFin = request.getParameter("hasta");
+			String medioDePrensa = request.getParameter("medioDePrensa");
+			String cantResultados = request.getParameter("cantResultados");
 			BuscadorOpiniones buscador = new BuscadorOpiniones();
 			Collection<String> fuentes = buscador.getFuentesRelacionadas(fuente, asunto, null, null);
 			StringBuilder spellCheckFuente = new StringBuilder();
@@ -46,6 +51,27 @@ public class Home extends HttpServlet {
 			buscador.getSpellCheckFuenteAsunto(fuente, asunto, spellCheckFuente, spellCheckAsunto);
 			System.out.println("spellCheckFuente:" + spellCheckFuente);
 			System.out.println("spellCheckAsunto:" + spellCheckAsunto);
+
+			int start_at_slide = 0;
+			if (!(fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null"))) {
+				ArrayList<Opinion> opiniones = buscador.getOpiniones(fuente, asunto, fechaIni, fechaFin, medioDePrensa, cantResultados);
+				if (opiniones.size() > 0) {
+					Opinion op = opiniones.get(0);					
+					Collections.sort(opiniones, new ComparadorOpiniones());
+					start_at_slide = 1;
+					for(Opinion op2 : opiniones){
+						System.out.println("op2:"+op2.getId());
+						System.out.println("op:"+op.getId());
+						System.out.println("start_at_slide:"+start_at_slide);
+						if(op2.getId().equals(op.getId())){
+							break;
+						}
+						start_at_slide++;
+					}
+						
+				}
+			}
+			request.setAttribute("start_at_slide", start_at_slide);
 			request.setAttribute("fuentes", fuentes);
 			request.setAttribute("spellCheckFuente", spellCheckFuente.toString());
 			request.setAttribute("spellCheckAsunto", spellCheckAsunto.toString());
