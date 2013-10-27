@@ -50,6 +50,26 @@
 					$(".divOcultar").slideToggle();
 				});
 			});
+
+			var prmstr = window.location.search.substr(1);
+			var prmarr = prmstr.split("&");
+			var params = {};
+			var mostrarBusqAvanzada = false;
+			for (var i = 0; i < prmarr.length; i++) {
+				var tmparr = prmarr[i].split("=");
+				params[tmparr[0]] = tmparr[1];
+				if ((tmparr[0] != null && tmparr[0] == "desde" && tmparr[1] != null && tmparr[1] != "")
+						|| (tmparr[0] != null && tmparr[0] == "hasta" && tmparr[1] != null && tmparr[1] != "")
+						|| (tmparr[0] != null && tmparr[0] == "medioDePrensa" && tmparr[1] != null && tmparr[1] != "")
+						|| (tmparr[0] != null && tmparr[0] == "cantResultados" && tmparr[1] != null && tmparr[1] != "")) {
+					mostrarBusqAvanzada = true;
+				}
+			}
+			if (mostrarBusqAvanzada) {
+				$(document).ready(function() {
+					$(".divOcultar").slideToggle();
+				});
+			}
 		</script>
 	</head>
 
@@ -89,7 +109,7 @@
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
 					<a href="#" class="bsqAvanzada"> <i class="icon-expand-alt "></i> Búsqueda avanzada</a>
-					
+
 					<%
 						String spellCheckFuente = request.getParameter("fuente");
 						String spellCheckAsunto = request.getParameter("asunto");
@@ -110,22 +130,26 @@
 					%>
 					<div class="divOcultar" style="display:none;">
 						<label>Opiniones desde: </label>
-							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
-							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
-							<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
-							<label>hasta: </label>
-							<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
-							<br />
-							<label>Medio de prensa:</label>
-							<input type="text" <% if (request.getParameter("medioDePresna") != null) {
-								%>value="<%= request.getParameter("medioDePresna")%>" <% 
-								}%> name="medioDePrensa" id="medioDePrensa" title="Ingrese el medio de Prensa" style="margin-right:10px" />
-							<br />
-							<label>Cantidad de resultados:</label>
-							<input type="text" <% if (request.getParameter("cantResultados") != null) {
-								%>value="<%= request.getParameter("cantResultados")%>" <% 
-								}%> name="cantResultados" id="cantResultados" title="Ingrese la cantidad de resultados" style="margin-right:10px" />
-							<br />
+						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
+						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+						<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
+						<label>hasta: </label>
+						<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+						<br />
+						<label>Medio de prensa:</label>
+						<select name="medioDePrensa" id="medioDePrensa" title="Ingrese el medio de Prensa" style="margin-right:10px">
+							<option value="">Todos</option>
+							<option value="elpais" <% if (request.getParameter("medioDePrensa") != null && request.getParameter("medioDePrensa").equals("elpais")) {%> selected<% }%>>El País</option>
+							<option value="larepublica" <% if (request.getParameter("medioDePrensa") != null && request.getParameter("medioDePrensa").equals("larepublica")) {%> selected<% }%>>La República</option>
+							<option value="elobservador" <% if (request.getParameter("medioDePrensa") != null && request.getParameter("medioDePrensa").equals("elobservador")) {%> selected<% }%>>El Observador</option>
+						</select>
+
+						<br />
+						<label>Cantidad de resultados:</label>
+						<input type="text" <% if (request.getParameter("cantResultados") != null) {
+							   %>value="<%= request.getParameter("cantResultados")%>" <%
+								   }%> name="cantResultados" id="cantResultados" title="Ingrese la cantidad de resultados" style="margin-right:10px" />
+						<br />
 					</div>
 				</form>
 
@@ -147,26 +171,7 @@
 		<script type="text/javascript" src="./compiled/js/storyjs-embed.js"></script>
 		<!-- /SLIDER -->
 
-		<div id="banner">
-			<div class="container intro_wrapper">
-				<div class="inner_content">
-
-					<!--welcome-->
-					<div class="container">				
-						<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
-							<label>Opiniones desde: </label>
-							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
-							<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
-							<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
-							<label>hasta: </label>
-							<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
-							<input type="submit" name="filtrar" value="Filtrar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
-						</form>
-					</div>
-					<!--//welcome-->
-				</div>
-			</div>
-		</div>
+		
 		<!--//banner-->
 
 		<div class="container wrapper">
