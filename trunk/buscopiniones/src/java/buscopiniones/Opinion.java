@@ -97,7 +97,8 @@ public class Opinion {
 			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
 		//}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");
-		opinionJson = opinionJson.replaceAll("^[A-Z ]* ", "");
+		opinionJson = opinionJson.replaceAll("^[A-ZÑÓÁÉÍÚ ]* ", "");
+		opinionJson = opinionJson.replaceAll("^| [A-ZÑÓÁÉÍÚ ]* ", "");
 		opinionJson = opinionJson.replaceAll("Publicado el [0-9 /:-]* ", "");
 		opinionJson = opinionJson.replaceAll("¿Te interesa esta noticia\\?", "");
 		opinionJson = opinionJson.trim();
