@@ -132,7 +132,11 @@ public class BuscadorOpiniones {
 		String paramRows = "0";
 		String paramFacetLimit = "10";
 		String paramFacetField = "fuente_facetado";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true";
+		
+		String paramQf = "text title h1 descripcion opinion^10";
+		paramQf = URLEncoder.encode(paramQf, "UTF-8");
+		
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -170,7 +174,7 @@ public class BuscadorOpiniones {
 		String paramQ = "articulo:(" + opinion.replaceAll("\"", "").replaceAll(":", "") + ")";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "1";
-		String fragsize = "200";
+		String fragsize = "5000";
 		String fl = "articulo";
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramIdOpinion + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&hl=true&hl.fragsize=" + fragsize + "&hl.fl=" + fl;
 		System.out.println(url);
@@ -180,7 +184,7 @@ public class BuscadorOpiniones {
 		Document doc = dBuilder.parse(url);
 		doc.getDocumentElement().normalize();
 
-		Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(0);
+		Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(1);
 		Element elementoResult = (Element) nodoResult;
 		String ret = elementoResult.getElementsByTagName("str").item(0).getTextContent();
 
@@ -224,7 +228,7 @@ public class BuscadorOpiniones {
 //				+ " articulo:(" + asunto + "))";
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		String paramQf = "text title h1 descripcion opinion^10";
+		String paramQf = "text title h1 descripcion opinion^4";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
 
 		String paramRows = "30";
@@ -303,7 +307,7 @@ public class BuscadorOpiniones {
 					}
 				}
 				opinion.setNoticia(noti);
-				//opinion.setTextoParaMostrar(getTextoParaMostrar(opinion.getId(), opinion.getOpinion()));
+				opinion.setTextoParaMostrar(getTextoParaMostrar(opinion.getId(), asunto + " " + fuente));
 				opiniones.add(opinion);
 			}
 		}

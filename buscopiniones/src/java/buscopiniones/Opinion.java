@@ -3,6 +3,7 @@ package buscopiniones;
 import java.text.BreakIterator;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -93,16 +94,29 @@ public class Opinion {
 		opinionJson = opinionJson.replaceAll("(?i) de el ", " del ");
 		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
 		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
-		//if (opinionJson.length() <= 80) {
-			opinionJson = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
-		//}
+		String opinionJson2 = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
+		if (opinionJson.length() + 10 <= opinionJson2.length()) {
+			opinionJson = opinionJson2;
+		}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");
-		opinionJson = opinionJson.replaceAll("^[A-ZÑÓÁÉÍÚ ]* ", "");
-		opinionJson = opinionJson.replaceAll("^| [A-ZÑÓÁÉÍÚ ]* ", "");
-		opinionJson = opinionJson.replaceAll("Publicado el [0-9 /:-]* ", "");
-		opinionJson = opinionJson.replaceAll("¿Te interesa esta noticia\\?", "");
+		opinionJson = opinionJson.replaceAll("^[A-ZÑÓÁÉÍÚ ][A-ZÑÓÁÉÍÚ ]+ ", "");
+		opinionJson = opinionJson.replaceAll("^\\| [A-ZÑÓÁÉÍÚ ]* ", "");
+		opinionJson = opinionJson.replaceAll(".*Publicado el [0-9 /:-]* ", "");
+		opinionJson = opinionJson.replaceAll("¿ ?Te interesa esta .*", "");
 		opinionJson = opinionJson.trim();
-		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replace("| Diario La República", "").replace("- Diario EL PAIS - Montevideo - Uruguay", "");
+
+		
+		Pattern p = Pattern.compile("(?i)<em>(.*?)</em>");
+		Matcher m = p.matcher(this.getTextoParaMostrar());
+		
+		while (m.find()) {
+			System.out.println(m.group(1));
+			opinionJson = opinionJson.replaceAll(m.group(1), "<b>"+m.group(1)+"</b>");
+			
+		}
+		
+
+		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replaceAll("\\|.*$", "").replace("- Diario EL PAIS - Montevideo - Uruguay", "");
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
 		BASE64Encoder encoder = new BASE64Encoder();
 		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
@@ -129,14 +143,14 @@ public class Opinion {
 		return json;
 	}
 
-	public Date getDate() {		
+	public Date getDate() {
 		Pattern p = Pattern.compile("(?i)([0-9][0-9][0-1][0-9])-([0-1][0-9])-([0-3][0-9])");
 		Matcher m = p.matcher(this.noticia.getFecha());
 		Calendar cal = Calendar.getInstance();
 		if (m.find()) {
 			cal.set(Calendar.YEAR, Integer.parseInt(m.group(1)));
 			cal.set(Calendar.MONTH, Integer.parseInt(m.group(2)));
-			cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group(3)));			
+			cal.set(Calendar.DAY_OF_MONTH, Integer.parseInt(m.group(3)));
 		}
 		Date dateRepresentation = cal.getTime();
 		return dateRepresentation;

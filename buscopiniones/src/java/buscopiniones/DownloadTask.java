@@ -40,9 +40,9 @@ public class DownloadTask implements Runnable {
 			int height = img.getHeight();
 			int width = img.getWidth();
 			double proporcion = ((double) height) / ((double) width);
-			System.out.println("height: " + height);
-			System.out.println("width: " + width);
-			System.out.println("proporcion: " + proporcion);
+//			System.out.println("height: " + height);
+//			System.out.println("width: " + width);
+//			System.out.println("proporcion: " + proporcion);
 			if (((Integer)session.getAttribute(idImg+ "max")) <= (height * width) && (height * width) >= (maxHeight * maxWidth) && proporcion < maxProporcion && proporcion > minProporcion) {
 				session.setAttribute(idImg + "img", img);
 				session.setAttribute(idImg + "max", (height * width));
