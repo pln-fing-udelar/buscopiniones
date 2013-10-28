@@ -105,19 +105,24 @@ public class Opinion {
 		opinionJson = opinionJson.replaceAll("¿ ?Te interesa esta .*", "");
 		opinionJson = opinionJson.trim();
 
-		
+
 		Pattern p = Pattern.compile("(?i)<em>(.*?)</em>");
 		Matcher m = p.matcher(this.getTextoParaMostrar());
-		
-		while (m.find()) {
-			System.out.println(m.group(1));
-			opinionJson = opinionJson.replaceAll(m.group(1), "<b>"+m.group(1)+"</b>");
-			
+
+		while (m.find()) {			
+			opinionJson = opinionJson.replaceAll(m.group(1), "<b>" + m.group(1) + "</b>");
+
 		}
-		
+
 
 		String tituloJson = BuscadorOpiniones.html2text(noticia.getTitle()).replaceAll("\\|.*$", "").replace("- Diario EL PAIS - Montevideo - Uruguay", "");
 		String urlJson = BuscadorOpiniones.html2text(noticia.getUrl());
+		String medio = "El País";
+		if (noticia.getUrl().matches(".*republica\\.(com\\.uy|net).*")) {
+			medio = "La República";
+		} else if (noticia.getUrl().matches(".*observador\\.com\\.uy.*")) {
+			medio = "El Observador";
+		}
 		BASE64Encoder encoder = new BASE64Encoder();
 		String base64 = encoder.encode(noticia.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
 		System.out.println(base64);
@@ -132,7 +137,7 @@ public class Opinion {
 		String json = "{";
 		json += "\"startDate\":\"" + getFechaParaJSON() + "\",";
 		json += "\"headline\":\"" + opinionJson + "\",";
-		json += "\"text\":\"<p>" + tituloJson + "</p><p>" + urlJson + "</p>\",";
+		json += "\"text\":\"<p>" + tituloJson + "</p><p><a href ='" + urlJson + "'>" + medio + "</a></p>\",";
 		json += "\"asset\":{\n"
 				+ "                    \"media\":\"" + media + "\",\n"
 				+ "                    \"credit\":\"" + credit + "\",\n"
