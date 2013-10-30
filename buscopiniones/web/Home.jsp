@@ -99,13 +99,19 @@
 		</div>
 		<!--//header-->
 		<!--page-->
-
+		<style>
+			#formBusqueda label {width:8%; text-align:right; margin-right:4px; margin-bottom:12px}
+			#formBusqueda label.samallLabel {width:4%}
+			@media (max-width:768px) {
+				#formBusqueda label,formBusqueda label.samallLabel {width:100%; display:block; text-align:left; margin:10px 0 !important}
+			}
+		</style>
 		<div style="background:rgb(240, 240, 240); box-shadow:3px 3px 3px #cecece;">
-			<div class="container">				
+			<div id="formBusqueda" class="container">				
 				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
 					<label>Opiniones de:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
-					<label>sobre:</label>
+					<label class="samallLabel">sobre:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
 					<a href="#" class="bsqAvanzada"> <i class="icon-expand-alt "></i> Búsqueda avanzada</a>
@@ -133,7 +139,7 @@
 						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
 						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 						<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
-						<label>hasta: </label>
+						<label class="samallLabel">hasta: </label>
 						<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
 						<br />
 						<label>Medio de prensa:</label>
