@@ -132,10 +132,10 @@ public class BuscadorOpiniones {
 		String paramRows = "0";
 		String paramFacetLimit = "10";
 		String paramFacetField = "fuente_facetado";
-		
+
 		String paramQf = "text title h1 descripcion opinion^10";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
-		
+
 		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
@@ -218,7 +218,7 @@ public class BuscadorOpiniones {
 
 		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
 		String paramStart = "0";
-		fuente = fuente.replaceAll("([^ ]+) ([^ ]+)","$1 AND $2");
+		fuente = fuente.replaceAll("([^ ]+) ([^ ]+)", "$1 AND $2");
 		String paramFuente = "fuente:(" + fuente + ")";
 		paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
 		// fuente_corref:(" + fuente + ")^0.001)
@@ -228,8 +228,11 @@ public class BuscadorOpiniones {
 //				+ " articulo:(" + asunto + "))";
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
-		String paramQf = "text title h1 descripcion opinion^4";
+		String paramQf = "text title h1 descripcion opinion^6";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
+		String paramPf = paramQf;
+		String paramPs = "1";
+		paramPs = URLEncoder.encode(paramPs, "UTF-8");
 
 		String paramRows = "30";
 		boolean validoCantResult = ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados) && (Integer.parseInt(cantResultados) > 0));
@@ -237,7 +240,7 @@ public class BuscadorOpiniones {
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf; //+ "&group=true&group.field=opinion_sin_stemm"
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf +"&ps="+paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -251,7 +254,7 @@ public class BuscadorOpiniones {
 		NodeList listaMatches = (NodeList) exprMatches.evaluate(doc, XPathConstants.NODESET);
 		String cantMatches = (String) listaMatches.item(0).getTextContent();
 		Integer matches = Integer.parseInt(cantMatches);
-		int cantResult = ((int) (Math.log(matches + 1) / Math.log(1.8)));
+		int cantResult = ((int) (Math.log(matches + 1) / Math.log(1.5)));
 		System.out.println("cantMatches: " + cantMatches);
 		System.out.println("cantResult: " + cantResult);
 		int paramRowsInt = Math.min(matches, Integer.parseInt(paramRows));
