@@ -92,7 +92,7 @@
 		<div class="container wrapper">
 			<div class="inner_content">
 
-				<div id="options">                                           
+				<!--<div id="options">                                           
                     <ul id="filters" class="option-set" data-option-key="filter">
                         <li><a href="#filter" data-option-value="*" class=" selected">All</a></li>
                         <li><a href="#filter" data-option-value=".category01">Category 01</a></li>                                            
