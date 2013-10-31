@@ -195,6 +195,7 @@ public class BuscadorOpiniones {
 			throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 
 
+
 		// Para el medio de prensa
 		String paramMedioDePrensa = "";
 		if (medioDePrensa != null && !medioDePrensa.equals("") && !medioDePrensa.equals("null")) {
@@ -214,13 +215,20 @@ public class BuscadorOpiniones {
 		String paramFecha = "";
 		if (fechaIni != null && !fechaIni.equals("") && fechaFin != null && !fechaFin.equals("") && !fechaIni.equals("null") && !fechaFin.equals("null")) {
 			paramFecha = "fecha:[" + ProcesadorTemas.transformarAFechaSolr(fechaIni) + " TO " + ProcesadorTemas.transformarAFechaSolr(fechaFin) + "]";
+			paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
+			paramFecha = "&fq=" + paramFecha;
 		}
 
-		paramFecha = URLEncoder.encode(paramFecha, "UTF-8");
+		
 		String paramStart = "0";
 		fuente = fuente.replaceAll("([^ ]+) ([^ ]+)", "$1 AND $2");
-		String paramFuente = "fuente:(" + fuente + ")";
-		paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
+		String paramFuente = "";
+		if (fuente != null && !fuente.equals("") && ! fuente.equals("null")) {	
+			paramFuente = "fuente:(" + fuente + ")";
+			paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
+			paramFuente = "&fq=" + paramFuente;
+		}
+		
 		// fuente_corref:(" + fuente + ")^0.001)
 //		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
 //				+ " descripcion:(" + asunto + ")"
@@ -240,7 +248,7 @@ public class BuscadorOpiniones {
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + paramMedioDePrensa + "&fq=" + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf +"&ps="+paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
+		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf +"&ps="+paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -320,7 +328,8 @@ public class BuscadorOpiniones {
 
 	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String json;
-		if (fuente == null || fuente.isEmpty() || fuente.equals("null") || asunto == null || asunto.isEmpty() || asunto.equals("null")) {
+		// el comentario adentro del if queda feo, pero es lo que hay....
+		if (/* fuente == null || fuente.isEmpty() || fuente.equals("null") || */ asunto == null || asunto.isEmpty() || asunto.equals("null")) {
 			json = "{\n"
 					+ "\"timeline\":\n"
 					+ "{\n"
