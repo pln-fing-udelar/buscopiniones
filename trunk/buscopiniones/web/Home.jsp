@@ -112,7 +112,7 @@
 					<label>Opiniones de:</label>
 					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
 					<label class="samallLabel">sobre:</label>
-					<input type="text" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
+					<input type="text" <% if (request.getParameter("asunto") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
 					<a href="#" class="bsqAvanzada"> <i class="icon-expand-alt "></i> Búsqueda avanzada</a>
 
@@ -136,8 +136,6 @@
 					%>
 					<div class="divOcultar" style="display:none;">
 						<label>Opiniones desde: </label>
-						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("fuente")%>" <% }%> name="fuente" title="Ingrese la fuente de la opinion" style="margin-right:10px;" />
-						<input type="hidden" <% if (request.getParameter("fuente") != null) {%>value="<%= request.getParameter("asunto")%>" <% }%> name="asunto" title="Ingrese el asunto de la opinion"  style="margin-right:10px" />
 						<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
 						<label class="samallLabel">hasta: </label>
 						<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
