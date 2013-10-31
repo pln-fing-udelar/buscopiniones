@@ -140,19 +140,19 @@ public class ProcesadorHTML {
 				return m.group(3) + "-" + aux2 + "-" + aux1 + "T00:00:00Z";
 			}	
 		} else if (medioDePrensa.equals("elpais")) {
-			Pattern p7 = Pattern.compile("(?i)<span class=\"published\">.*?(ene|feb|mar|abr|may|jun|jul|ago|sep|oct|nov|dic).([0-3]?[0-9]).(20[0-9][0-9]).*?</span>");
+			Pattern p7 = Pattern.compile("(?i)<span class=\"published\">.*?(ene|jan|feb|mar|abr|apr|may|jun|jul|ago|aug|sep|oct|nov|nob|dic|dec).([0-3]?[0-9]).(20[0-9][0-9]).*?</span>");
 			Matcher m = p7.matcher(html);
 			
 			if (m.find()) {
 				String aux2 = "";
 				String mes = "01";
-				if (m.group(1).toLowerCase().equals("ene")) {
+				if (m.group(1).toLowerCase().equals("ene") || m.group(1).toLowerCase().equals("jan")) {
 					mes = "01";
 				} else if (m.group(1).toLowerCase().equals("feb")) {
 					mes = "02";
 				} else if (m.group(1).toLowerCase().equals("mar")) {
 					mes = "03";
-				} else if (m.group(1).toLowerCase().equals("abr")) {
+				} else if (m.group(1).toLowerCase().equals("abr") || m.group(1).toLowerCase().equals("apr")) {
 					mes = "04";
 				} else if (m.group(1).toLowerCase().equals("may")) {
 					mes = "05";
@@ -160,15 +160,15 @@ public class ProcesadorHTML {
 					mes = "06";
 				} else if (m.group(1).toLowerCase().equals("jul")) {
 					mes = "07";
-				} else if (m.group(1).toLowerCase().equals("ago")) {
+				} else if (m.group(1).toLowerCase().equals("ago") || m.group(1).toLowerCase().equals("aug")) {
 					mes = "08";
 				} else if (m.group(1).toLowerCase().equals("sep")) {
 					mes = "09";
 				} else if (m.group(1).toLowerCase().equals("oct")) {
 					mes = "10";
-				} else if (m.group(1).toLowerCase().equals("nov")) {
+				} else if (m.group(1).toLowerCase().equals("nov") || m.group(1).toLowerCase().equals("nob")) {
 					mes = "11";
-				} else if (m.group(1).toLowerCase().equals("dic")) {
+				} else if (m.group(1).toLowerCase().equals("dic") || m.group(1).toLowerCase().equals("dec")) {
 					mes = "12";
 				}
 				if ((Integer.parseInt(m.group(2)) < 10) && (m.group(2).length() == 1)) {
