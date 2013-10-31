@@ -207,169 +207,10 @@
 						<div class="pad25"></div>
 					</div> 
 
-					<div class="span3">
-						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-rocket intro-icon-large"></i></div>
-							<h6><small>CODE</small>
-								<br><a href="#"><span>12-column grid</span></a></h6>
-							<p>Bootstrap is designed to help people of all skill levels - designer or developer, huge nerd or early beginner. 
-								Use it as a complete kit or use to start something.</p>
-						</div> 
-						<div class="pad25"></div>
-					</div> 
-
-					<div class="span3">
-						<div class="tile">
-							<div class="intro-icon-disc cont-large"><i class="icon-beaker intro-icon-large"></i></div>
-							<h6><small>CREATE</small>
-								<br><a href="#"><span>responsive</span></a></h6>
-							<p>Bootstrap have gone fully responsive. Our components are scaled according to a range of resolutions and devices to provide a consistent 
-								experience.</p>	
-						</div> 
-						<div class="pad25"></div>
-					</div> 
-
-					<div class="span3">
-						<div class="tile tile-hot">
-							<div class="intro-icon-disc cont-large"><i class="icon-book  intro-icon-large"></i></div>
-							<h6> <small>SUPPORT</small>
-								<br><a href="#"><span>growing library</span></a></h6>
-							<p>Despite being only 7kb (gzipped), Bootstrap is one of the most complete front-end toolkits out there with dozens of fully functional components.</p>
-						</div>
-						<div class="pad25"></div>	
-					</div> 
+					
 				</div> 
 
-				<!--//info boxes-->
-				<div class="row">
-					<!--col 1-->
-					<div class="span12">
-						<div class="row">
-							<div class="pad25 hidden-phone"></div>	
-
-							<div class="span4">
-								<h1>Recent Work</h1>
-								<h4>Lorem ipsum dolor sit amet, rebum putant recusabo in ius, pri simul tempor ne, his ei summo virtute.</h4>
-								<p>Nam ea labitur pericula. Meis tamquam pro te, cibo mutat necessitatibus id vim. An his tamquam postulant, pri id mazim nostrud diceret 
-									sapientem eloquentiam sea cu, sea ut exerci delicata. Corrumpit vituperata.</p>
-
-								<a href="#" class="btn btn-primary  btn-custom btn-rounded">view portfolio</a>
-								<div class="pad45"></div>
-							</div>
-							<!--column 2 slider-->
-							<div class="span8 pad15 col_full2">
-
-								<div id="slider_home">
-									<div class="slider-item">	
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s1.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s1.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">catalogue</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s2.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s2.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">loupe</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s3.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s3.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">retro rocket</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s4.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s4.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">infographics</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s5.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s5.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">mock up</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s6.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s6.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">retro badges</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s7.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s7.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">details</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-
-									<div class="slider-item">
-										<div class="slider-image">
-											<div class="hover_colour">
-												<a href="img/large/s8.jpg" data-rel="prettyPhoto">
-													<img src="img/small/s8.jpg" alt="" /></a>
-											</div>
-										</div>
-										<div class="slider-title">
-											<h3><a href="#">vintage form</a></h3>
-											<p>An his tamquam postulant, pri id mazim nostrud diceret.</p>
-										</div>
-									</div>
-								</div>
-								<div id="sl-prev" class="widget-scroll-prev"><i class="icon-chevron-left white"></i></div>
-								<div id="sl-next" class="widget-scroll-next"><i class="icon-chevron-right white but_marg"></i></div>
-							</div>
-						</div>
-					</div>
-				</div>
+				
 			</div>
 			<!--//page-->
 
@@ -378,9 +219,9 @@
 
 		<!-- footer -->
 		<div id="footer">
-			<h1>get in touch</h1>
+			<h1>Ponte en contacto</h1>
 			<h3 class="center follow">
-				We're social and we'd love to hear from you! Feel free to send us an email, find us on Google Plus, follow us on Twitter and join us on Facebook.</h3>
+				¿Te ha sido de utilidad esta herramienta? Ponte en contacto con nosotros <a href="#">aquí</a></h3>
 
 			<div class="follow_us">
 				<a href="#" class="zocial twitter"></a>
