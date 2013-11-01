@@ -115,17 +115,19 @@
    
    
    
-   <field name="articulo_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
+   <!-- <field name="articulo_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="title_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="metatitle_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="h1_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="categorias_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="descripcion_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="autor_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
+    <field name="text_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false" multiValued="true"/>
+   /-->
    <field name="fuente_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="fuente_corref_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
    <field name="opinion_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false"/>
-   <field name="text_sin_stemm" type="text_es_sin_stemm" indexed="true" stored="false" multiValued="true"/>
+  
 
    <field name="fuente_facetado" type="text_facetado" indexed="true" stored="false"/>
    
@@ -175,17 +177,19 @@
 		
 		<copyField source="articulo" dest="spellcheck_es"/>
 		
-		<copyField source="articulo" dest="articulo_sin_stemm"/>
+		<!-- <copyField source="articulo" dest="articulo_sin_stemm"/>
 		<copyField source="title" dest="title_sin_stemm"/>
 		<copyField source="metatitle" dest="metatitle_sin_stemm"/>
 		<copyField source="h1" dest="h1_sin_stemm"/>
 		<copyField source="categorias" dest="categorias_sin_stemm"/>
 		<copyField source="descripcion" dest="descripcion_sin_stemm"/>
 		<copyField source="autor" dest="autor_sin_stemm"/>
+		<copyField source="*_sin_stemm" dest="text_sin_stemm"/>
+		-->
 		<copyField source="fuente" dest="fuente_sin_stemm"/>
 		<copyField source="opinion" dest="opinion_sin_stemm"/>
 		
-		<copyField source="*_sin_stemm" dest="text_sin_stemm"/>
+		
 		
 		<copyField source="fuente" dest="fuente_facetado"/>
   
