@@ -67,7 +67,7 @@
 							</li>
 							<li class="sub-menu active"><a href="VerTemas">Temas</a>								
 							</li>							
-							<li class="last"><a href="contact.html">Contacto</a></li>
+							<li class="last"><a href="Contacto">Contacto</a></li>
 						</ul>
 					</div>
 				</nav>
@@ -167,7 +167,7 @@
 		<div id="footer">
 			<h1>Ponte en contacto</h1>
 			<h3 class="center follow">
-				¿Te ha sido de utilidad esta herramienta? Ponte en contacto con nosotros <a href="#">aquí</a></h3>
+				¿Te ha sido de utilidad esta herramienta? Ponte en contacto con nosotros <a href="Contacto">aquí</a></h3>
 
 			<div class="follow_us">
 				<a href="#" class="zocial twitter"></a>

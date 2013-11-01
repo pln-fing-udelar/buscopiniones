@@ -16,6 +16,10 @@
         <servlet-name>ImagenNoticia</servlet-name>
         <servlet-class>buscopiniones.ImagenNoticia</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Contacto</servlet-name>
+        <servlet-class>buscopiniones.Contacto</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>VerTemas</servlet-name>
         <url-pattern>/VerTemas</url-pattern>
@@ -31,6 +35,10 @@
     <servlet-mapping>
         <servlet-name>ImagenNoticia</servlet-name>
         <url-pattern>/ImagenNoticia/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Contacto</servlet-name>
+        <url-pattern>/Contacto</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>
