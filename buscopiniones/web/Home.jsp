@@ -186,12 +186,12 @@
 
 				<!--info boxes-->
 				<div class="row">
-					<div class="span3">
+					<div class="span3" style="width:100%">
 						<div class="tile">
 							<div class="intro-icon-disc cont-large"><i class="icon-user intro-icon-large"></i></div>
-							<h6><small>FUENTES</small>
-								<br /><span>Otras fuentes que opinaron sobre este tema</span></h6>
-							<h5>
+							<h3><small>FUENTES</small>
+								<br /><span>Otras fuentes que opinaron sobre este tema</span></h3>
+							<h2>
 								<p>
 									<%
 										Collection<String> fuentes = (Collection<String>) request.getAttribute("fuentes");
@@ -202,7 +202,7 @@
 												}
 											%>
 								</p>
-							</h5>
+							</h2>
 						</div> 
 						<div class="pad25"></div>
 					</div> 
@@ -227,7 +227,7 @@
 				<a href="#" class="zocial twitter"></a>
 				<a href="#" class="zocial facebook"></a>
 				<a href="#" class="zocial linkedin"></a>
-				<a href="#" class="zocial googleplus"></a>
+				<a href="https://plus.google.com/u/0/b/108400617712156541730/108400617712156541730/posts" class="zocial googleplus"></a>
 				<a href="#" class="zocial vimeo"></a>
 			</div>
 		</div>
