@@ -78,7 +78,7 @@ public class BuscadorOpiniones {
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "0";
 
-		String url = urlSolrSpell + "?q=" + paramQ + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&spellcheck=true&spellcheck.count=1&spellcheck.collate=true&spellcheck.maxCollations=1";
+		String url = urlSolrSpell + "?q=" + paramQ + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&spellcheck=true&spellcheck.count=1&spellcheck.collate=true&spellcheck.maxCollations=1&defType=edismax&mm=10<-100&stopwords=true&lowercaseOperators=true";
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -171,7 +171,7 @@ public class BuscadorOpiniones {
 		String paramIdOpinion = "id:(" + idOpinion.replace(":", "\\:") + ")";
 		paramIdOpinion = URLEncoder.encode(paramIdOpinion, "UTF-8");
 		String paramStart = "0";
-		String paramQ = "articulo:(" + opinion.replaceAll("\"", "").replaceAll(":", "") + ")";
+		String paramQ = "articulo:(" + opinion.replaceAll("\"", "").replaceAll(":", "").replaceAll("AND", " ") + ")";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "1";
 		String fragsize = "5000";
@@ -183,11 +183,12 @@ public class BuscadorOpiniones {
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
 		Document doc = dBuilder.parse(url);
 		doc.getDocumentElement().normalize();
-
-		Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(1);
-		Element elementoResult = (Element) nodoResult;
-		String ret = elementoResult.getElementsByTagName("str").item(0).getTextContent();
-
+		String ret = "";
+		if (doc.getDocumentElement().getElementsByTagName("arr") != null && doc.getDocumentElement().getElementsByTagName("arr").getLength() > 1) {
+			Node nodoResult = doc.getDocumentElement().getElementsByTagName("arr").item(1);
+			Element elementoResult = (Element) nodoResult;
+			ret = elementoResult.getElementsByTagName("str").item(0).getTextContent();
+		}
 		return ret;
 	}
 
@@ -219,16 +220,16 @@ public class BuscadorOpiniones {
 			paramFecha = "&fq=" + paramFecha;
 		}
 
-		
+
 		String paramStart = "0";
 		fuente = fuente.replaceAll("([^ ]+) ([^ ]+)", "$1 AND $2");
 		String paramFuente = "";
-		if (fuente != null && !fuente.equals("") && ! fuente.equals("null")) {	
+		if (fuente != null && !fuente.equals("") && !fuente.equals("null")) {
 			paramFuente = "fuente:(" + fuente + ")";
 			paramFuente = URLEncoder.encode(paramFuente, "UTF-8");
 			paramFuente = "&fq=" + paramFuente;
 		}
-		
+
 		// fuente_corref:(" + fuente + ")^0.001)
 //		String paramQ = "(title:(" + asunto + ")^2 metatitle:(" + asunto + ")^2 h1:(" + asunto + ")^2"
 //				+ " descripcion:(" + asunto + ")"
@@ -248,7 +249,7 @@ public class BuscadorOpiniones {
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf +"&ps="+paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
+		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf + "&ps=" + paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -329,7 +330,7 @@ public class BuscadorOpiniones {
 	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String json;
 		// el comentario adentro del if queda feo, pero es lo que hay....
-		if (/* fuente == null || fuente.isEmpty() || fuente.equals("null") || */ asunto == null || asunto.isEmpty() || asunto.equals("null")) {
+		if (/* fuente == null || fuente.isEmpty() || fuente.equals("null") || */asunto == null || asunto.isEmpty() || asunto.equals("null")) {
 			json = "{\n"
 					+ "\"timeline\":\n"
 					+ "{\n"

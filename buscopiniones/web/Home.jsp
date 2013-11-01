@@ -105,6 +105,7 @@
 			@media (max-width:768px) {
 				#formBusqueda label,formBusqueda label.samallLabel {width:100%; display:block; text-align:left; margin:10px 0 !important}
 			}
+			#quizasquiso label{width:70%; text-align:left; margin-right:4px; margin-bottom:12px}
 		</style>
 		<div style="background:rgb(240, 240, 240); box-shadow:3px 3px 3px #cecece;">
 			<div id="formBusqueda" class="container">				
@@ -116,24 +117,7 @@
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
 					<a href="#" class="bsqAvanzada"> <i class="icon-expand-alt "></i> Búsqueda avanzada</a>
 
-					<%
-						String spellCheckFuente = request.getParameter("fuente");
-						String spellCheckAsunto = request.getParameter("asunto");
-						boolean sugiero = false;
-						if (request.getAttribute("spellCheckFuente") != null && !((String) request.getAttribute("spellCheckFuente")).isEmpty()) {
-							sugiero = true;
-							spellCheckFuente = (String) request.getAttribute("spellCheckFuente");
-						}
-						if (request.getAttribute("spellCheckAsunto") != null && !((String) request.getAttribute("spellCheckAsunto")).isEmpty()) {
-							sugiero = true;
-							spellCheckAsunto = (String) request.getAttribute("spellCheckAsunto");
-						}
-						if (sugiero) {
-					%>
-					<label>           Quizás quiso decir: <a href="?fuente=<%= spellCheckFuente%>&asunto=<%= spellCheckAsunto%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"> Opiniones de <%= spellCheckFuente%> sobre <%= spellCheckAsunto%></a></label>
-					<%
-						}
-					%>
+
 					<div class="divOcultar" style="display:none;">
 						<label>Opiniones desde: </label>
 						<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
@@ -158,6 +142,24 @@
 				</form>
 
 			</div>
+			<%
+				String spellCheckFuente = request.getParameter("fuente");
+				String spellCheckAsunto = request.getParameter("asunto");
+				boolean sugiero = false;
+				if (request.getAttribute("spellCheckFuente") != null && !((String) request.getAttribute("spellCheckFuente")).isEmpty()) {
+					sugiero = true;
+					spellCheckFuente = (String) request.getAttribute("spellCheckFuente");
+				}
+				if (request.getAttribute("spellCheckAsunto") != null && !((String) request.getAttribute("spellCheckAsunto")).isEmpty()) {
+					sugiero = true;
+					spellCheckAsunto = (String) request.getAttribute("spellCheckAsunto");
+				}
+				if (sugiero) {
+			%>
+			<div id="quizasquiso" class="container"><label>Quizás quiso decir: <a href="?fuente=<%= spellCheckFuente%>&asunto=<%= spellCheckAsunto%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"> Opiniones de <%= spellCheckFuente%> sobre <%= spellCheckAsunto%></a></label></div>
+			<%
+				}
+			%>
 		</div>
 
 		<div id="timeline-embed"></div>
@@ -175,7 +177,7 @@
 		<script type="text/javascript" src="./compiled/js/storyjs-embed.js"></script>
 		<!-- /SLIDER -->
 
-		
+
 		<!--//banner-->
 
 		<div class="container wrapper">
@@ -205,10 +207,10 @@
 						<div class="pad25"></div>
 					</div> 
 
-					
+
 				</div> 
 
-				
+
 			</div>
 			<!--//page-->
 
