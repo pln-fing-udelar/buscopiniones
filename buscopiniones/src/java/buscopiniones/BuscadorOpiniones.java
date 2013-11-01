@@ -235,8 +235,12 @@ public class BuscadorOpiniones {
 //				+ " descripcion:(" + asunto + ")"
 //				+ " opinion:(" + asunto + ")^10"
 //				+ " articulo:(" + asunto + "))";
+
 		String paramQ = asunto;
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
+		if (asunto == null || asunto.isEmpty() || asunto.equals("null")){
+			paramQ = "*:*";
+		}
 		String paramQf = "text title h1 descripcion opinion^6";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
 		String paramPf = paramQf;
@@ -329,8 +333,8 @@ public class BuscadorOpiniones {
 
 	public String getJSONOpiniones(String fuente, String asunto, String fechaIni, String fechaFin, String medioDePrensa, String cantResultados) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
 		String json;
-		// el comentario adentro del if queda feo, pero es lo que hay....
-		if (/* fuente == null || fuente.isEmpty() || fuente.equals("null") || */asunto == null || asunto.isEmpty() || asunto.equals("null")) {
+		
+		if ((fuente == null || fuente.isEmpty() || fuente.equals("null")) && (asunto == null || asunto.isEmpty() || asunto.equals("null"))) {
 			json = "{\n"
 					+ "\"timeline\":\n"
 					+ "{\n"
