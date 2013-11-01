@@ -749,8 +749,7 @@
         <tokenizer class="solr.StandardTokenizerFactory"/>
 		<!--<tokenizer class="solr.KeywordTokenizerFactory"/> -->
         <filter class="solr.LowerCaseFilterFactory"/>
-		<filter class="solr.KeepWordFilterFactory" words="politicos.txt" ignoreCase="true"/>		
-		<filter class="solr.KeepWordFilterFactory" words="futbolistas.txt" ignoreCase="true"/>		
+		<filter class="solr.KeepWordFilterFactory" words="apellidos.txt" ignoreCase="true"/>				
         <filter class="solr.StopFilterFactory" ignoreCase="true" words="lang/stopwords_es.txt" format="snowball" enablePositionIncrements="true"/>		
       </analyzer>
     </fieldType>
