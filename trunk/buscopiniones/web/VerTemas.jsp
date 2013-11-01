@@ -126,7 +126,7 @@
 									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","")%>" /></a>
                             </div>  
                             <div class="item_description">
-								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","")%></span></a><br/>
+								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","").replaceAll("|.*","")%></span></a><br/>
 								<p><%= noti.getDescripcion()%></p>
 								<p><%= noti.getFecha()%></p>
 								<p>
