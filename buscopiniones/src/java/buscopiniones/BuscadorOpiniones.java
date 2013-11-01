@@ -355,20 +355,49 @@ public class BuscadorOpiniones {
 			json += "}";
 
 		} else {
-			json = "{\n"
-					+ "\"timeline\":\n"
-					+ "{\n"
-					+ "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n"
-					+ " \"type\":\"default\",\n"
-					+ " \"text\":\"Powered by Buscopiniones\",\n"
-					+ " \"startDate\":\"2013,10,26\",\n"
-					+ " \"date\": [ ";
 			Collection<Opinion> opiniones = this.getOpiniones(fuente, asunto, fechaIni, fechaFin, medioDePrensa, cantResultados);
+			if (opiniones.isEmpty()) {				
+				json = "{\n"
+						+ "\"timeline\":\n"
+						+ "{\n"
+						+ "\"headline\":\"No se han encontrado resultados\",\n"
+						+ " \"type\":\"default\",\n"
+						+ " \"text\":\"Powered by Buscopiniones\",\n"
+						+ " \"startDate\":\"2013,10,26\",\n"
+						+ " \"date\": [ ";
+				json += "{";
+				json += "\"startDate\":\"2013,10,26\",";
+				json += "\"headline\":\"\",";
+				json += "\"text\":\"\",";
+				json += "\"asset\":{\n"
+						+ "                    \"media\":\"img/large/4.jpg\",\n"
+						+ "                    \"credit\":\"\",\n"
+						+ "                    \"caption\":\"\"\n"
+						+ "                }";
+				json += "}";	
+			
+			} else {
+				json = "{\n"
+						+ "\"timeline\":\n"
+						+ "{\n";
+						if (asunto == null || asunto.isEmpty() || asunto.equals("null")) {
+				json += "\"headline\":\"Lo que dijo " + fuente + "\",\n";
+						} else if (fuente == null || fuente.isEmpty() || fuente.equals("null")) {
+				json += "\"headline\":\"Lo que se dijo sobre " + asunto + "\",\n";			
+						} else {
+				json += "\"headline\":\"Lo que dijo " + fuente + " sobre " + asunto + "\",\n";								
+						}
+				json += " \"type\":\"default\",\n"
+						+ " \"text\":\"Powered by Buscopiniones\",\n"
+						+ " \"startDate\":\"2013,10,26\",\n"
+						+ " \"date\": [ ";
 
-			for (Opinion op : opiniones) {
-				json += op.toJSON() + ",";
+
+				for (Opinion op : opiniones) {
+					json += op.toJSON() + ",";
+				}
+				json = json.substring(0, json.length() - 1);
 			}
-			json = json.substring(0, json.length() - 1);
 		}
 
 		json += " ]\n"
