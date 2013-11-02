@@ -246,14 +246,24 @@ public class BuscadorOpiniones {
 		String paramPf = paramQf;
 		String paramPs = "1";
 		paramPs = URLEncoder.encode(paramPs, "UTF-8");
-
+		
+		// Maximo deberia ser 100
 		String paramRows = "30";
 		boolean validoCantResult = ((cantResultados != null && !cantResultados.equals("") && !cantResultados.equals("null")) && isInteger(cantResultados) && (Integer.parseInt(cantResultados) > 0));
 		if (validoCantResult) {
+			if (Integer.parseInt(cantResultados) > 100){
+				cantResultados = "100";
+			}
 			paramRows = cantResultados;
 		}
 
-		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf + "&pf=" + paramPf + "&ps=" + paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
+		
+		/* Armamos la url para solr */
+		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente
+				+ "&wt=xml&start=" + paramStart + "&rows=" + paramRows 
+				+ "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" 
+				+ paramQf + "&pf=" + paramPf + "&ps=" + paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
+		
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
