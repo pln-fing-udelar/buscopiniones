@@ -241,6 +241,8 @@ public class BuscadorOpiniones {
 		if (asunto == null || asunto.isEmpty() || asunto.equals("null")){
 			paramQ = "*:*";
 		}
+		
+		// por que esta el campo text en el qf?
 		String paramQf = "text title h1 descripcion opinion^6";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
 		String paramPf = paramQf;
@@ -261,7 +263,7 @@ public class BuscadorOpiniones {
 		/* Armamos la url para solr */
 		String url = urlSolrSelect + "?q=" + paramQ + paramFecha + paramMedioDePrensa + paramFuente
 				+ "&wt=xml&start=" + paramStart + "&rows=" + paramRows 
-				+ "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" 
+				+ "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25+5<50%25&stopwords=true&lowercaseOperators=true&qf=" 
 				+ paramQf + "&pf=" + paramPf + "&ps=" + paramPs; //+ "&group=true&group.field=opinion_sin_stemm"
 		
 		System.out.println(url);
