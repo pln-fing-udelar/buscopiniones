@@ -124,7 +124,7 @@
 									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "")%>" /></a>
                             </div>  
                             <div class="item_description">
-								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "").replaceAll("|.*", "")%></span></a><br/>
+								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "").replaceAll("\\|.*", "")%></span></a><br/>
 								<p><%= noti.getDescripcion()%></p>
 								<p><%= noti.getFecha()%></p>
 								<p>
@@ -138,7 +138,7 @@
 												break;
 											}
 									%>
-									<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getAttribute("desde")%>&hasta=<%= request.getAttribute("hasta")%>"><b><%= fuente%></b></a><br/>
+									<a href="Home?fuente=<%= fuente%>&asunto=<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "").replaceAll("\\|.*", "")%>&desde=<%= request.getAttribute("desde")%>&hasta=<%= request.getAttribute("hasta")%>"><b><%= fuente%></b></a><br/>
 											<%
 												}
 											%>

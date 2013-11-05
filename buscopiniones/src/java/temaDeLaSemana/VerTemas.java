@@ -72,10 +72,14 @@ public class VerTemas extends HttpServlet {
 				request.setAttribute("hasta", hasta);
 			}
 			if (request.getParameter("procesarAnio") != null && !request.getParameter("procesarAnio").equals("")) {
+				int limiteSemana = 52; // un anio tiene 52 semanas
+				if (request.getParameter("limiteSemana") != null && !request.getParameter("limiteSemana").equals("")) {
+					limiteSemana = Integer.parseInt(request.getParameter("limiteSemana"));
+				}
 				ProcesadorTemas procTemas = new ProcesadorTemas();
 				String format = "dd/MM/yyyy";
 				SimpleDateFormat df = new SimpleDateFormat(format);
-				for (int i = 1; i <= 52; i++) { // un anio tiene 52 semanas
+				for (int i = 1; i <= limiteSemana; i++) { 
 					Calendar cal = Calendar.getInstance();
 					cal.set(Calendar.YEAR, Integer.parseInt(request.getParameter("procesarAnio")));
 					cal.set(Calendar.WEEK_OF_YEAR, i);

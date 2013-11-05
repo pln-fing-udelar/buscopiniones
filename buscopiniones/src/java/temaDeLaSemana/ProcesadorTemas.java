@@ -359,7 +359,7 @@ public class ProcesadorTemas {
 				}
 			}
 			BuscadorOpiniones buscOp = new BuscadorOpiniones();
-			Collection<String> fuentesRel = buscOp.getFuentesRelacionadas("", asunto, fechaInicial, fechaFinal);
+			Collection<String> fuentesRel = buscOp.getFuentesRelacionadas("", noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "").replaceAll("\\|.*", ""), fechaInicial, fechaFinal);
 			noti.setFuentesRel(fuentesRel);
 
 			noticias.add(noti);
