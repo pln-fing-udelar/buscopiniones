@@ -15,9 +15,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
 import java.nio.charset.Charset;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collection;
 import java.util.Comparator;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -78,7 +82,7 @@ public class ProcesadorTemas {
 		String paramQ = "*:*";
 		paramQ = URLEncoder.encode(paramQ, "UTF-8");
 		String paramRows = "1000";
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows +"&group=true&group.field=articulo";
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&group=true&group.field=articulo";
 
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();
@@ -90,7 +94,7 @@ public class ProcesadorTemas {
 
 		Node nodoResult = doc.getDocumentElement().getElementsByTagName("result").item(0);
 		Element elementoResult = (Element) nodoResult;
-		
+
 		XPathFactory xPathfactory = XPathFactory.newInstance();
 		XPath xpath = xPathfactory.newXPath();
 		XPathExpression exprDoc = xpath.compile("//doc");
@@ -277,7 +281,7 @@ public class ProcesadorTemas {
 		return fecha;
 	}
 
-	public Collection<Noticia> getNoticiaDeLaSemana(String fechaInicial, String fechaFinal) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException {
+	public Collection<Noticia> getNoticiaDeLaSemana(String fechaInicial, String fechaFinal) throws UnsupportedEncodingException, ParserConfigurationException, SAXException, IOException, XPathExpressionException, ParseException {
 		String fechaIni = transformarAFechaSolr(fechaInicial);
 		String fechaFin = transformarAFechaSolr(fechaFinal);
 		Collection<Map<String, Double>> temasCluster = getTemasDeLaSemana(fechaIni, fechaFin);
@@ -366,7 +370,18 @@ public class ProcesadorTemas {
 		if (!dir.exists()) {
 			dir.mkdirs();
 		}
-		String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\salida.bin";
+		String input = fechaFinal;
+		String format = "dd/MM/yyyy";
+
+		SimpleDateFormat df = new SimpleDateFormat(format);
+		Date date = df.parse(input);
+
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		int week = cal.get(Calendar.WEEK_OF_YEAR);
+		int anio = cal.get(Calendar.YEAR);
+
+		String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin";
 		FileOutputStream fileOut = new FileOutputStream(filePath);
 		ObjectOutputStream out = new ObjectOutputStream(fileOut);
 		out.writeObject(noticias);
