@@ -136,7 +136,7 @@ public class BuscadorOpiniones {
 		String paramQf = "text title h1 descripcion opinion^10";
 		paramQf = URLEncoder.encode(paramQf, "UTF-8");
 
-		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<-75%25+5<-50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf;
+		String url = urlSolrSelect + "?q=" + paramQ + "&fq=" + paramFecha + "&wt=xml&start=" + paramStart + "&rows=" + paramRows + "&facet=true&facet.field=" + paramFacetField + "&facet.limit=" + paramFacetLimit + "&group=true&group.field=opinion_sin_stemm&defType=edismax&mm=2<75%25+5<50%25&stopwords=true&lowercaseOperators=true&qf=" + paramQf;
 		System.out.println(url);
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 		DocumentBuilder dBuilder = dbFactory.newDocumentBuilder();

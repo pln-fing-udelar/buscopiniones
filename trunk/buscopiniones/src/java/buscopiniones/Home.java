@@ -45,7 +45,7 @@ public class Home extends HttpServlet {
 			String medioDePrensa = request.getParameter("medioDePrensa");
 			String cantResultados = request.getParameter("cantResultados");
 			BuscadorOpiniones buscador = new BuscadorOpiniones();
-			Collection<String> fuentes = buscador.getFuentesRelacionadas(fuente, asunto, null, null);
+			Collection<String> fuentes = buscador.getFuentesRelacionadas(fuente, asunto, fechaIni, fechaFin);
 			StringBuilder spellCheckFuente = new StringBuilder();
 			StringBuilder spellCheckAsunto = new StringBuilder();
 			buscador.getSpellCheckFuenteAsunto(fuente, asunto, spellCheckFuente, spellCheckAsunto);
