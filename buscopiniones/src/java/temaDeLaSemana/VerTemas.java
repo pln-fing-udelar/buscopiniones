@@ -9,7 +9,10 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.PrintWriter;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -36,18 +39,61 @@ public class VerTemas extends HttpServlet {
 		response.setContentType("text/html;charset=UTF-8");
 		PrintWriter out = response.getWriter();
 		try {
-			if (request.getParameter("desde") != null && !request.getParameter("desde").equals("")
-					&& request.getParameter("hasta") != null && !request.getParameter("hasta").equals("")) {
-				ProcesadorTemas procTemas = new ProcesadorTemas();
-				Collection<Noticia> noticias = procTemas.getNoticiaDeLaSemana(request.getParameter("desde"), request.getParameter("hasta"));
-//				FileInputStream fileIn = new FileInputStream("C:\\Fing\\ProyGrado\\tmpTemas\\salida.bin");
-//				ObjectInputStream in = new ObjectInputStream(fileIn);
-//				noticias = (Collection<Noticia>) in.readObject();
-//				in.close();
-//				fileIn.close();
+			if (request.getParameter("semana") != null && !request.getParameter("semana").equals("")) {
+				String input = request.getParameter("semana");
+				String format = "dd/MM/yyyy";
 
+				SimpleDateFormat df = new SimpleDateFormat(format);
+				Date date = df.parse(input);
+
+				Calendar cal = Calendar.getInstance();
+				cal.setTime(date);
+				int week = cal.get(Calendar.WEEK_OF_YEAR);
+				int anio = cal.get(Calendar.YEAR);
+
+				String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin";
+				FileInputStream fileIn = new FileInputStream(filePath);
+				ObjectInputStream in = new ObjectInputStream(fileIn);
+				Collection<Noticia> noticias = (Collection<Noticia>) in.readObject();
+				in.close();
+				fileIn.close();
 				request.setAttribute("Noticias", noticias);
+				
+				Calendar caldesde = Calendar.getInstance();
+				caldesde.setTime(date);
+				caldesde.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+				String desde = df.format(caldesde.getTime());
+				request.setAttribute("desde", desde);
+				
+				Calendar calhasta = Calendar.getInstance();
+				calhasta.setTime(date);
+				calhasta.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+				String hasta = df.format(calhasta.getTime());
+				request.setAttribute("hasta", hasta);
 			}
+			if (request.getParameter("procesarAnio") != null && !request.getParameter("procesarAnio").equals("")) {
+				ProcesadorTemas procTemas = new ProcesadorTemas();
+				String format = "dd/MM/yyyy";
+				SimpleDateFormat df = new SimpleDateFormat(format);
+				for (int i = 1; i <= 52; i++) { // un anio tiene 52 semanas
+					Calendar cal = Calendar.getInstance();
+					cal.set(Calendar.YEAR, Integer.parseInt(request.getParameter("procesarAnio")));
+					cal.set(Calendar.WEEK_OF_YEAR, i);
+					cal.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
+					String desde = df.format(cal.getTime());
+
+					cal = Calendar.getInstance();
+					cal.set(Calendar.YEAR, Integer.parseInt(request.getParameter("procesarAnio")));
+					cal.set(Calendar.WEEK_OF_YEAR, i);
+					cal.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
+					String hasta = df.format(cal.getTime());
+					
+					System.out.println("procesarAniodesde:"+desde);
+					System.out.println("procesarAniohasta:"+hasta);
+					Collection<Noticia> noticias = procTemas.getNoticiaDeLaSemana(desde, hasta);
+				}
+			}
+			
 			request.getRequestDispatcher("/VerTemas.jsp").forward(request, response);
 		} catch (Exception e) {
 			System.out.println(e);

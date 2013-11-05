@@ -41,12 +41,11 @@
 		<script src="js/jquery.ui.datepicker-es.js"></script>
 		<link rel="stylesheet" media="all" href="js/jquery-ui.css"/>
 		<script>
-			$( document ).ready(function() {
-				$("#desde").datepicker();
-				$("#hasta").datepicker();				
-			});
+			$(document).ready(function() {
+				$("#semana").datepicker({showWeek: true, weekHeader: "Sm"});				
+			});			
 		</script>		
-		
+
 	</head>
 
 	<body>
@@ -79,10 +78,9 @@
 		<div style="background:rgb(240, 240, 240); box-shadow:3px 3px 3px #cecece;">
 			<div class="container">				
 				<form method="GET" class="form-inline" style="margin:14px 0 14px 0;">
-					<label>El tema desde: </label>
-					<input type="text" <% if (request.getParameter("desde") != null) {%>value="<%= request.getParameter("desde")%>" <% }%> name="desde" id="desde" title="Ingrese la fecha inicial" style="margin-right:10px;" />
-					<label>hasta: </label>
-					<input type="text" <% if (request.getParameter("hasta") != null) {%>value="<%= request.getParameter("hasta")%>" <% }%> name="hasta" id="hasta" title="Ingrese la fecha final" style="margin-right:10px" />
+					<label>El tema de la semana del día: </label>
+					<input type="text" <% if (request.getParameter("semana") != null) {%>value="<%= request.getParameter("semana")%>" <% }%> name="semana" id="semana" title="Ingrese la fecha de la semana" style="margin-right:10px;" />
+					
 					<input type="submit" name="buscar" value="Buscar" class="btn btn-medium btn-primary btn-rounded" style="padding:8px 20px;" />
 				</form>
 			</div>
@@ -113,9 +111,9 @@
 									BASE64Encoder encoder = new BASE64Encoder();
 									String base64 = encoder.encode(noti.getUrl().getBytes()).replaceAll("\r\n", "").replaceAll("\n", "");
 									String imagen = "ImagenNoticia/" + base64 + ".jpg";
-									if(j > 3){
+									if (j > 3) {
 										category = "category02";
-									}else if(j > 7){
+									} else if (j > 7) {
 										category = "category03";
 									}
 									j++;
@@ -123,10 +121,10 @@
                         <div class="span3 element <%= category%>" data-category=" <%= category%>">
                             <div class="hover_img">
 								<a href="<%= noti.getUrl()%>" data-rel="prettyPhoto[portfolio1]">	
-									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","")%>" /></a>
+									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "")%>" /></a>
                             </div>  
                             <div class="item_description">
-								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay","").replaceAll("|.*","")%></span></a><br/>
+								<a href="<%= noti.getUrl()%>"><span><%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "").replaceAll("|.*", "")%></span></a><br/>
 								<p><%= noti.getDescripcion()%></p>
 								<p><%= noti.getFecha()%></p>
 								<p>
@@ -140,10 +138,10 @@
 												break;
 											}
 									%>
-									<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getParameter("desde")%>&hasta=<%= request.getParameter("hasta")%>"><b><%= fuente%></b></a><br/>
-									<%
-										}
-									%>
+									<a href="Home?fuente=<%= fuente%>&asunto=<%= URLEncoder.encode(noti.getTitle())%>&desde=<%= request.getAttribute("desde")%>&hasta=<%= request.getAttribute("hasta")%>"><b><%= fuente%></b></a><br/>
+											<%
+												}
+											%>
 								</p>
                             </div>                                    
                         </div>
@@ -155,8 +153,8 @@
 				</div>
 
 				<div class="pad45"></div>
-				
-				
+
+
 			</div>
 			<!--//page-->
 
@@ -205,17 +203,17 @@
 
 
 
-		
+
 		<script src="js/jquery.isotope.min.js" type="text/javascript"></script>
 		<script type="text/javascript" src="js/sorting.html"></script>
 		<script type="text/javascript">
-								//<![CDATA[
-								$(window).load(function() {
-									
-									$('.projects').isotope({
-									});
-								});
-								//]]>
+			//<![CDATA[
+			$(window).load(function() {
+
+				$('.projects').isotope({
+				});
+			});
+			//]]>
 		</script>		
 		<script type="text/javascript">
 			//<![CDATA[
