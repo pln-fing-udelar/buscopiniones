@@ -32,13 +32,13 @@ public class Noticia {
 		String xml = "";
 		xml += "<field name=\"url\">" + ProcesadorHTML.html2text(url) + "</field>\r\n";
 		xml += "<field name=\"articulo\">" + ProcesadorHTML.html2text(articulo) + "</field>\r\n";
-		xml += "<field name=\"title\">" + title + "</field>\r\n";
-		xml += "<field name=\"metatitle\">" + metatitle + "</field>\r\n";
-		xml += "<field name=\"h1\">" + h1 + "</field>\r\n";
+		xml += "<field name=\"title\">" + ProcesadorHTML.html2text(title) + "</field>\r\n";
+		xml += "<field name=\"metatitle\">" + ProcesadorHTML.html2text(metatitle) + "</field>\r\n";
+		xml += "<field name=\"h1\">" + ProcesadorHTML.html2text(h1) + "</field>\r\n";
 		xml += "<field name=\"fecha\">" + fecha + "</field>\r\n";
-		xml += "<field name=\"categorias\">" + categorias + "</field>\r\n";
+		xml += "<field name=\"categorias\">" + ProcesadorHTML.html2text(categorias) + "</field>\r\n";
 		xml += "<field name=\"descripcion\">" + ProcesadorHTML.html2text(getDescripcion()) + "</field>\r\n";
-		xml += "<field name=\"autor\">" + getAutor() + "</field>\r\n";
+		xml += "<field name=\"autor\">" + ProcesadorHTML.html2text(getAutor()) + "</field>\r\n";
 		return xml;
 	}
 
