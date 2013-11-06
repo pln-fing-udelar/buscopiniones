@@ -113,8 +113,9 @@ public class ImagenNoticia extends HttpServlet {
 			}
 		} catch (Exception e) {
 			//System.out.println(e);
-			//System.out.println(e.getCause());
-			BufferedImage img = ImageIO.read(new File("C:\\Fing\\ProyGrado\\buscopiniones\\buscopiniones\\web\\img\\default.jpg"));
+			//System.out.println(e.getCause());			
+			URL location = getClass().getResource("default.jpg");			
+			BufferedImage img = ImageIO.read(new File(location.getPath()));
 			ImageIO.write(img, "jpg", out);
 		}
 	}
