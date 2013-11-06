@@ -118,7 +118,7 @@
 									}
 									j++;
 						%>
-                        <div class="span3 element <%= category%>" data-category=" <%= category%>">
+                        <div class="span3 element" >
                             <div class="hover_img">
 								<a href="<%= noti.getUrl()%>" data-rel="prettyPhoto[portfolio1]">	
 									<img src="<%= imagen%>" alt="<%= noti.getTitle().replace("- Diario EL PAIS - Montevideo - Uruguay", "")%>" /></a>
