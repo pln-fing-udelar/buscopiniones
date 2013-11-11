@@ -147,6 +147,14 @@
                         </div>
 						<%
 								}
+							}else{								
+							
+						%>
+							<div>
+							<h1>Realice una búsqueda para ver los temas de una semana.</h1>
+							</div>
+						<%
+							
 							}
 						%>
 					</div>
