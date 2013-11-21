@@ -38,7 +38,7 @@ public class Clustering {
 	void crearModelo() {
 		try {
 			em = new EM();
-			em.setOptions(weka.core.Utils.splitOptions("weka.clusterers.EM -I 100 -N 10 -M 1.0E-6 -S 100"));
+			em.setOptions(weka.core.Utils.splitOptions("weka.clusterers.EM -I 100 -N 15 -M 1.0E-6 -S 100"));
 			System.out.println("Clustering: empiezo a crear modelo");
 			em.buildClusterer(train);
 		} catch (Exception e) {

@@ -229,6 +229,9 @@ public class ProcesadorTemas {
 		System.out.println(noticiasClusterizadas);
 		ArrayList<Map<String, Double>> temasClusterizados = new ArrayList();
 		for (Collection<NoticiaCluster> col : noticiasClusterizadas.values()) {
+			if(col.size() < 5){ // si el cluster tiene menos de 5 noticias, lo saco
+				continue;
+			}
 			Map<String, Double> temasCluster = new HashMap();
 			for (NoticiaCluster noti : col) {
 				for (Map.Entry<String, Double> entry : noti.getVectNoticia().entrySet()) {

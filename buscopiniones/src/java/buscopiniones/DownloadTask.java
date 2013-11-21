@@ -20,8 +20,8 @@ public class DownloadTask implements Runnable {
 	private HttpSession session;
 	private static BufferedImage mejorImagen = null;
 	private static int max = 0;
-	private static int maxHeight = 200;
-	private static int maxWidth = 200;
+	private static int maxHeight = 400;
+	private static int maxWidth = 400;
 	private static double maxProporcion = 2.0;
 	private static double minProporcion = 0.3;
 
@@ -35,7 +35,7 @@ public class DownloadTask implements Runnable {
 		return mejorImagen;
 	}
 
-	public static synchronized void probarMejorImagen(BufferedImage img, String idImg, HttpSession session) {
+	public static synchronized void probarMejorImagen(BufferedImage img, String idImg, HttpSession session, String imagenCandidata) {
 		if (img != null) {
 			int height = img.getHeight();
 			int width = img.getWidth();
@@ -45,6 +45,7 @@ public class DownloadTask implements Runnable {
 //			System.out.println("proporcion: " + proporcion);
 			if (((Integer)session.getAttribute(idImg+ "max")) <= (height * width) && (height * width) >= (maxHeight * maxWidth) && proporcion < maxProporcion && proporcion > minProporcion) {
 				session.setAttribute(idImg + "img", img);
+				session.setAttribute(idImg + "url", imagenCandidata);
 				session.setAttribute(idImg + "max", (height * width));
 				mejorImagen = img;
 				max = height * width;
@@ -55,8 +56,8 @@ public class DownloadTask implements Runnable {
 	@Override
 	public void run() {
 		try {
-			BufferedImage img = ImageIO.read(new URL(imagenCandidata));
-			probarMejorImagen(img, idImg, session);
+			BufferedImage img = ImageIO.read(new URL(imagenCandidata));			
+			probarMejorImagen(img, idImg, session, imagenCandidata);
 		} catch (Exception e) {
 			System.out.println(e);
 			System.out.println(e.getCause());
