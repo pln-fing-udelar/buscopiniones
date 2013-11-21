@@ -51,7 +51,7 @@ public class VerTemas extends HttpServlet {
 				int week = cal.get(Calendar.WEEK_OF_YEAR);
 				int anio = cal.get(Calendar.YEAR);
 
-				String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin";
+				String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin"; // /usr/share/tomcat6/tmpTemas/
 				FileInputStream fileIn = new FileInputStream(filePath);
 				ObjectInputStream in = new ObjectInputStream(fileIn);
 				Collection<Noticia> noticias = (Collection<Noticia>) in.readObject();

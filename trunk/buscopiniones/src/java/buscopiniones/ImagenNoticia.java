@@ -6,13 +6,18 @@ package buscopiniones;
 
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.io.Reader;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
@@ -44,7 +49,7 @@ public class ImagenNoticia extends HttpServlet {
 	 * @throws ServletException if a servlet-specific error occurs
 	 * @throws IOException if an I/O error occurs
 	 */
-	public BufferedImage obtenerImagenDeURL(String urlString, HttpSession session) throws MalformedURLException, IOException, Exception {
+	public static BufferedImage obtenerImagenDeURL(String urlString, HttpSession session) throws MalformedURLException, IOException, Exception {
 		//System.out.println("toy aca 1");
 		BufferedImage imagenRet = null;
 		URL url = new URL(urlString);
@@ -74,6 +79,9 @@ public class ImagenNoticia extends HttpServlet {
 		ExecutorService pool = Executors.newFixedThreadPool(20);
 		while (m.find()) {
 			String imagenCandidata = m.group(2);
+//			if(imagenCandidata.matches(".*(menu_top_article_video|tv_show).*")){
+//				continue;
+//			}
 			if (imagenCandidata != null && !imagenCandidata.matches("http://.*")) {
 				imagenCandidata = urlString.replaceFirst("(http://.*?)/.*", "$1") + imagenCandidata;
 			}
@@ -87,6 +95,7 @@ public class ImagenNoticia extends HttpServlet {
 		//System.out.println("toy aca 4");
 //		imagenRet = DownloadTask.getMejorImagen();
 		imagenRet = (BufferedImage) session.getAttribute(idImg + "img");
+		System.out.println(session.getAttribute(idImg + "url"));
 		if (imagenRet == null) {
 			throw new Exception("No encontre ninguna imagen");
 		}
@@ -107,14 +116,23 @@ public class ImagenNoticia extends HttpServlet {
 			byte[] decodedBytes = decoder.decodeBuffer(pathParts[1].replaceAll("\\.jpg$", ""));
 			String url = new String(decodedBytes);
 			BufferedImage img = null;
-			img = obtenerImagenDeURL(url, session);
+
+			String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + pathParts[1]; // /usr/share/tomcat6/tmpTemas/
+			File archivo = new File(filePath);
+			if (archivo.isFile()) {				
+				img = ImageIO.read(archivo);				
+			} else {
+				img = obtenerImagenDeURL(url, session);
+				ImageIO.write(img, "jpg", archivo);				
+			}
+
 			if (img != null) {
 				ImageIO.write(img, "jpg", out);
 			}
 		} catch (Exception e) {
-			//System.out.println(e);
-			//System.out.println(e.getCause());			
-			URL location = getClass().getResource("default.jpg");			
+//			System.out.println(e);
+//			System.out.println(e.getCause());			
+			URL location = getClass().getResource("default.jpg");
 			BufferedImage img = ImageIO.read(new File(location.getPath()));
 			ImageIO.write(img, "jpg", out);
 		}
