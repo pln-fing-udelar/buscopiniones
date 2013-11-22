@@ -8,17 +8,14 @@ package scraper;
  *
  * @author Bongo
  */
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
 public class LectorCSV {
 
 	public static Map<String,Boolean> run(String medioPrensa, Configuracion config) throws FileNotFoundException, IOException {
-		String csvFile = config.getDirTrabajo() + "csv\\resultados"+ medioPrensa +".csv";
+		String csvFile = config.getDirTrabajo() + "csv" + File.separator + "resultados"+ medioPrensa +".csv";
 		String coma = ",";
 		Map<String,Boolean> retorno = new HashMap();
 		BufferedReader br = new BufferedReader(new FileReader(csvFile));

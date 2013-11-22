@@ -40,7 +40,13 @@ public class TaggerOpiniones {
 	}
 
 	public void taggearFreeling(String articulo, final String archOutput) throws IOException {
-		ProcessBuilder builder = new ProcessBuilder(archFreeling + "analyzer.exe", "-f" + archFreeling + "analyzer.cfg");
+		String freelingBin;
+		if (System.getProperty("os.name").startsWith("Win")) {
+			freelingBin = "analyzer.exe";
+		} else {
+			freelingBin = "analize";
+		}
+		ProcessBuilder builder = new ProcessBuilder(archFreeling + freelingBin, "-f" + archFreeling + "analyzer.cfg");
 		builder.redirectErrorStream(true);
 		Process process = builder.start();
 		OutputStream stdin = process.getOutputStream();
@@ -102,9 +108,14 @@ public class TaggerOpiniones {
 //		System.out.println(
 //				"inicio "
 //				+ (q2.query() ? "succeeded" : "failed"));
-		
-		System.out.println(archProlog + "swipl.exe" + " controlEs.pl");
-		ProcessBuilder builder = new ProcessBuilder(archProlog + "swipl.exe", "controlEs.pl");
+		String prologBin;
+		if (System.getProperty("os.name").startsWith("Win")) {
+			prologBin = "swipl.exe";
+		} else {
+			prologBin = "swipl";
+		}
+		System.out.println(archProlog + prologBin + " controlEs.pl");
+		ProcessBuilder builder = new ProcessBuilder(archProlog + prologBin, "controlEs.pl");
 		builder.directory(new File(archOpiniones));
 		builder.redirectErrorStream(true);
 		Process process = builder.start();

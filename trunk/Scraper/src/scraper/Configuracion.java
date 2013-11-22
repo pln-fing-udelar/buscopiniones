@@ -18,7 +18,7 @@ import org.xml.sax.SAXException;
  */
 public class Configuracion {
 
-	private static String archConfig = "src\\scraper\\config.xml";
+	private static String archConfig = "src" + File.separator + "scraper" + File.separator + "config.xml";
 	private String dirOpiniones;
 	private String dirFreeling;
 	private String dirCorreferencias;
@@ -26,8 +26,11 @@ public class Configuracion {
 	private String dirProlog;
 	private String dirTrabajo;
 
-	public Configuracion() throws ParserConfigurationException, SAXException, IOException {
+	public Configuracion(boolean isWin) throws ParserConfigurationException, SAXException, IOException {
 		System.out.println("toy aca 1");
+		if (!isWin) {
+			archConfig = "src" + File.separator + "scraper" + File.separator + "configLinux.xml";
+		}
 		File fXmlFile = new File(archConfig);
 		System.out.println("toy aca 2");
 		DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();

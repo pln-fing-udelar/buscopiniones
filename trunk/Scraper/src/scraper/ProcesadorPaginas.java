@@ -5,11 +5,7 @@
 package scraper;
 
 import de.l3s.boilerpipe.BoilerpipeProcessingException;
-import java.io.BufferedWriter;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.OutputStreamWriter;
-import java.io.Writer;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import javax.xml.parsers.ParserConfigurationException;
@@ -31,7 +27,7 @@ public class ProcesadorPaginas {
 	public ProcesadorPaginas(Configuracion config, String medioDePrensa) {
 		this.config = config;
 		this.medioDePrensa = medioDePrensa;
-		clasificador = new Clasificador(config.getDirTrabajo() + "csv\\ejemplos" + medioDePrensa + ".csv");
+		clasificador = new Clasificador(config.getDirTrabajo() + "csv" + File.separator + "ejemplos" + medioDePrensa + ".csv");
 		clasificador.crearModelo();
 		this.coleccionNoticias = new ArrayList<Noticia>();
 	}
