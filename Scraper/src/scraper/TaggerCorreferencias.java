@@ -57,8 +57,15 @@ public class TaggerCorreferencias {
 		//		String realResult = (String) result.__tojava__(String.class);
 
 		this.arreglarXML();
-		System.out.println(config.getDirPython() + "python.exe" + " correferencias.py");
-		ProcessBuilder builder = new ProcessBuilder(config.getDirPython() + "python.exe", "correferencias.py");
+		
+		String pythonBin;
+		if (System.getProperty("os.name").startsWith("Win")) {
+			pythonBin = "python.exe";
+		} else {
+			pythonBin = "python";
+		}
+		System.out.println(config.getDirPython() + pythonBin + " correferencias.py");
+		ProcessBuilder builder = new ProcessBuilder(config.getDirPython() + pythonBin, "correferencias.py");
 		builder.directory(new File(config.getDirCorreferencias()));
 		builder.redirectErrorStream(true);
 		Process process = builder.start();

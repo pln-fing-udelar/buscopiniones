@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this template, choose Tools | Templates
+and open the template in the editor.
+-->
+
+
+<Configuracion>
+	<dirOpiniones>~/opiniones/</dirOpiniones>
+	<dirFreeling>/usr/local/bin/</dirFreeling>
+	<dirCorreferencias>~/Correferencias/Proyecto_v6.2/</dirCorreferencias>
+	<dirPython>/usr/bin/</dirPython>
+	<dirProlog>/usr/bin</dirProlog>
+	<dirTrabajo>~/</dirTrabajo>
+</Configuracion>

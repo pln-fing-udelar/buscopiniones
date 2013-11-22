@@ -15,7 +15,7 @@ public class Main {
 	static public void generarCVSEntrenamiento(String medioPrensa, Configuracion config) throws IOException {
 		Map<String, Boolean> tablaUrls = LectorCSV.run(medioPrensa, config);
 		List<Ejemplo> ejemplos = new LinkedList();
-		File folder = new File(config.getDirTrabajo() + "entrenar\\" + medioPrensa + "\\");
+		File folder = new File(config.getDirTrabajo() + "entrenar" + File.separator + medioPrensa + File.separator);
 		File[] listOfFiles = folder.listFiles();
 		for (File file : listOfFiles) {
 			if (file.isFile()) {
@@ -39,7 +39,7 @@ public class Main {
 				ejemplos.add(ej);
 			}
 		}
-		Ejemplo.guardarCSV(config.getDirTrabajo() + "csv\\ejemplos" + medioPrensa + ".csv", ejemplos);
+		Ejemplo.guardarCSV(config.getDirTrabajo() + "csv" + File.separator + "ejemplos" + medioPrensa + ".csv", ejemplos);
 	}
 
 	static public String readFile(String file, String encoding) throws IOException {
@@ -75,8 +75,11 @@ public class Main {
 	 */
 	public static void main(String[] args) {
 		try {
+			String sistemaOperativo = System.getProperty("os.name");
+			boolean isWin = sistemaOperativo.startsWith("Win");
 
-			Configuracion config = new Configuracion();
+	
+			Configuracion config = new Configuracion(isWin);
 			final int maxIterFreeling = 25;
 
 			// Creo una lista de ejemplos vacia, para entrenar
@@ -92,9 +95,9 @@ public class Main {
 				Main.generarCVSEntrenamiento("elobservador", config);
 				System.out.println("csv la republica");
 				Main.generarCVSEntrenamiento("larepublica", config);
-				Clasificador clasifelpais = new Clasificador(config.getDirTrabajo() + "csv\\ejemploselpais.csv");
-				Clasificador clasifelobservador = new Clasificador(config.getDirTrabajo() + "csv\\ejemploselobservador.csv");
-				Clasificador clasiflarepublica = new Clasificador(config.getDirTrabajo() + "csv\\ejemploslarepublica.csv");
+				Clasificador clasifelpais = new Clasificador(config.getDirTrabajo() + "csv" + File.separator + "ejemploselpais.csv");
+				Clasificador clasifelobservador = new Clasificador(config.getDirTrabajo() + "csv" + File.separator + "ejemploselobservador.csv");
+				Clasificador clasiflarepublica = new Clasificador(config.getDirTrabajo() + "csv" + File.separator + "ejemploslarepublica.csv");
 				System.out.println("entrenando el pais");
 				clasifelpais.crearModelo();
 				System.out.println("entrenando el observador");
@@ -158,8 +161,8 @@ public class Main {
 				File[] listOfFolders = medioPrensa.listFiles();
 				Arrays.sort(listOfFolders);
 				String medioActual = medioPrensa.getName();
-				String nomArchivo = config.getDirTrabajo() + "htmlprocesado\\" + medioActual + timeStamp + ".xml";
-				String nomArchivoNoti = config.getDirTrabajo() + "htmlprocesado\\" + medioActual + timeStamp + "Noticias.xml";
+				String nomArchivo = config.getDirTrabajo() + "htmlprocesado" + File.separator + medioActual + timeStamp + ".xml";
+				String nomArchivoNoti = config.getDirTrabajo() + "htmlprocesado" + File.separator + medioActual + timeStamp + "Noticias.xml";
 				Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivo), "UTF-8"));
 				Writer bwNoticias = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(nomArchivoNoti), "UTF-8"));
 				bw.append("<add>");
