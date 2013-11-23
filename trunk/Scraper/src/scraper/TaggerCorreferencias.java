@@ -97,7 +97,7 @@ public class TaggerCorreferencias {
 	}
 
 	private void arreglarXML() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
-		String opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "Windows-1252");
+		String opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "utf8");
 		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirCorreferencias() + "entradaOld.xml"), "iso-8859-1"));
 		bw.write(opinionesXML);
 		bw.close();

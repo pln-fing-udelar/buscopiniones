@@ -56,7 +56,7 @@ public class ProcesadorPaginas {
 		}
 		String xml = "";
 		System.out.println("Empiezo a procesar taggeo");
-		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirFreeling() + "entradaFreeling.txt"), "utf8"));
+		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "entradaFreeling.txt"), "utf8"));
 		for (Noticia noti : coleccionNoticias) {
 			bw.write(noti.getArticulo());
 			bw.write("\r\n");
@@ -65,14 +65,14 @@ public class ProcesadorPaginas {
 		}
 		bw.close();
 		
-		TaggerOpiniones tagger = new TaggerOpiniones(config.getDirOpiniones(), config.getDirFreeling(), config.getDirProlog());
+		TaggerOpiniones tagger = new TaggerOpiniones(config.getDirOpiniones(), config.getDirFreeling(), config.getDirProlog(), config.getDirTrabajo());
 		System.out.println("Empiezo a taggear con freeling");
-		tagger.taggearFreelingDesdeArchivo(config.getDirFreeling() + "entradaFreeling.txt", config.getDirFreeling() + "salidaFreeling.txt");
+		tagger.taggearFreelingDesdeArchivo(config.getDirTrabajo() + "entradaFreeling.txt", config.getDirTrabajo() + "salidaFreeling.txt");
 		
 		String[] arrFreeling = null;
 		int contador = 0;
 		while (arrFreeling == null || ((arrFreeling.length - 1) != coleccionNoticias.size() && contador < 10)) {
-			String salidaFreeling = Main.readFile(config.getDirFreeling() + "salidaFreeling.txt", "utf8");
+			String salidaFreeling = Main.readFile(config.getDirTrabajo() + "salidaFreeling.txt", "utf8");
 			arrFreeling = salidaFreeling.split("(?m)-------------------------------------------------------------- -------------------------------------------------------------- Fz 1");
 			contador++;
 		}
@@ -81,7 +81,7 @@ public class ProcesadorPaginas {
 			int i = 0;
 			for (Noticia noti : coleccionNoticias) {
 				//i = salidaFreeling.indexOf("--------------------------------------------------------------", i+1);
-				bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirOpiniones() + "entrada"), "Windows-1252"));
+				bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirOpiniones() + "entrada"), "utf8"));
 
 				bw.write(arrFreeling[i++]);
 				bw.flush();

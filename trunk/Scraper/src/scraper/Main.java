@@ -121,15 +121,19 @@ public class Main {
 			 * *******************************************************************
 			 */
 //			File status = new File("log.txt");
+			System.out.println("hola che1");
 			File folder = new File(config.getDirTrabajo() + "pruebas");
+			System.out.println("hola che2");
 			File[] listOfMediosPrensa = folder.listFiles();
+			System.out.println("hola che3");
 			Arrays.sort(listOfMediosPrensa);
+			System.out.println("hola che4");
 			File empiezoEnA = new File(config.getDirTrabajo() + "log.txt");
 			String empiezoEn = "";
 			if (empiezoEnA.exists()) {
 				empiezoEn = readFile(empiezoEnA, "UTF-8");
 			}
-			int totMediosPrensa = listOfMediosPrensa.length;
+			int totMediosPrensa = listOfMediosPrensa.length;	
 			System.out.println(empiezoEn);
 			String[] informacionParaParar = empiezoEn.split(System.getProperty("line.separator"));
 			File archivoParar;

@@ -26,11 +26,13 @@ public class TaggerOpiniones {
 	private String archOpiniones;
 	private String archFreeling;
 	private String archProlog;
+	private String dirTrabajo;
 
-	public TaggerOpiniones(String archOpiniones, String archFreeling, String archProlog) {
+	public TaggerOpiniones(String archOpiniones, String archFreeling, String archProlog, String dirTrabajo) {
 		this.archOpiniones = archOpiniones;
 		this.archFreeling = archFreeling;
 		this.archProlog = archProlog;
+		this.dirTrabajo = dirTrabajo;
 	}
 
 	public void taggearFreelingDesdeArchivo(String archInput, String archOutput) throws IOException {
@@ -41,12 +43,14 @@ public class TaggerOpiniones {
 
 	public void taggearFreeling(String articulo, final String archOutput) throws IOException {
 		String freelingBin;
+		ProcessBuilder builder;
 		if (System.getProperty("os.name").startsWith("Win")) {
 			freelingBin = "analyzer.exe";
+			builder = new ProcessBuilder(archFreeling + freelingBin, "-f" + archFreeling + "analyzer.cfg");
 		} else {
-			freelingBin = "analize";
+			freelingBin = "analyze";
+			builder = new ProcessBuilder(archFreeling + freelingBin, "-f" + dirTrabajo + "analyzer.cfg");
 		}
-		ProcessBuilder builder = new ProcessBuilder(archFreeling + freelingBin, "-f" + archFreeling + "analyzer.cfg");
 		builder.redirectErrorStream(true);
 		Process process = builder.start();
 		OutputStream stdin = process.getOutputStream();
@@ -90,9 +94,9 @@ public class TaggerOpiniones {
 	public void taggearOpiniones() throws FileNotFoundException, IOException {
 
 		// primero saco los numeritos que pone freeling al final de cada linea porque no se usan
-		String content = Main.readFile(archOpiniones + "entrada", "Windows-1252");
+		String content = Main.readFile(archOpiniones + "entrada", "utf8");
 		content = content.replaceAll("(?m) [0-9\\.]*$", "");
-		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "Windows-1252"));
+		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "utf8"));
 		bw.write(content);
 		bw.close();
 
@@ -115,7 +119,7 @@ public class TaggerOpiniones {
 			prologBin = "swipl";
 		}
 		System.out.println(archProlog + prologBin + " controlEs.pl");
-		ProcessBuilder builder = new ProcessBuilder(archProlog + prologBin, "controlEs.pl");
+		ProcessBuilder builder = new ProcessBuilder(archProlog + prologBin, "-f", "controlEs.pl");
 		builder.directory(new File(archOpiniones));
 		builder.redirectErrorStream(true);
 		Process process = builder.start();
