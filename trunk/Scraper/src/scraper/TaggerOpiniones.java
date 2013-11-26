@@ -37,7 +37,7 @@ public class TaggerOpiniones {
 
 	public void taggearFreelingDesdeArchivo(String archInput, String archOutput) throws IOException {
 		//String content = new Scanner(new File(archInput)).useDelimiter("\\Z").next();
-		String content = Main.readFile(archInput, "utf8");
+		String content = Main.readFile(archInput, "UTF-8");
 		taggearFreeling(content, archOutput);
 	}
 
@@ -94,9 +94,9 @@ public class TaggerOpiniones {
 	public void taggearOpiniones() throws FileNotFoundException, IOException {
 
 		// primero saco los numeritos que pone freeling al final de cada linea porque no se usan
-		String content = Main.readFile(archOpiniones + "entrada", "utf8");
+		String content = Main.readFile(archOpiniones + "entrada", "UTF-8");
 		content = content.replaceAll("(?m) [0-9\\.]*$", "");
-		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "utf8"));
+		Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "entrada"), "UTF-8"));
 		bw.write(content);
 		bw.close();
 
