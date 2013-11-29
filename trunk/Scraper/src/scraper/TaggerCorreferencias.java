@@ -108,10 +108,10 @@ public class TaggerCorreferencias {
 		opinionesXML = Main.readFile(config.getDirCorreferencias() + "entrada.xml", "iso-8859-1");
 		opinionesXML = opinionesXML.replaceAll("(?s)</body>.*$", "");
 		opinionesXML = opinionesXML.replaceAll("(?s)<html>.*;\\?\\&gt;", "");
-		opinionesXML = opinionesXML.replaceAll("(?s)(<opinion>.*?<)(fuente)(>.*?</)(fuente)(>.*?</opinion>)", "$1$2a$3$4a$5");
-		opinionesXML = opinionesXML.replaceAll("(?s)<fuente>(.*?)</fuente>", "$1");
-		opinionesXML = opinionesXML.replaceAll("<fuentea>", "<fuente>");
-		opinionesXML = opinionesXML.replaceAll("</fuentea>", "</fuente>");
+//		opinionesXML = opinionesXML.replaceAll("(?s)(<opinion>.*?<)(fuente)(>.*?</)(fuente)(>.*?</opinion>)", "$1$2a$3$4a$5");
+//		opinionesXML = opinionesXML.replaceAll("(?s)<fuente>(.*?)</fuente>", "$1");
+//		opinionesXML = opinionesXML.replaceAll("<fuentea>", "<fuente>");
+//		opinionesXML = opinionesXML.replaceAll("</fuentea>", "</fuente>");
 		opinionesXML = opinionesXML.replaceAll("atributos=", "Atributos=");
 		opinionesXML = opinionesXML.replaceAll("=\"\\[cant", "=\"[C");
 //		opinionesXML = opinionesXML.replaceAll("<predicado>", "<predop>");
