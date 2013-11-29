@@ -6,10 +6,10 @@ and open the template in the editor.
 
 
 <Configuracion>
-	<dirOpiniones>/home/jairo/opiniones/</dirOpiniones>
+	<dirOpiniones>/home/buscopiniones/opiniones/</dirOpiniones>
 	<dirFreeling>/usr/local/bin/</dirFreeling>
-	<dirCorreferencias>/home/jairo/Correferencias/Proyecto_v6.2/</dirCorreferencias>
+	<dirCorreferencias>/home/buscopiniones/Correferencias/Proyecto_v6.2/</dirCorreferencias>
 	<dirPython>/usr/bin/</dirPython>
 	<dirProlog>/usr/bin/</dirProlog>
-	<dirTrabajo>/home/jairo/ProyGrado/</dirTrabajo>
+	<dirTrabajo>/home/buscopiniones/ProyGrado/</dirTrabajo>
 </Configuracion>
