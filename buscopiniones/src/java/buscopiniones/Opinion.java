@@ -95,7 +95,7 @@ public class Opinion {
 		opinionJson = opinionJson.replaceAll("(?i) a el ", " al ");
 		opinionJson = opinionJson.replaceAll("&quot; (.*?) &quot;", "&quot;$1&quot;");
 		String opinionJson2 = BuscadorOpiniones.html2text(this.getTextoOpinionOrig());
-		if (opinionJson.length() + 10 <= opinionJson2.length()) {
+		if ((opinionJson.length() + 10 <= opinionJson2.length()) && !opinionJson2.contains("::")) {
 			opinionJson = opinionJson2;
 		}
 		opinionJson = opinionJson.replaceAll(".*A\\+", "");
