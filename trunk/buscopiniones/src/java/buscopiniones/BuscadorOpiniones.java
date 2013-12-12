@@ -158,7 +158,10 @@ public class BuscadorOpiniones {
 			if (nodoDoc.getNodeType() == Node.ELEMENT_NODE) {
 				Element elementoDoc = (Element) nodoDoc;
 				int cant = Integer.parseInt(elementoDoc.getTextContent());
-				if (cant > 0) {
+				if (cant > 4 
+						&& !elementoDoc.getAttribute("name").equalsIgnoreCase("fernando") 
+						&& !elementoDoc.getAttribute("name").equalsIgnoreCase("país")
+						&& !elementoDoc.getAttribute("name").equalsIgnoreCase("pais")) {
 					fuentes.add(elementoDoc.getAttribute("name"));
 				}
 
