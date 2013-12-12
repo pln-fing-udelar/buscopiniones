@@ -130,7 +130,7 @@ public class Main {
 			 */
 //			File status = new File("log.txt");
 		
-			File folder = new File(config.getDirTrabajo() + "pruebas");
+			File folder = new File(config.getDirTrabajo() + "paginas");
 			
 			File[] listOfMediosPrensa = folder.listFiles();
 			
