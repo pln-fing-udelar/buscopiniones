@@ -51,7 +51,7 @@ public class VerTemas extends HttpServlet {
 				int week = cal.get(Calendar.WEEK_OF_YEAR);
 				int anio = cal.get(Calendar.YEAR);
 
-				String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin"; // /usr/share/tomcat6/tmpTemas/
+				String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + anio + "_" + week + ".bin"; // C:\\Fing\\ProyGrado\\tmpTemas\\ /usr/share/tomcat6/tmpTemas/
 				FileInputStream fileIn = new FileInputStream(filePath);
 				ObjectInputStream in = new ObjectInputStream(fileIn);
 				Collection<Noticia> noticias = (Collection<Noticia>) in.readObject();
@@ -79,7 +79,7 @@ public class VerTemas extends HttpServlet {
 				ProcesadorTemas procTemas = new ProcesadorTemas();
 				String format = "dd/MM/yyyy";
 				SimpleDateFormat df = new SimpleDateFormat(format);
-				for (int i = 1; i <= limiteSemana; i++) { 
+				for (int i = 1; i <= limiteSemana; i++) {					
 					Calendar cal = Calendar.getInstance();
 					cal.set(Calendar.YEAR, Integer.parseInt(request.getParameter("procesarAnio")));
 					cal.set(Calendar.WEEK_OF_YEAR, i);

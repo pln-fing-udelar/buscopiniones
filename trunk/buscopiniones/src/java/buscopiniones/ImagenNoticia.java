@@ -117,7 +117,7 @@ public class ImagenNoticia extends HttpServlet {
 			String url = new String(decodedBytes);
 			BufferedImage img = null;
 
-			String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + pathParts[1]; // /usr/share/tomcat6/tmpTemas/
+			String filePath = "C:\\Fing\\ProyGrado\\tmpTemas\\" + pathParts[1]; //C:\\Fing\\ProyGrado\\tmpTemas\\ /usr/share/tomcat6/tmpTemas/
 			File archivo = new File(filePath);
 			if (archivo.isFile()) {				
 				img = ImageIO.read(archivo);				
