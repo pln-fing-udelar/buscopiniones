@@ -96,7 +96,7 @@ public class Main {
 			System.out.println("Entrenar clasificador?s/n");
 			BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
 			String entrenarClasificador = in.readLine();
-			if (entrenarClasificador.equals("s")) {
+			if (entrenarClasificador != null && entrenarClasificador.equals("s")) {
 				System.out.println("csv el pais");
 				Main.generarCVSEntrenamiento("elpais", config);
 				System.out.println("csv el observador");
@@ -113,12 +113,12 @@ public class Main {
 				System.out.println("entrenando la republica");
 				clasiflarepublica.crearModelo();
 			}
-
+			
 			System.out.println("Esto puede ser muy lento");
 			System.out.println("Borrar duplicados?s/n");
 			in = new BufferedReader(new InputStreamReader(System.in));
 			String borrarDuplicados = in.readLine();
-			if (borrarDuplicados.equals("s")) {
+			if ((borrarDuplicados != null) && borrarDuplicados.equals("s")) {
 				BorrarDuplicados.borrar(config);
 				//return;
 			}
