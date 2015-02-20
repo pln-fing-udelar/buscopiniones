@@ -161,29 +161,27 @@ public class TaggerOpiniones {
     }
 
     private void arreglarXML() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
+        CopyFiles.copyWithChannels(archOpiniones + "salida.xml", archOpiniones + "salida_limpia.xml", false);
+        
         String opinionesXML = Main.readFile(archOpiniones + "salida_limpia.xml", "UTF-8");
-
+             
+        
         HtmlCleaner cleaner = new HtmlCleaner();
         CleanerProperties props = cleaner.getProperties();
         TagNode node = cleaner.clean(opinionesXML);
+        
         new PrettyXmlSerializer(props).writeToFile(node, archOpiniones + "salida_limpia.xml", "UTF-8");
         opinionesXML = Main.readFile(archOpiniones + "salida_limpia.xml", "UTF-8");
+        opinionesXML = opinionesXML.replaceAll("(?s)<body>", "");
+        opinionesXML = opinionesXML.replaceAll("(?s)<head />", "");
         opinionesXML = opinionesXML.replaceAll("(?s)</body>.*$", "");
-        opinionesXML = opinionesXML.replaceAll("(?s)<html>.*;\\?\\&gt;", "");
-        opinionesXML = opinionesXML.replaceAll("(?s)(<opinion>.*?<)(fuente)(>.*?</)(fuente)(>.*?</opinion>)", "$1$2a$3$4a$5");
-        opinionesXML = opinionesXML.replaceAll("(?s)<fuente>(.*?)</fuente>", "$1");
-        opinionesXML = opinionesXML.replaceAll("<fuentea>", "<fuente>");
-        opinionesXML = opinionesXML.replaceAll("</fuentea>", "</fuente>");
-        opinionesXML = opinionesXML.replaceAll("atributos=", "Atributos=");
-        opinionesXML = opinionesXML.replaceAll("=\"\\[cant", "=\"[C");
-//		opinionesXML = opinionesXML.replaceAll("<predicado>", "<predop>");
-//		opinionesXML = opinionesXML.replaceAll("</predicado>", "</predop>");
-
+        opinionesXML = opinionesXML.replaceAll("(?s)<html>", "");
         opinionesXML = replaceLowerCase(opinionesXML, "=(\"\\[([a-z],)*([a-z])\\]\")");
-        //opinionesXML = opinionesXML.replaceAll("Atributos=\"\\[([a-z],)*([a-z])\\]\"", "$1");
+
         Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "salida_limpia.xml"), "UTF-8"));
         bw.write(opinionesXML);
         bw.close();
+        
 
     }
 
@@ -226,15 +224,13 @@ public class TaggerOpiniones {
                 if (nNode.getNodeType() == Node.ELEMENT_NODE) {
                     Element eElement = (Element) nNode;
                     String opinion = eElement.getTextContent();
-                    String fuente;
-                    if (eElement.getElementsByTagName("fuente").getLength() > 0) {
-                        Element elemFuente = (Element) eElement.getElementsByTagName("fuente").item(0);
-                        fuente = elemFuente.getTextContent();
-
-                    } else {
-                        fuente = "";
+                    String fuente = "";
+                    int i = 0;
+                    while (eElement.getElementsByTagName("fuente").getLength() > i) {
+                        Element elemFuente = (Element) eElement.getElementsByTagName("fuente").item(i);
+                        fuente += elemFuente.getTextContent() + " ";
+                        i++;
                     }
-
                     Opinion op = new Opinion(noti, fuente, opinion, idOp + "");
                     idOp++;
                     opiniones.add(op);
