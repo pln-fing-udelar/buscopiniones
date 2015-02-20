@@ -1,6 +1,10 @@
 package scraper;
 
 import java.io.*;
+import java.nio.file.FileSystems;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardCopyOption;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -68,6 +72,18 @@ public class Main {
         reader.close();
         return stringBuilder.toString();
     }
+    
+    public static void mover_archivos(List<Path> archivos_a_mover, File medioPrensa) throws IOException {
+        for (Path origen : archivos_a_mover) {
+            Path destino = FileSystems.getDefault().getPath(medioPrensa.getParentFile().getParent(),
+                    "/paginas_procesadas", medioPrensa.getName(),
+                    origen.getParent().getFileName().toString());
+            if (!destino.toFile().exists()) {
+                destino.toFile().mkdirs();
+            }
+            Files.move(origen, destino.resolve(origen.getFileName()), StandardCopyOption.REPLACE_EXISTING);
+        }
+    }
 
     /**
      * @param args the command line arguments
@@ -80,7 +96,7 @@ public class Main {
             Configuracion config = new Configuracion(isWin);
             final int maxIterFreeling = 25;
 
-			// Creo una lista de ejemplos vacia, para entrenar
+            // Creo una lista de ejemplos vacia, para entrenar
             System.out.println("toy aca!!!!!!!");
             System.out.println("Entrenar clasificador?s/n");
             BufferedReader in = new BufferedReader(new InputStreamReader(System.in));
@@ -113,47 +129,20 @@ public class Main {
                 return;
             }
 
-
             File folder = new File(config.getDirTrabajo() + "paginas");
 
             File[] listOfMediosPrensa = folder.listFiles();
-
-            Arrays.sort(listOfMediosPrensa);
-
-            File empiezoEnA = new File(config.getDirTrabajo() + "log.txt");
-            String empiezoEn = "";
-            if (empiezoEnA.exists()) {
-                empiezoEn = readFile(empiezoEnA, "UTF-8");
-            }
-            int totMediosPrensa = listOfMediosPrensa.length;
-            System.out.println(empiezoEn);
-            String[] informacionParaParar = empiezoEn.split(System.getProperty("line.separator"));
-            File archivoParar;
-            if (empiezoEnA.exists()) {
-                archivoParar = new File(informacionParaParar[0]);
-                System.out.println(informacionParaParar[0]);
-            } else {
-                archivoParar = new File("");
-            }
 
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
             //get current date time with Date()
             Date date = new Date();
             String timeStamp = dateFormat.format(date);
 
-            int iterMediosPrensa = 0;
+            // esto es para no generar xml tan grandes
+            final int cantidad_de_archivos_a_procesar = 5000;
+            int cantidad_de_archivos_procesados = 0;
 
-            while ((iterMediosPrensa < totMediosPrensa) && (listOfMediosPrensa[iterMediosPrensa].compareTo(archivoParar) <= 0)) {
-                System.out.println(listOfMediosPrensa[iterMediosPrensa].compareTo(archivoParar));
-                iterMediosPrensa++;
-            }
-            System.out.println(iterMediosPrensa);
-            if ((iterMediosPrensa > 0) && (listOfMediosPrensa[iterMediosPrensa - 1].compareTo(archivoParar) < 0)) {
-                iterMediosPrensa--;
-            }
-
-            while (iterMediosPrensa < totMediosPrensa) {
-                File medioPrensa = listOfMediosPrensa[iterMediosPrensa];
+            for (File medioPrensa : listOfMediosPrensa) {
                 File[] listOfFolders = medioPrensa.listFiles();
                 Arrays.sort(listOfFolders);
                 String medioActual = medioPrensa.getName();
@@ -167,29 +156,23 @@ public class Main {
                 int i = 0;
                 int iterCarpetaFecha = 0;
                 int totCarpetasFecha = listOfFolders.length;
-                while ((iterCarpetaFecha < totCarpetasFecha) && (listOfFolders[iterCarpetaFecha].compareTo(archivoParar) <= 0)) {
-                    iterCarpetaFecha++;
-                }
-                if ((iterCarpetaFecha > 0) && listOfFolders[iterCarpetaFecha - 1].compareTo(archivoParar) < 0) {
-                    iterCarpetaFecha--;
-                }
+                ArrayList<Path> archivos_a_mover = new ArrayList<Path>();
 
                 // Para el tema de la semana
                 String xmlNoticia = "";
 
                 while (iterCarpetaFecha < totCarpetasFecha) {
-                    System.out.println("jairo");
+
                     File carpeta_fecha = listOfFolders[iterCarpetaFecha];
                     File[] listOfFiles = carpeta_fecha.listFiles();
                     Arrays.sort(listOfFiles);
                     String ultimo = "";
                     int iterArchivo = 0;
                     int totArchivo = listOfFiles.length;
-                    while ((iterArchivo < totArchivo) && (listOfFiles[iterArchivo].compareTo(archivoParar) <= 0)) {
-                        iterArchivo++;
-                    }
+
                     while (iterArchivo < totArchivo) {
                         File file = listOfFiles[iterArchivo];
+                        archivos_a_mover.add(file.toPath());
                         if (file.isFile() && file.length() > 0) {
                             ultimo = file.getName();
                             System.out.println(ultimo);
@@ -219,17 +202,29 @@ public class Main {
                             i++;
 
                         }
+
                         if (i >= maxIterFreeling) {
+                            cantidad_de_archivos_procesados += i;
                             String xml = proc.taggear();
                             bw.append(xml);
                             bw.flush();
                             bwNoticias.append(xmlNoticia);
                             bwNoticias.flush();
                             xmlNoticia = "";
+                            cantidad_de_archivos_procesados += i;
                             i = 0;
-                            Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
-                            status.write(file.getPath());
-                            status.close();
+                            if (cantidad_de_archivos_procesados >= cantidad_de_archivos_a_procesar) {
+                                cantidad_de_archivos_procesados = 0;
+                                bw.append("</add>");
+                                bwNoticias.append("</add>");
+                                bw.flush();
+                                bwNoticias.flush();
+                                bw.close();
+                                bwNoticias.close();
+                                iterArchivo = totArchivo;
+                                iterCarpetaFecha = totCarpetasFecha + 1;
+                                mover_archivos(archivos_a_mover, medioPrensa);
+                            }
                         }
                         iterArchivo++;
                     }
@@ -241,10 +236,19 @@ public class Main {
                         bwNoticias.append(xmlNoticia);
                         bwNoticias.flush();
                         xmlNoticia = "";
+                        cantidad_de_archivos_procesados += i;
                         i = 0;
-                        Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
-                        status.write(carpeta_fecha.getPath());
-                        status.close();
+                        if (cantidad_de_archivos_procesados >= cantidad_de_archivos_a_procesar) {
+                            cantidad_de_archivos_procesados = 0;
+                            bw.append("</add>");
+                            bwNoticias.append("</add>");
+                            bw.flush();
+                            bwNoticias.flush();
+                            bw.close();
+                            bwNoticias.close();
+                            iterCarpetaFecha = totCarpetasFecha;
+                            mover_archivos(archivos_a_mover, medioPrensa);
+                        }
                     }
                     iterCarpetaFecha++;
                 }
@@ -255,17 +259,20 @@ public class Main {
                     bwNoticias.append(xmlNoticia);
                     bwNoticias.flush();
                     xmlNoticia = "";
+                    cantidad_de_archivos_procesados += i;
                 }
-                Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
-                status.write(medioPrensa.getPath() + System.getProperty("line.separator"));
-                status.close();
-                bw.append("</add>");
-                bwNoticias.append("</add>");
-                bw.flush();
-                bwNoticias.flush();
-                bw.close();
-                bwNoticias.close();
-                iterMediosPrensa++;
+                if (cantidad_de_archivos_procesados > 0) {
+                    Writer status = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(config.getDirTrabajo() + "log.txt"), "UTF-8"));
+                    status.write(medioPrensa.getPath() + System.getProperty("line.separator"));
+                    status.close();
+                    bw.append("</add>");
+                    bwNoticias.append("</add>");
+                    bw.flush();
+                    bwNoticias.flush();
+                    bw.close();
+                    bwNoticias.close();
+                    mover_archivos(archivos_a_mover, medioPrensa);
+                }
             }
         } catch (Exception e) {
             System.out.println(e);
