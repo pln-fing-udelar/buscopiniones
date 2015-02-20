@@ -6,76 +6,66 @@ package scraper;
  */
 public class Opinion {
 
-	private Noticia noticia;
-	private Fuente fuente;
-	private Fuente fuente_corref;
-	private String opinion;
-	private String id;
+    private Noticia noticia;
+    private String fuente;
+    private String opinion;
+    private String id;
 
-	public Opinion(Noticia noti, Fuente fuente, String opinion, String id) {
-		this.noticia = noti;
-		this.fuente = fuente;
-		this.opinion = opinion;
-		this.id = id;
-		this.fuente_corref = new Fuente("", "", "");
-	}
+    public Opinion(Noticia noti, String fuente, String opinion, String id) {
+        this.noticia = noti;
+        this.fuente = fuente;
+        this.opinion = opinion;
+        this.id = id;
+    }
 
-	public String toXML() {
-		String xml = "<doc>\r\n";
-		xml += noticia.toXML();
-		xml += "<field name=\"fuente\">" + ProcesadorHTML.html2text(fuente.getFuente()) + "</field>\r\n";
-		xml += "<field name=\"fuente_corref\">" + ProcesadorHTML.html2text(getFuente_corref().getFuente()) + "</field>\r\n";
-		xml += "<field name=\"opinion\">" + ProcesadorHTML.html2text(opinion) + "</field>\r\n";
-		xml += "<field name=\"id\">" + ProcesadorHTML.html2text(noticia.getUrl()) + "/" + id + "</field>\r\n";
-		xml += "</doc>\r\n";
-		return xml;
-	}
+    public String toXML() {
+        String xml = "<doc>\r\n";
+        xml += noticia.toXML();
+        xml += "<field name=\"fuente\">" + ProcesadorHTML.html2text(fuente) + "</field>\r\n";
+        xml += "<field name=\"opinion\">" + ProcesadorHTML.html2text(opinion) + "</field>\r\n";
+        xml += "<field name=\"id\">" + ProcesadorHTML.html2text(noticia.getUrl()) + "/" + id + "</field>\r\n";
+        xml += "</doc>\r\n";
+        return xml;
+    }
 
-	int countWords(String in) {
-		String trim = in.trim();
-		if (trim.isEmpty()) {
-			return 0;
-		}
-		return trim.split("\\s+").length; //separate string around spaces
-	}
+    int countWords(String in) {
+        String trim = in.trim();
+        if (trim.isEmpty()) {
+            return 0;
+        }
+        return trim.split("\\s+").length; //separate string around spaces
+    }
 
-	public boolean esDescartable() {
-		if ((countWords(fuente.getFuente()) < 1
-				&& countWords(getFuente_corref().getFuente().replaceAll(",", "")) < 1)
-			|| fuente.getFuente().trim().equals("se")
-			|| fuente.getFuente().trim().equals("yo")
-			|| fuente.getFuente().trim().equals("Yo")
-			|| fuente.getFuente().trim().equals("Se")) {
-			return true;
-		}
-		return false;
-	}
+    public boolean esDescartable() {
+        if ((countWords(fuente) < 1)
+                || fuente.trim().equals("se")
+                || fuente.trim().equals("yo")
+                || fuente.trim().equals("Yo")
+                || fuente.trim().equals("Se")) {
+            return true;
+        }
+        return false;
+    }
 
-	/**
-	 * @return the noticia
-	 */
-	public Noticia getNoticia() {
-		return noticia;
-	}
+    /**
+     * @return the noticia
+     */
+    public Noticia getNoticia() {
+        return noticia;
+    }
 
-	/**
-	 * @return the fuente
-	 */
-	public Fuente getFuente() {
-		return fuente;
-	}
+    /**
+     * @return the fuente
+     */
+    public String getFuente() {
+        return fuente;
+    }
 
-	/**
-	 * @return the opinion
-	 */
-	public String getOpinion() {
-		return opinion;
-	}
+    /**
+     * @return the opinion
+     */
+    public String getOpinion() {
+        return opinion;
+    }
 
-	/**
-	 * @return the fuente_corref
-	 */
-	public Fuente getFuente_corref() {
-		return fuente_corref;
-	}
 }
