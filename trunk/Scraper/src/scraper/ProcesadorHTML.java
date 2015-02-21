@@ -8,6 +8,7 @@ import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.TagNode;
 import org.jsoup.Jsoup;
+import org.apache.commons.lang3.StringEscapeUtils;
 
 /**
  *
@@ -33,13 +34,14 @@ public class ProcesadorHTML {
         if (html == null || html.equals("")) {
             return "";
         }
-
-        String textoOk = Jsoup.parse(html).text();
+        String html2 = StringEscapeUtils.unescapeHtml4(html);
+        String textoOk = Jsoup.parse(html2).text();
         HtmlCleaner cleaner = new HtmlCleaner();
         CleanerProperties props = cleaner.getProperties();
         TagNode node = cleaner.clean(textoOk);
         TagNode[] nodos = node.getElementsByName("body", true);
         String ret = cleaner.getInnerHtml(nodos[0]);
+        
         if (ret == null) {
             ret = "";
         }
