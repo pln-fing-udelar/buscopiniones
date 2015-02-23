@@ -11,6 +11,7 @@ import java.util.Collection;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPathExpressionException;
 import org.xml.sax.SAXException;
 
 /**
@@ -50,7 +51,7 @@ public class ProcesadorPaginas {
         }
     }
 
-    public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
+    public String taggear() throws BoilerpipeProcessingException, IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException, XPathExpressionException {
         if (coleccionNoticias.isEmpty()) {
             return "";
         }
