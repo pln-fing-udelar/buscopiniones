@@ -25,6 +25,10 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.transform.TransformerConfigurationException;
 import javax.xml.transform.TransformerException;
+import javax.xml.xpath.XPath;
+import javax.xml.xpath.XPathConstants;
+import javax.xml.xpath.XPathExpressionException;
+import javax.xml.xpath.XPathFactory;
 import org.htmlcleaner.CleanerProperties;
 import org.htmlcleaner.HtmlCleaner;
 import org.htmlcleaner.PrettyXmlSerializer;
@@ -162,14 +166,13 @@ public class TaggerOpiniones {
 
     private void arreglarXML() throws IOException, ParserConfigurationException, SAXException, TransformerConfigurationException, TransformerException {
         CopyFiles.copyWithChannels(archOpiniones + "salida.xml", archOpiniones + "salida_limpia.xml", false);
-        
+
         String opinionesXML = Main.readFile(archOpiniones + "salida_limpia.xml", "UTF-8");
-             
-        
+
         HtmlCleaner cleaner = new HtmlCleaner();
         CleanerProperties props = cleaner.getProperties();
         TagNode node = cleaner.clean(opinionesXML);
-        
+
         new PrettyXmlSerializer(props).writeToFile(node, archOpiniones + "salida_limpia.xml", "UTF-8");
         opinionesXML = Main.readFile(archOpiniones + "salida_limpia.xml", "UTF-8");
         opinionesXML = opinionesXML.replaceAll("(?s)<body>", "");
@@ -181,7 +184,6 @@ public class TaggerOpiniones {
         Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "salida_limpia.xml"), "UTF-8"));
         bw.write(opinionesXML);
         bw.close();
-        
 
     }
 
@@ -196,7 +198,7 @@ public class TaggerOpiniones {
         return sb.toString();
     }
 
-    public Collection<Opinion> obtenerOpiniones(Noticia noti) throws ParserConfigurationException, SAXException, IOException, TransformerException {
+    public Collection<Opinion> obtenerOpiniones(Noticia noti) throws ParserConfigurationException, SAXException, IOException, TransformerException, XPathExpressionException {
 
         this.arreglarXML();
 
@@ -214,7 +216,7 @@ public class TaggerOpiniones {
         return opiniones;
     }
 
-    private void obtenerOpinionesAux(Node nodo, Noticia noti, Collection<Opinion> opiniones) {
+    private void obtenerOpinionesAux(Node nodo, Noticia noti, Collection<Opinion> opiniones) throws XPathExpressionException {
         if (nodo.getNodeType() == Node.ELEMENT_NODE) {
             int idOp = 0;
             Element elemento = (Element) nodo;
@@ -226,8 +228,13 @@ public class TaggerOpiniones {
                     String opinion = eElement.getTextContent();
                     String fuente = "";
                     int i = 0;
-                    while (eElement.getElementsByTagName("fuente").getLength() > i) {
-                        Element elemFuente = (Element) eElement.getElementsByTagName("fuente").item(i);
+                    XPath xPath = XPathFactory.newInstance().newXPath();
+                    NodeList nodes = (NodeList) xPath.evaluate("fuente",
+                            eElement, XPathConstants.NODESET);
+
+//                    while (eElement.getElementsByTagName("fuente").getLength() > i) {
+                    while (nodes.getLength() > i) {
+                        Element elemFuente = (Element) nodes.item(i);
                         fuente += elemFuente.getTextContent() + " ";
                         i++;
                     }
