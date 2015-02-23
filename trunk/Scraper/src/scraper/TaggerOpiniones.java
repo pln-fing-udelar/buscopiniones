@@ -171,14 +171,12 @@ public class TaggerOpiniones {
 
         HtmlCleaner cleaner = new HtmlCleaner();
         CleanerProperties props = cleaner.getProperties();
+        props.setOmitHtmlEnvelope(true);
         TagNode node = cleaner.clean(opinionesXML);
 
         new PrettyXmlSerializer(props).writeToFile(node, archOpiniones + "salida_limpia.xml", "UTF-8");
         opinionesXML = Main.readFile(archOpiniones + "salida_limpia.xml", "UTF-8");
-        opinionesXML = opinionesXML.replaceAll("(?s)<body>", "");
-        opinionesXML = opinionesXML.replaceAll("(?s)<head />", "");
-        opinionesXML = opinionesXML.replaceAll("(?s)</body>.*$", "");
-        opinionesXML = opinionesXML.replaceAll("(?s)<html>", "");
+
         opinionesXML = replaceLowerCase(opinionesXML, "=(\"\\[([a-z],)*([a-z])\\]\")");
 
         Writer bw = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(archOpiniones + "salida_limpia.xml"), "UTF-8"));
@@ -232,7 +230,6 @@ public class TaggerOpiniones {
                     NodeList nodes = (NodeList) xPath.evaluate("fuente",
                             eElement, XPathConstants.NODESET);
 
-//                    while (eElement.getElementsByTagName("fuente").getLength() > i) {
                     while (nodes.getLength() > i) {
                         Element elemFuente = (Element) nodes.item(i);
                         fuente += elemFuente.getTextContent() + " ";
