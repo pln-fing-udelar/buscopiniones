@@ -227,7 +227,7 @@ public class TaggerOpiniones {
                     String fuente = "";
                     int i = 0;
                     XPath xPath = XPathFactory.newInstance().newXPath();
-                    NodeList nodes = (NodeList) xPath.evaluate("fuente",
+                    NodeList nodes = (NodeList) xPath.evaluate("./fuente",
                             eElement, XPathConstants.NODESET);
 
                     while (nodes.getLength() > i) {
