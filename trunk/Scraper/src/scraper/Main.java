@@ -90,12 +90,19 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
+            
             String sistemaOperativo = System.getProperty("os.name");
             boolean isWin = sistemaOperativo.startsWith("Win");
-
+            
             Configuracion config = new Configuracion(isWin);
             final int maxIterFreeling = 25;
 
+//            TaggerOpiniones pruebaTag = new TaggerOpiniones(config);
+//            Collection<Opinion> opis = pruebaTag.obtenerOpiniones(new Noticia("","","","","","","","",""));
+//            for (Opinion opi : opis){
+//                System.out.println(opi.toXML());
+//            }
+            
             // Creo una lista de ejemplos vacia, para entrenar
             System.out.println("toy aca!!!!!!!");
             System.out.println("Entrenar clasificador?s/n");
@@ -129,7 +136,7 @@ public class Main {
                 return;
             }
 
-            File folder = new File(config.getDirTrabajo() + "paginas");
+            File folder = new File(config.getDirTrabajo() + "PaginasDescargadas");
 
             File[] listOfMediosPrensa = folder.listFiles();
 
@@ -140,7 +147,7 @@ public class Main {
 
             // esto es para no generar xml tan grandes
             final int cantidad_de_archivos_a_procesar = 5000;
-            int cantidad_de_archivos_procesados = 0;
+            
 
             for (File medioPrensa : listOfMediosPrensa) {
                 File[] listOfFolders = medioPrensa.listFiles();
@@ -157,7 +164,7 @@ public class Main {
                 int iterCarpetaFecha = 0;
                 int totCarpetasFecha = listOfFolders.length;
                 ArrayList<Path> archivos_a_mover = new ArrayList<Path>();
-
+                int cantidad_de_archivos_procesados = 0;
                 // Para el tema de la semana
                 String xmlNoticia = "";
 
@@ -204,7 +211,6 @@ public class Main {
                         }
 
                         if (i >= maxIterFreeling) {
-                            cantidad_de_archivos_procesados += i;
                             String xml = proc.taggear();
                             bw.append(xml);
                             bw.flush();
