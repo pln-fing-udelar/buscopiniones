@@ -72,7 +72,7 @@ public class Main {
         reader.close();
         return stringBuilder.toString();
     }
-    
+
     public static void mover_archivos(List<Path> archivos_a_mover, File medioPrensa) throws IOException {
         for (Path origen : archivos_a_mover) {
             Path destino = FileSystems.getDefault().getPath(medioPrensa.getParentFile().getParent(),
@@ -90,10 +90,10 @@ public class Main {
      */
     public static void main(String[] args) {
         try {
-            
+
             String sistemaOperativo = System.getProperty("os.name");
             boolean isWin = sistemaOperativo.startsWith("Win");
-            
+
             Configuracion config = new Configuracion(isWin);
             final int maxIterFreeling = 25;
 
@@ -102,7 +102,6 @@ public class Main {
 //            for (Opinion opi : opis){
 //                System.out.println(opi.toXML());
 //            }
-            
             // Creo una lista de ejemplos vacia, para entrenar
             System.out.println("toy aca!!!!!!!");
             System.out.println("Entrenar clasificador?s/n");
@@ -138,7 +137,11 @@ public class Main {
 
             File folder = new File(config.getDirTrabajo() + "PaginasDescargadas");
 
-            File[] listOfMediosPrensa = folder.listFiles();
+            File[] listOfMediosPrensa = folder.listFiles(new FileFilter() {  // obtengo los medios de prensa
+                public boolean accept(File pathname) {
+                    return pathname.isDirectory();  // descarto los que no son carpetas
+                }
+            });
 
             DateFormat dateFormat = new SimpleDateFormat("yyyyMMddHHmmss");
             //get current date time with Date()
@@ -147,11 +150,13 @@ public class Main {
 
             // esto es para no generar xml tan grandes
             final int cantidad_de_archivos_a_procesar = 5000;
-            
 
             for (File medioPrensa : listOfMediosPrensa) {
-                File[] listOfFolders = medioPrensa.listFiles();
-                Arrays.sort(listOfFolders);
+                File[] listOfFolders = medioPrensa.listFiles(new FileFilter() {  // obtengo las carpetas de fechas
+                    public boolean accept(File pathname) {
+                        return pathname.isDirectory();  // descarto los que no son carpetas
+                    }
+                });
                 String medioActual = medioPrensa.getName();
                 String nomArchivo = config.getDirTrabajo() + "htmlprocesado" + File.separator + medioActual + timeStamp + ".xml";
                 String nomArchivoNoti = config.getDirTrabajo() + "htmlprocesado" + File.separator + medioActual + timeStamp + "Noticias.xml";
